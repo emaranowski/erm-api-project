@@ -15,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          len: [1, 30],
-          isAlpha: true
+          len: [1, 30]
+          // isAlpha: true
           // isNotAlpha(value) {
           //   if (!Validator.isAlpha(value)) {
           //     throw new Error(`Can only contain letters.`);
@@ -28,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          len: [1, 60],
-          isAlpha: true
+          len: [1, 60]
+          // isAlpha: true
           // isNotAlpha(value) {
           //   if (!Validator.isAlpha(value)) {
           //     throw new Error(`Can only contain letters.`);
