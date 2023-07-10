@@ -1,0 +1,21 @@
+{
+  "name": "erm-mod4-api-project",
+  "version": "1.0.0",
+  "description": "API Project: Meetup Clone",
+  "main": "index.js",
+  "scripts": {
+    "install": "npm --prefix backend install backend",
+    "dev:backend": "npm install --prefix backend start",
+    "sequelize": "npm run --prefix backend sequelize",
+    "sequelize-cli": "npm run --prefix backend sequelize-cli",
+    "start": "npm start --prefix backend",
+    "build": "npm run --prefix backend build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emaranowski/API-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
