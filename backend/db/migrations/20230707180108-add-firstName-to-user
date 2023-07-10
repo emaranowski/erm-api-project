@@ -1,0 +1,21 @@
+'use strict';
+
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+    options.schema = process.env.SCHEMA; // define schema in options obj
+}
+
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+    async up(queryInterface, Sequelize) {
+        await queryInterface.addColumn('Users', 'firstName', {
+            type: Sequelize.STRING(30),
+            allowNull: false
+        });
+    },
+
+    async down(queryInterface, Sequelize) {
+        options.tableName = "Users";
+        return queryInterface.removeColumn('Users', 'firstName');
+    }
+};
