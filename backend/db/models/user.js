@@ -16,12 +16,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           len: [1, 30],
-          // isAlpha: true,
-          isNotAlpha(value) {
-            if (!Validator.isAlpha(value)) {
-              throw new Error(`Can only contain letters.`);
-            }
-          }
+          isAlpha: true
+          // isNotAlpha(value) {
+          //   if (!Validator.isAlpha(value)) {
+          //     throw new Error(`Can only contain letters.`);
+          //   }
+          // }
         }
       },
       lastName: {
@@ -29,12 +29,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           len: [1, 60],
-          // isAlpha: true,
-          isNotAlpha(value) {
-            if (!Validator.isAlpha(value)) {
-              throw new Error(`Can only contain letters.`);
-            }
-          }
+          isAlpha: true
+          // isNotAlpha(value) {
+          //   if (!Validator.isAlpha(value)) {
+          //     throw new Error(`Can only contain letters.`);
+          //   }
+          // }
         }
       },
       username: {
