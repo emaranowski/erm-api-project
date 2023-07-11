@@ -16,14 +16,22 @@ const router = express.Router();
 const validateSignup = [
   check('firstName') // check if req.body.firstName exists
     .exists({ checkFalsy: true })
-    .withMessage('Please provide a valid first name.'),
+    .withMessage('First Name is required'),
   check('lastName') // check if req.body.lastName exists
     .exists({ checkFalsy: true })
-    .withMessage('Please provide a valid last name.'),
+    .withMessage('Last Name is required'),
   check('email') // check if req.body.email is an email
     .exists({ checkFalsy: true })
     .isEmail()
-    .withMessage('Please provide a valid email.'),
+    .withMessage('Invalid email'),
+  // check('email') // currently err seems to be coming from model val; should come from here
+  //   .exists({ checkFalsy: true })
+  //   .isUnique()
+  //   .withMessage('User with that email already exists'),
+  // check('username') // currently err seems to be coming from model val; should come from here
+  //   .exists({ checkFalsy: true })
+  //   .isUnique()
+  //   .withMessage('User with that username already exists'),
   check('username') // check if req.body.username has min len 4
     .exists({ checkFalsy: true })
     .isLength({ min: 4 })
