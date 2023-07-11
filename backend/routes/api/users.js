@@ -24,11 +24,11 @@ const validateSignup = [
     .exists({ checkFalsy: true })
     .isEmail()
     .withMessage('Invalid email'),
-  // check('email') // currently err seems to be coming from model val; should come from here
+  // check('email') // currently err seems to be coming from model val; should come from here? prob fine actually
   //   .exists({ checkFalsy: true })
   //   .isUnique()
   //   .withMessage('User with that email already exists'),
-  // check('username') // currently err seems to be coming from model val; should come from here
+  // check('username') // currently err seems to be coming from model val; should come from here? prob fine actually
   //   .exists({ checkFalsy: true })
   //   .isUnique()
   //   .withMessage('User with that username already exists'),

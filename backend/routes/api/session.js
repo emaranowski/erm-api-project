@@ -1,31 +1,23 @@
 // this file holds resources for route paths beginning in: /api/session
-
 const express = require('express');
 const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
-
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User } = require('../../db/models');
-
-// check func will be used w/ handleValidationErrors to validate body of req
-const { check } = require('express-validator');
+const { check } = require('express-validator'); // check func will be used w/ handleValidationErrors to validate body of req
 const { handleValidationErrors } = require('../../utils/validation');
-
 const router = express.Router();
 
-// validateLogin midware is composed of check & handleValidationErrors middlewares
-// checks if req.body.credential & req.body.password are empty
-// if one is empty, err is ret as res
-const validateLogin = [
-  check('credential')
+const validateLogin = [ // validateLogin midware composed of check & handleValidationErrors midwares
+  check('credential') // check if req.body.credential is missing
     .exists({ checkFalsy: true })
     .notEmpty()
-    .withMessage('Please provide a valid email or username.'),
-  check('password')
+    .withMessage('Credential is required (email or username)'),
+  check('password') // check if req.body.password is missing
     .exists({ checkFalsy: true })
-    .withMessage('Please provide a password.'),
+    .withMessage('Password is required'),
   handleValidationErrors
-];
+]; // if one is empty, err is ret as res
 
 // Log in (POST /api/session)
 router.post(
@@ -34,7 +26,7 @@ router.post(
   async (req, res, next) => {
     const { credential, password } = req.body;
 
-    const user = await User.unscoped().findOne({ // turn off default scope, so can read all user attributes, incl hashedPassword
+    const user = await User.unscoped().findOne({ // turn off default scope to read all user attr, incl hashedPassword
       where: {
         [Op.or]: { // can be either credential
           username: credential,
