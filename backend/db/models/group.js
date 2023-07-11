@@ -32,6 +32,13 @@ module.exports = (sequelize, DataTypes) => {
         { foreignKey: 'groupId' }
       );
 
+      // one groupimage belongsTo one group
+      // one group hasMany groupimages
+      Group.hasMany(
+        models.GroupImage,
+        { foreignKey: 'groupId' }
+      );
+
       // one user belongsToMany groups ?
       // one group belongsToMany users ?
       Group.belongsToMany(
