@@ -1,11 +1,16 @@
 // this file holds resources for route paths beginning in: /api/session
+
 const express = require('express');
 const { Op } = require('sequelize');
+
 const bcrypt = require('bcryptjs');
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
+
 const { User } = require('../../db/models');
+
 const { check } = require('express-validator'); // check func will be used w/ handleValidationErrors to validate body of req
 const { handleValidationErrors } = require('../../utils/validation');
+
 const router = express.Router();
 
 const validateLogin = [ // validateLogin midware composed of check & handleValidationErrors midwares
