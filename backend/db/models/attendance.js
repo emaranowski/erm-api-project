@@ -33,6 +33,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Attendance.init({
+    id: { // added to init(), since there aare multiple FKs; want PK to be 'id'
+      type: DataTypes.INTEGER, // do not want auto-assigned PK based on combo of FK col names
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
+    },
     eventId: {
       type: DataTypes.INTEGER,
       allowNull: false,
