@@ -39,6 +39,13 @@ module.exports = (sequelize, DataTypes) => {
         { foreignKey: 'groupId' }
       );
 
+      // one group hasMany events
+      // one event belongsTo one group
+      Group.hasMany(
+        models.Event,
+        { foreignKey: 'groupId' }
+      );
+
       // one user belongsToMany groups ?
       // one group belongsToMany users ?
       Group.belongsToMany(
@@ -47,6 +54,19 @@ module.exports = (sequelize, DataTypes) => {
           through: models.Membership,
           foreignKey: 'groupId',
           otherKey: 'userId'
+        }
+      );
+
+      // ?
+      // many to many: venues-to-groups, via events
+      // one venue belongsToMany groups
+      // one group belongsToMany venues
+      Group.belongsToMany(
+        models.Venue,
+        {
+          through: models.Event,
+          foreignKey: 'groupId',
+          otherKey: 'venueId'
         }
       );
 

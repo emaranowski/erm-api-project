@@ -1,7 +1,7 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+
+const { Model, Validator } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Venue extends Model {
     /**
@@ -18,10 +18,25 @@ module.exports = (sequelize, DataTypes) => {
         { foreignKey: 'groupId' }
       );
 
+      // one venue hasMany events
+      // one event belongsTo one venue
+      Venue.hasMany(
+        models.Event,
+        { foreignKey: 'venueId' }
+      );
+
+      // ?
+      // many to many: venues-to-groups, via events
       // one venue belongsToMany groups
       // one group belongsToMany venues
-      // THROUGH EVENTS TABLE
-      // CREATE LATER, AFTER CREATING EVENTS TABLE
+      Venue.belongsToMany(
+        models.Group,
+        {
+          through: models.Event,
+          foreignKey: 'venueId',
+          otherKey: 'groupId'
+        }
+      );
 
     }
   }
