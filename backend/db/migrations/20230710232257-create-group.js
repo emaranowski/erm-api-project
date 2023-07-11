@@ -27,7 +27,7 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
         allowNull: false,
-        // unique: true // automatically adds index
+        unique: true // automatically adds index
       },
       about: {
         type: Sequelize.TEXT,
