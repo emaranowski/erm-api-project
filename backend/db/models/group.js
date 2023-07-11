@@ -13,10 +13,11 @@ module.exports = (sequelize, DataTypes) => {
 
       // one user/organizer hasMany groups
       // one group belongsTo one user/organizer
-      Group.belongsTo(
-        models.User,
-        { foreignKey: 'organizerId' } // may need to alias? like.. { foreignKey: 'currentTeamId', as: 'TeamRoster' }
-      );
+      // Group.belongsTo(
+      //   models.User,
+      //   { foreignKey: 'organizerId' } // may need to alias? like.. { foreignKey: 'currentTeamId', as: 'TeamRoster' }
+      // );
+
     }
   }
   Group.init({
@@ -27,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      // unique: true,
     },
     about: {
       type: DataTypes.TEXT,
@@ -35,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     type: {
       type: DataTypes.ENUM('outdoors', 'food', 'board games'),
-      allowNull: false,
+      allowNull: true,
     },
     private: {
       type: DataTypes.BOOLEAN,

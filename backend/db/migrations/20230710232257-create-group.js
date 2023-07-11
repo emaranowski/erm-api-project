@@ -26,7 +26,7 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true // automatically adds index
+        // unique: true // automatically adds index
       },
       about: {
         type: Sequelize.TEXT,
@@ -34,7 +34,7 @@ module.exports = {
       },
       type: {
         type: Sequelize.ENUM('outdoors', 'food', 'board games'),
-        allowNull: false,
+        allowNull: true,
       },
       private: {
         type: Sequelize.BOOLEAN,
