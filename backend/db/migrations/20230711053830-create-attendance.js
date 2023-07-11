@@ -1,5 +1,6 @@
 'use strict';
 
+
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA; // define schema in options obj
@@ -9,7 +10,7 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up(queryInterface, Sequelize) {
 
-    options.tableName = 'GroupImages';
+    options.tableName = 'Attendances';
     await queryInterface.createTable(options, {
       id: {
         allowNull: false,
@@ -17,20 +18,24 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      groupId: {
+      eventId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Groups',
+          model: 'Events',
           key: 'id'
         }
       },
-      url: {
-        type: Sequelize.STRING,
+      userId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'id'
+        }
       },
-      preview: {
-        type: Sequelize.BOOLEAN,
+      status: {
+        type: Sequelize.ENUM('yes', 'no', 'maybe'),
         allowNull: false,
       },
       createdAt: {
@@ -48,7 +53,7 @@ module.exports = {
   },
   async down(queryInterface, Sequelize) {
 
-    options.tableName = 'GroupImages';
+    options.tableName = 'Attendances';
     await queryInterface.dropTable(options);
 
   }

@@ -20,6 +20,13 @@ module.exports = (sequelize, DataTypes) => {
         { foreignKey: 'userId' }
       );
 
+      // one user hasMany attendances
+      // one attendance belongsTo one user
+      User.hasMany(
+        models.Attendance,
+        { foreignKey: 'userId' }
+      );
+
       // one user belongsToMany groups ?
       // one group belongsToMany users ?
       User.belongsToMany(
@@ -30,6 +37,20 @@ module.exports = (sequelize, DataTypes) => {
           otherKey: 'groupId'
         }
       );
+
+      // BUG HERE when both commented in
+      // ?
+      // many-to-many: events-to-users, via attendances?
+      // one event belongsToMany users
+      // one user belongsToMany events
+      // User.belongsToMany(
+      //   models.Event,
+      //   {
+      //     through: models.Attendance,
+      //     foreignKey: 'userId',
+      //     otherKey: 'eventId'
+      //   }
+      // );
 
     }
   };

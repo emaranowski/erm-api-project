@@ -1,6 +1,6 @@
 'use strict';
 
-const { EventImage } = require('../models');
+const { Attendance } = require('../models');
 const bcrypt = require('bcryptjs');
 
 let options = {};
@@ -12,36 +12,34 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up(queryInterface, Sequelize) {
 
-    await EventImage.bulkCreate([
+    await Attendance.bulkCreate([
       {
         eventId: 1,
-        url: 'https://tinyurl.com/meetup-schema',
-        preview: false
+        userId: 1,
+        status: 'yes'
       },
       {
         eventId: 2,
-        url: 'https://tinyurl.com/meetup-schema',
-        preview: false
+        userId: 1,
+        status: 'no'
       },
       {
         eventId: 3,
-        url: 'https://tinyurl.com/meetup-schema',
-        preview: false
-      }
+        userId: 1,
+        status: 'maybe'
+      },
     ], { validate: true });
 
   },
 
   async down(queryInterface, Sequelize) {
 
-    options.tableName = 'EventImages';
+    options.tableName = 'Attendances';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      url: {
-        [Op.in]: [
-          'https://tinyurl.com/meetup-schema'
-        ]
-      } // if more urls added in up, add in down too
+      status: {
+        [Op.in]: ['yes', 'no', 'maybe']
+      } // ideally use something better than status
     }, {});
 
   }
