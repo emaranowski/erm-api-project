@@ -13,10 +13,10 @@ module.exports = (sequelize, DataTypes) => {
 
       // one event hasMany eventimages
       // one eventimage belongsTo one event
-      // Event.hasMany(
-      //   models.EventImage,
-      //   { foreignKey: 'eventId' }
-      // ); // --- comment in after making EventImage
+      Event.hasMany(
+        models.EventImage,
+        { foreignKey: 'eventId' }
+      );
 
       // one event hasMany attendances
       // one attendance belongsTo one event
