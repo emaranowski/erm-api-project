@@ -105,11 +105,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Group',
-    defaultScope: {
-      attributes: {
-        exclude: ['createdAt', 'updatedAt']
-      }
-    }
+    // defaultScope: { // removed this dscope
+    //   attributes: { // so createdAt & updatedAt show in Get All Groups
+    //     exclude: ['createdAt', 'updatedAt']
+    //   }
+    // }
   });
   return Group;
 };
