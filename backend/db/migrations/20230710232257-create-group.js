@@ -35,7 +35,7 @@ module.exports = {
       },
       type: {
         type: Sequelize.ENUM('outdoors', 'food', 'board games'),
-        allowNull: true,
+        allowNull: false,
       },
       private: {
         type: Sequelize.BOOLEAN,

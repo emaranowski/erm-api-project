@@ -16,7 +16,7 @@ module.exports = {
         organizerId: 1, // prob correct syntax for FK val
         name: 'Hikers',
         about: 'A group of hikers who love getting outdoors.',
-        // type: 'outdoors', // may not be correct ENUM syntax
+        type: 'outdoors', // may not be correct ENUM syntax
         private: false,
         city: 'Portland',
         state: 'OR'
@@ -25,7 +25,7 @@ module.exports = {
         organizerId: 2, // prob correct syntax for FK val
         name: 'Hobby Chefs',
         about: 'Culinary creatives who want to share and try new recipes together.',
-        // type: 'food', // may not be correct ENUM syntax
+        type: 'food', // may not be correct ENUM syntax
         private: true,
         city: 'Portland',
         state: 'OR'
@@ -34,7 +34,7 @@ module.exports = {
         organizerId: 3, // prob correct syntax for FK val
         name: 'Board Game Fans',
         about: 'Folks who love playing and making board games.',
-        // type: 'board games', // may not be correct ENUM syntax
+        type: 'board games', // may not be correct ENUM syntax
         private: false,
         city: 'Portland',
         state: 'OR'

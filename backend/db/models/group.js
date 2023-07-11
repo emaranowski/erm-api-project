@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     type: {
       type: DataTypes.ENUM('outdoors', 'food', 'board games'),
-      allowNull: true,
+      allowNull: false,
     },
     private: {
       type: DataTypes.BOOLEAN,
