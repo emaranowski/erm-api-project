@@ -13,10 +13,10 @@ module.exports = (sequelize, DataTypes) => {
 
       // one user/organizer hasMany groups
       // one group belongsTo one user/organizer
-      // Group.belongsTo(
-      //   models.User,
-      //   { foreignKey: 'organizerId' } // may need to alias? like.. { foreignKey: 'currentTeamId', as: 'TeamRoster' }
-      // );
+      Group.belongsTo(
+        models.User,
+        { foreignKey: 'organizerId' } // may need to alias? like.. { foreignKey: 'currentTeamId', as: 'TeamRoster' }
+      );
 
     }
   }

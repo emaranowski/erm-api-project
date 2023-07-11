@@ -8,11 +8,11 @@ module.exports = (sequelize, DataTypes) => {
 
       // one user/organizer hasMany groups
       // one group belongsTo one user/organizer
-      // User.hasMany(
-      //   models.Group,
-      //   // { foreignKey: 'currentTeamId' }
-      //   { foreignKey: 'organizerId' } // may need to alias? like.. { foreignKey: 'currentTeamId', as: 'TeamRoster' }
-      // );
+      User.hasMany(
+        models.Group,
+        // { foreignKey: 'currentTeamId' }
+        { foreignKey: 'organizerId' } // may need to alias? like.. { foreignKey: 'currentTeamId', as: 'TeamRoster' }
+      );
 
     }
   };
