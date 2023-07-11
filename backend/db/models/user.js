@@ -5,7 +5,15 @@ const { Model, Validator } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      // define association here
+
+      // one user/organizer hasMany groups
+      // one group belongsTo one user/organizer
+      User.hasMany(
+        models.Group,
+        // { foreignKey: 'currentTeamId' }
+        { foreignKey: 'organizerId' } // may need to alias? like.. { foreignKey: 'currentTeamId', as: 'TeamRoster' }
+      );
+
     }
   };
 
