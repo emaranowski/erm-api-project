@@ -25,6 +25,13 @@ module.exports = (sequelize, DataTypes) => {
         { foreignKey: 'groupId' }
       );
 
+      // one group hasMany venues
+      // one venue belongsTo one group
+      Group.hasMany(
+        models.Venue,
+        { foreignKey: 'groupId' }
+      );
+
       // one user belongsToMany groups ?
       // one group belongsToMany users ?
       Group.belongsToMany(
