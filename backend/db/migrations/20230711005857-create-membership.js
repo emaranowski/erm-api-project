@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up(queryInterface, Sequelize) {
 
-    options.tableName = 'Groups';
+    options.tableName = 'Memberships';
     await queryInterface.createTable(options, {
       id: {
         allowNull: false,
@@ -17,38 +17,25 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      organizerId: {
+      userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { // add ref to organizerId/userId in migration only
-          model: 'Users', // table name, so plural
+        references: {
+          model: 'Users', // table name, so plural; only add refs on mig
           key: 'id'
         }
       },
-      name: {
-        type: Sequelize.STRING,
+      groupId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-        unique: true // automatically adds index
+        references: {
+          model: 'Groups', // table name, so plural; only add refs on mig
+          key: 'id'
+        }
       },
-      about: {
-        type: Sequelize.TEXT,
-        allowNull: false,
-      },
-      type: {
-        type: Sequelize.ENUM('outdoors', 'food', 'board games'),
-        allowNull: false,
-      },
-      private: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-      },
-      city: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      state: {
-        type: Sequelize.STRING,
-        allowNull: false,
+      status: {
+        type: Sequelize.ENUM('pending', 'rejected', 'approved'),
+        allowNull: true, // maybe change later to defaultValue?
       },
       createdAt: {
         allowNull: false,
@@ -65,8 +52,8 @@ module.exports = {
   },
   async down(queryInterface, Sequelize) {
 
-    options.tableName = 'Groups';
-    return queryInterface.dropTable(options);
+    options.tableName = 'Memberships';
+    await queryInterface.dropTable(options);
 
   }
 };

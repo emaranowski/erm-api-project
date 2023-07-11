@@ -11,6 +11,7 @@ if (process.env.NODE_ENV === 'production') {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
+
     await Group.bulkCreate([
       {
         organizerId: 1, // prob correct syntax for FK val
@@ -40,9 +41,11 @@ module.exports = {
         state: 'OR'
       },
     ], { validate: true });
+
   },
 
   async down(queryInterface, Sequelize) {
+
     options.tableName = 'Groups';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
@@ -50,5 +53,6 @@ module.exports = {
         [Op.in]: ['Hikers', 'Hobby Chefs', 'Board Game Fans']
       }
     }, {});
+
   }
 };

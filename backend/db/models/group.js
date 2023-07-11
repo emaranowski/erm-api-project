@@ -18,6 +18,24 @@ module.exports = (sequelize, DataTypes) => {
         { foreignKey: 'organizerId' } // may need to alias? like.. { foreignKey: 'currentTeamId', as: 'TeamRoster' }
       );
 
+      // one membership belongsTo one group
+      // one group hasMany memberships
+      Group.hasMany(
+        models.Membership,
+        { foreignKey: 'groupId' }
+      );
+
+      // one user belongsToMany groups ?
+      // one group belongsToMany users ?
+      Group.belongsToMany(
+        models.User,
+        {
+          through: models.Membership,
+          foreignKey: 'groupId',
+          otherKey: 'userId'
+        }
+      );
+
     }
   }
   Group.init({
