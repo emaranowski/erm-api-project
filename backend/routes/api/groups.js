@@ -1,10 +1,12 @@
 // resources for route paths beginning in: /api/groups
-
 const express = require('express');
 const { Op } = require('sequelize');
-const { Group, Membership, GroupImage, Organizer, Venue } = require('../../db/models');
-
+const { Group, Membership, GroupImage, User, Venue } = require('../../db/models');
 const router = express.Router();
+
+
+
+
 
 // // GET GROUPS FOR CURRENT USER (GET /api/groups/current)
 // router.get('/current', async (req, res) => {
@@ -24,27 +26,80 @@ const router = express.Router();
 //     return res.json(currUserGroups);
 // });
 
-// Get details of a Group from an id (GET /api/groups/:groupId)
+
+
+
+
+// Get details of a Group from an id (GET /api/groups/:groupId) -- ORIG DRAFT
 router.get('/:groupId', async (req, res) => {
 
-    const group = await Group.findByPk(req.params.groupId,
+    const groupOrig = await Group.findByPk(req.params.groupId,
         {
             include: [
                 { model: GroupImage },
-                // { model: Organizer }, // this one is causing problem
+                // { model: User }, // this one is causing problem
                 { model: Venue },
             ]
         }
     );
 
-    // creating numMembers:
-    const memberships = await Membership.findAll();
+    // Error response: Couldn't find a Group with the specified id
+    if (!groupOrig) {
+        res.status(404);
+        return res.json({ message: `Group couldn't be found` });
+    }
 
+    // convert to JSON
+    group = groupOrig.toJSON();
+
+    // create numMembers val (totalMembers):
+    let totalMembers;
+    const memberships = await Membership.findAll(); // QUERY DB
     const membersArr = memberships.filter(membership => {
-        return membership.groupId === group.id; // fixed by adding 'return'
+        return membership.groupId === group.id;
+    });
+    totalMembers = membersArr.length;
+
+    // create GroupImages val (groupImagesArr):
+    let groupImagesArr = [];
+    const groupImagesArrOrig = group.GroupImages; // want to remove groupId from orig
+    groupImagesArrOrig.forEach(image => {
+        const imageObj = {};
+        imageObj.id = image.id;
+        imageObj.url = image.url;
+        imageObj.preview = image.preview;
+
+        groupImagesArr.push(imageObj);
     });
 
-    const groupObj = {
+    // create Organizer val (organizerObj):
+    let organizerObj = {};
+    const users = await User.findAll(); // QUERY DB
+    const usersArr = users.filter(user => {
+        return user.id === group.organizerId;
+    });
+    const user = usersArr[0];
+    organizerObj.id = user.id;
+    organizerObj.firstName = user.firstName;
+    organizerObj.lastName = user.lastName;
+
+    // create Venues val (venuesArr):
+    let venuesArr = [];
+    const venuesArrOrig = group.Venues;
+    venuesArrOrig.forEach(venue => {
+        const venueObj = {};
+        venueObj.id = venue.id;
+        venueObj.groupId = venue.groupId;
+        venueObj.address = venue.address;
+        venueObj.city = venue.city;
+        venueObj.state = venue.state;
+        venueObj.lat = venue.lat;
+        venueObj.lng = venue.lng;
+
+        venuesArr.push(venueObj);
+    });
+
+    const groupObj = { // manually creating obj helps ensure ideal order
         id: group.id,
         organizerId: group.organizerId,
         name: group.name,
@@ -55,63 +110,69 @@ router.get('/:groupId', async (req, res) => {
         state: group.state,
         createdAt: group.createdAt,
         updatedAt: group.updatedAt,
-        numMembers: membersArr.length, // add
-        GroupImages: group.GroupImages, // add
-        // Organizer: group.Organizer, // add
-        Venues: group.Venues // add
+        numMembers: totalMembers, // add
+        GroupImages: groupImagesArr, // add
+        Organizer: organizerObj, // add
+        Venues: venuesArr // add
     };
+
+    // NOTES:
+    // ideally do more efficiently, w/o querying db for:
+    // await Membership
+    // await User
 
     return res.json(groupObj);
 });
 
-// GET ALL GROUPS (GET /api/groups)
+
+
+
+
+// Get all Groups (GET /api/groups) -- V2
 router.get('/', async (req, res) => {
     let allGroupsObj = { Groups: [] };
 
-    const groupsOrig = await Group.findAll({ // ret arr of objs
-        include: [{ model: GroupImage }] // remove this outer arr?
+    const groupsOrig = await Group.findAll({
+        include: [
+            { model: Membership },
+            { model: GroupImage }
+        ]
     });
 
-    const memberships = await Membership.findAll();
-
+    // convert to JSON (not sure needed; keep to be safe)
+    let groupsList = [];
     groupsOrig.forEach(group => {
-
-        // creating numMembers:
-
-        const membersArr = memberships.filter(membership => {
-            return membership.groupId === group.id; // fixed by adding 'return'
-        });
-
-        const groupObj = {
-            id: group.id,
-            organizerId: group.organizerId,
-            name: group.name,
-            about: group.about,
-            type: group.type,
-            private: group.private,
-            city: group.city,
-            state: group.state,
-            createdAt: group.createdAt,
-            updatedAt: group.updatedAt,
-            numMembers: membersArr.length // add numMembers prop
-        };
-
-        // creating previewImage:
-
-        group.GroupImages.forEach(image => {
-
-            if (image.preview === true) {
-                groupObj.previewImage = image.url // add previewImage prop
-            } else {
-                groupObj.previewImage = 'No preview image found'
-            }
-        });
-
-        allGroupsObj.Groups.push(groupObj);
+        groupsList.push(group.toJSON());
     });
 
-    return res.json(allGroupsObj);
+    groupsList.forEach(group => {
+
+        // 1. create + add numMembers
+        membershipsArr = group.Memberships;
+        group.numMembers = membershipsArr.length;
+        delete group.Memberships;
+
+        // 2. create + add previewImage
+        group.GroupImages.forEach(image => {
+            // console.log(image.preview)
+            if (image.preview === true) {
+                // console.log(image)
+                group.previewImage = image.url;
+            };
+        });
+        if (!group.previewImage) {
+            group.previewImage = 'No preview image found';
+        };
+        delete group.GroupImages;
+
+        // 3. add group to allGroupsObj
+        allGroupsObj.Groups.push(group);
+    });
+
+    return res.json(allGroupsObj); // format: { Groups: [] }
 });
+
+
 
 
 
@@ -125,6 +186,165 @@ module.exports = router;
 
 
 
+
+
+
+
+////////////////// ALTERNATIVE VERSIONS //////////////////
+////////////////// ALTERNATIVE VERSIONS //////////////////
+////////////////// ALTERNATIVE VERSIONS //////////////////
+////////////////// ALTERNATIVE VERSIONS //////////////////
+////////////////// ALTERNATIVE VERSIONS //////////////////
+////////////////// ALTERNATIVE VERSIONS //////////////////
+////////////////// ALTERNATIVE VERSIONS //////////////////
+////////////////// ALTERNATIVE VERSIONS //////////////////
+////////////////// ALTERNATIVE VERSIONS //////////////////
+
+
+// Get all Groups (GET /api/groups) -- V2
+// router.get('/', async (req, res) => {
+//     let allGroupsObj = { Groups: [] };
+
+//     const groupsOrig = await Group.findAll({
+//         include: [
+//             { model: Membership },
+//             { model: GroupImage }
+//         ]
+//     });
+
+//     // convert to JSON (not sure needed; keep to be safe)
+//     let groupsList = [];
+//     groupsOrig.forEach(group => {
+//         groupsList.push(group.toJSON());
+//     });
+
+//     groupsList.forEach(group => {
+
+//         // 1. create + add numMembers
+//         membershipsArr = group.Memberships;
+//         group.numMembers = membershipsArr.length;
+//         delete group.Memberships;
+
+//         // 2. create + add previewImage
+//         group.GroupImages.forEach(image => {
+//             // console.log(image.preview)
+//             if (image.preview === true) {
+//                 // console.log(image)
+//                 group.previewImage = image.url;
+//             };
+//         });
+//         if (!group.previewImage) {
+//             group.previewImage = 'No preview image found';
+//         };
+//         delete group.GroupImages;
+
+//         // 3. add group to allGroupsObj
+//         allGroupsObj.Groups.push(group);
+//     });
+
+//     return res.json(allGroupsObj); // format: { Groups: [] }
+// });
+
+// Get all Groups (GET /api/groups) -- V1 -- ORIG BUT LONGER
+// router.get('/', async (req, res) => {
+//     let allGroupsObj = { Groups: [] };
+
+//     const groupsOrig = await Group.findAll({ // ret arr of objs
+//         include: [{ model: GroupImage }] // remove this outer arr?
+//     });
+
+//     const memberships = await Membership.findAll();
+
+//     groupsOrig.forEach(group => {
+
+//         // creating numMembers:
+
+//         const membersArr = memberships.filter(membership => {
+//             return membership.groupId === group.id; // fixed by adding 'return'
+//         });
+
+//         const groupObj = {
+//             id: group.id,
+//             organizerId: group.organizerId,
+//             name: group.name,
+//             about: group.about,
+//             type: group.type,
+//             private: group.private,
+//             city: group.city,
+//             state: group.state,
+//             createdAt: group.createdAt,
+//             updatedAt: group.updatedAt,
+//             numMembers: membersArr.length // add numMembers prop
+//         };
+
+//         // creating previewImage:
+
+//         group.GroupImages.forEach(image => {
+
+//             if (image.preview === true) {
+//                 groupObj.previewImage = image.url // add previewImage prop
+//             } else {
+//                 groupObj.previewImage = 'No preview image found'
+//             }
+//         });
+
+//         allGroupsObj.Groups.push(groupObj);
+//     });
+
+//     return res.json(allGroupsObj);
+// });
+
+
+////////////////// OLD DRAFT CODE //////////////////
+////////////////// OLD DRAFT CODE //////////////////
+////////////////// OLD DRAFT CODE //////////////////
+////////////////// OLD DRAFT CODE //////////////////
+////////////////// OLD DRAFT CODE //////////////////
+////////////////// OLD DRAFT CODE //////////////////
+////////////////// OLD DRAFT CODE //////////////////
+////////////////// OLD DRAFT CODE //////////////////
+////////////////// OLD DRAFT CODE //////////////////
+
+
+// Get details of a Group from an id (GET /api/groups/:groupId) -- ORIG DRAFT
+// router.get('/:groupId', async (req, res) => {
+
+//     const group = await Group.findByPk(req.params.groupId,
+//         {
+//             include: [
+//                 { model: GroupImage },
+//                 // { model: Organizer }, // this one is causing problem
+//                 { model: Venue },
+//             ]
+//         }
+//     );
+
+//     // creating numMembers:
+//     const memberships = await Membership.findAll();
+
+//     const membersArr = memberships.filter(membership => {
+//         return membership.groupId === group.id; // fixed by adding 'return'
+//     });
+
+//     const groupObj = {
+//         id: group.id,
+//         organizerId: group.organizerId,
+//         name: group.name,
+//         about: group.about,
+//         type: group.type,
+//         private: group.private,
+//         city: group.city,
+//         state: group.state,
+//         createdAt: group.createdAt,
+//         updatedAt: group.updatedAt,
+//         numMembers: membersArr.length, // add
+//         GroupImages: group.GroupImages, // add
+//         // Organizer: group.Organizer, // add
+//         Venues: group.Venues // add
+//     };
+
+//     return res.json(groupObj);
+// });
 
 
 // WORKING
