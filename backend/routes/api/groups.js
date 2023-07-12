@@ -6,110 +6,44 @@ const { Group, Membership, GroupImage, Organizer, Venue } = require('../../db/mo
 
 const router = express.Router();
 
-// GET GROUPS FOR CURRENT USER (GET /api/groups/current)
-router.get('/current', async (req, res) => {
+// // GET GROUPS FOR CURRENT USER (GET /api/groups/current)
+// router.get('/current', async (req, res) => {
 
-    const currUserGroups = await Group.findAll({
-        // include: [
-        //     { model: Membership }
-        // ],
-        where: {
-            [Op.or]: [
-                { organizerId: req.user.id },
-                // { groupId: req.user.id }
-            ]
-        }
-    });
-
-    return res.json(currUserGroups);
-});
-
-// Get details of a Group from an id (GET /api/groups/:groupId)
-router.get('/:groupId', async (req, res) => {
-
-    const group = await Group.findByPk(req.params.groupId,
-        {
-            include: [
-                // { model: },
-                { model: GroupImage },
-                { model: Organizer },
-                { model: Venue },
-            ]
-        }
-    );
-
-    // need to also include: numMembers, GroupImages, Organizer, Venues
-
-    return res.json(group);
-});
-
-
-
-// router.get('/', async (req, res) => {
-//     const games = await Boardgame.findAll({
-//         include: [
-//             { model: Review },
-//             { model: Image }
-//         ]
-//     })
-
-//     let gamesList = [];
-//     games.forEach(game => {
-//         gamesList.push(game.toJSON())
-//     });
-
-//     gamesList.forEach(game => {
-//         game.Images.forEach(image => {
-//             // console.log(image.bannerImage)
-//             if (image.bannerImage === true) {
-//                 // console.log(image)
-//                 game.bannerImage = image.url
-//             }
-//         })
-//         if (!game.bannerImage) {
-//             game.bannerImage = 'No banner image found'
+//     const currUserGroups = await Group.findAll({
+//         // include: [
+//         //     { model: Membership }
+//         // ],
+//         where: {
+//             [Op.or]: [
+//                 { organizerId: req.user.id },
+//                 // { groupId: req.user.id }
+//             ]
 //         }
-//         delete game.Images
 //     });
 
-//     res.json(gamesList);
+//     return res.json(currUserGroups);
 // });
 
+// // Get details of a Group from an id (GET /api/groups/:groupId)
+// router.get('/:groupId', async (req, res) => {
 
-// router.get('/', async (req, res) => {
-//     const groupsOrig = await Group.findAll({
-//         include: [
-//             // { model: Membership },
-//             { model: GroupImage }
-//         ]
-//     })
-
-//     let groups = [];
-//     groupsOrig.forEach(group => {
-//         groups.push(group.toJSON())
-//     });
-
-//     groups.forEach(group => {
-
-//         group.GroupImages.forEach(image => {
-//             // console.log(image.preview)
-//             if (image.preview === true) {
-//                 // console.log(image)
-//                 group.previewImage = image.url
-//             }
-//         })
-//         if (!group.previewImage) {
-//             group.previewImage = 'No preview image found'
+//     const group = await Group.findByPk(req.params.groupId,
+//         {
+//             include: [
+//                 // { model: },
+//                 { model: GroupImage },
+//                 { model: Organizer },
+//                 { model: Venue },
+//             ]
 //         }
-//         delete group.GroupImages
-//     });
+//     );
 
-//     res.json(groups);
+//     // need to also include: numMembers, GroupImages, Organizer, Venues
+
+//     return res.json(group);
 // });
 
-
-
-// GET ALL GROUPS (GET / api / groups)
+// GET ALL GROUPS (GET /api/groups)
 router.get('/', async (req, res) => {
     let allGroupsObj = { Groups: [] };
 
@@ -256,6 +190,67 @@ module.exports = router;
 
 
 
+// router.get('/', async (req, res) => {
+//     const games = await Boardgame.findAll({
+//         include: [
+//             { model: Review },
+//             { model: Image }
+//         ]
+//     })
+
+//     let gamesList = [];
+//     games.forEach(game => {
+//         gamesList.push(game.toJSON())
+//     });
+
+//     gamesList.forEach(game => {
+//         game.Images.forEach(image => {
+//             // console.log(image.bannerImage)
+//             if (image.bannerImage === true) {
+//                 // console.log(image)
+//                 game.bannerImage = image.url
+//             }
+//         })
+//         if (!game.bannerImage) {
+//             game.bannerImage = 'No banner image found'
+//         }
+//         delete game.Images
+//     });
+
+//     res.json(gamesList);
+// });
+
+
+// router.get('/', async (req, res) => {
+//     const groupsOrig = await Group.findAll({
+//         include: [
+//             // { model: Membership },
+//             { model: GroupImage }
+//         ]
+//     })
+
+//     let groups = [];
+//     groupsOrig.forEach(group => {
+//         groups.push(group.toJSON())
+//     });
+
+//     groups.forEach(group => {
+
+//         group.GroupImages.forEach(image => {
+//             // console.log(image.preview)
+//             if (image.preview === true) {
+//                 // console.log(image)
+//                 group.previewImage = image.url
+//             }
+//         })
+//         if (!group.previewImage) {
+//             group.previewImage = 'No preview image found'
+//         }
+//         delete group.GroupImages
+//     });
+
+//     res.json(groups);
+// });
 
 
 
