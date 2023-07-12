@@ -4,10 +4,9 @@ const { Op } = require('sequelize');
 const { Group, Membership, GroupImage, User, Venue } = require('../../db/models');
 const router = express.Router();
 
-// // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- DRAFT V2
+// // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- DRAFT V3
 // Return all groups created by current user, or where current user has a membership.
 // require authentication: TRUE
-// test if shows 2 groups, after adding a group to User 1
 router.get('/current', async (req, res) => {
     const { user } = req; // pull user from req
 
@@ -33,7 +32,7 @@ router.get('/current', async (req, res) => {
     const groupsOrig = await Group.findAll({
         // where: { organizerId: currUserId }, // this was limiting to only groups meeting this condition
         include: [
-            { model: Membership, where: { userId: currUserId } }, // do not need as "currUserId"
+            { model: Membership }, // removed: where: { userId: currUserId } (& do not need as "currUserId")
             { model: GroupImage }
         ]
     });
@@ -48,7 +47,19 @@ router.get('/current', async (req, res) => {
     // console.log(groupsOrig)
     // console.log('////////////////////////////////')
 
+
+    // 1. get all Memberships
+    // 2. get Memberships where: { userId: currUserId }
+    // 3. get groupId for each Membership where: { userId: currUserId }
+    // 4. for each group, get count of Memberships with that groupId (numMembers)
+
     groups.forEach(group => {
+
+        // console.log('////////////////////////////////')
+        // console.log(`***** group.Memberships:`)
+        // console.log(group.Memberships)
+        // console.log('////////////////////////////////')
+
         // 1. create + add numMembers
         membershipsArr = group.Memberships;
         group.numMembers = membershipsArr.length;
@@ -67,8 +78,21 @@ router.get('/current', async (req, res) => {
         };
         delete group.GroupImages;
 
-        // 3. add group to allGroupsObj
-        allGroupsObj.Groups.push(group);
+        let allUserIdsInGroupMemberships = [];
+        membershipsArr.forEach(membership => {
+            const id = membership.userId;
+            allUserIdsInGroupMemberships.push(id);
+        });
+
+        // console.log('////////////////////////////////')
+        // console.log(`***** allUserIdsInGroupMemberships:`)
+        // console.log(allUserIdsInGroupMemberships)
+        // console.log('////////////////////////////////')
+
+        if (allUserIdsInGroupMemberships.includes(currUserId)) {
+            // 3. add group to allGroupsObj
+            allGroupsObj.Groups.push(group);
+        };
     });
 
     return res.json(allGroupsObj); // format: { Groups: [] }
@@ -78,7 +102,6 @@ router.get('/current', async (req, res) => {
 // // // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- DRAFT V1
 // // Return all groups created by current user, or where current user has a membership.
 // // require authentication: TRUE
-// // test if shows 2 groups, after adding a group to User 1
 // router.get('/current', async (req, res) => {
 //     const { user } = req; // pull user from req
 //     const currUserId = user.dataValues.id;
@@ -531,6 +554,91 @@ module.exports = router;
 ////////////////// OLD DRAFT CODE //////////////////
 ////////////////// OLD DRAFT CODE //////////////////
 ////////////////// OLD DRAFT CODE //////////////////
+
+// // // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- DRAFT V2
+// // Return all groups created by current user, or where current user has a membership.
+// // require authentication: TRUE
+// router.get('/current', async (req, res) => {
+//     const { user } = req; // pull user from req
+
+//     // console.log('////////////////////////////////')
+//     // console.log(`***** user:`)
+//     // console.log(user)
+//     // console.log('////////////////////////////////')
+
+//     if (!user) {
+//         res.status(404); // change to client-side error code
+//         return res.json({ message: `No user is currently logged in` });
+//     };
+
+//     let allGroupsObj = { Groups: [] };
+
+//     const currUserId = user.dataValues.id;
+
+//     // console.log('////////////////////////////////')
+//     // console.log(`***** currUserId:`)
+//     // console.log(currUserId)
+//     // console.log('////////////////////////////////')
+
+//     const groupsOrig = await Group.findAll({
+//         // where: { organizerId: currUserId }, // this was limiting to only groups meeting this condition
+//         include: [
+//             { model: Membership }, // removed: where: { userId: currUserId } (& do not need as "currUserId")
+//             { model: GroupImage }
+//         ]
+//     });
+
+//     let groups = [];
+//     groupsOrig.forEach(group => {
+//         groups.push(group.toJSON()); // convert to JSON
+//     });
+
+//     // console.log('////////////////////////////////')
+//     // console.log(`***** groupsOrig:`)
+//     // console.log(groupsOrig)
+//     // console.log('////////////////////////////////')
+
+
+//     // 1. get all Memberships
+//     // 2. get Memberships where: { userId: currUserId }
+//     // 3. get groupId for each Membership where: { userId: currUserId }
+//     // 4. for each group, get count of Memberships with that groupId (numMembers)
+
+//     groups.forEach(group => {
+
+//         console.log('////////////////////////////////')
+//         console.log(`***** group.Memberships:`)
+//         console.log(group.Memberships)
+//         console.log('////////////////////////////////')
+
+//         // if (group.Membership.userId === currUserId) {
+
+//         // 1. create + add numMembers
+//         membershipsArr = group.Memberships;
+//         group.numMembers = membershipsArr.length;
+//         delete group.Memberships;
+
+//         // 2. create + add previewImage
+//         group.GroupImages.forEach(image => {
+//             // console.log(image.preview)
+//             if (image.preview === true) {
+//                 // console.log(image)
+//                 group.previewImage = image.url;
+//             };
+//         });
+//         if (!group.previewImage) {
+//             group.previewImage = 'No preview image found';
+//         };
+//         delete group.GroupImages;
+
+//         // 3. add group to allGroupsObj
+//         allGroupsObj.Groups.push(group);
+//         // }
+//     });
+
+//     return res.json(allGroupsObj); // format: { Groups: [] }
+// });
+
 
 // // Get all Groups joined or organized by Current User (GET /api/groups/current) -- ORIG DRAFT
 

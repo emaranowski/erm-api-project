@@ -23,7 +23,7 @@ module.exports = {
       {
         userId: 1, // added to test, so that User 1 is in 2 groups, as host & member (for: GET /api/groups/current)
         groupId: 2,
-        status: 'member' // i.e. organizer
+        status: 'member'
       },
       {
         userId: 2,
