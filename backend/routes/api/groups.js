@@ -24,24 +24,45 @@ const router = express.Router();
 //     return res.json(currUserGroups);
 // });
 
-// // Get details of a Group from an id (GET /api/groups/:groupId)
-// router.get('/:groupId', async (req, res) => {
+// Get details of a Group from an id (GET /api/groups/:groupId)
+router.get('/:groupId', async (req, res) => {
 
-//     const group = await Group.findByPk(req.params.groupId,
-//         {
-//             include: [
-//                 // { model: },
-//                 { model: GroupImage },
-//                 { model: Organizer },
-//                 { model: Venue },
-//             ]
-//         }
-//     );
+    const group = await Group.findByPk(req.params.groupId,
+        {
+            include: [
+                { model: GroupImage },
+                // { model: Organizer }, // this one is causing problem
+                { model: Venue },
+            ]
+        }
+    );
 
-//     // need to also include: numMembers, GroupImages, Organizer, Venues
+    // creating numMembers:
+    const memberships = await Membership.findAll();
 
-//     return res.json(group);
-// });
+    const membersArr = memberships.filter(membership => {
+        return membership.groupId === group.id; // fixed by adding 'return'
+    });
+
+    const groupObj = {
+        id: group.id,
+        organizerId: group.organizerId,
+        name: group.name,
+        about: group.about,
+        type: group.type,
+        private: group.private,
+        city: group.city,
+        state: group.state,
+        createdAt: group.createdAt,
+        updatedAt: group.updatedAt,
+        numMembers: membersArr.length, // add
+        GroupImages: group.GroupImages, // add
+        // Organizer: group.Organizer, // add
+        Venues: group.Venues // add
+    };
+
+    return res.json(groupObj);
+});
 
 // GET ALL GROUPS (GET /api/groups)
 router.get('/', async (req, res) => {
