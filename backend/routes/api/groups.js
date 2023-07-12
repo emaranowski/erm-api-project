@@ -4,12 +4,139 @@ const { Op } = require('sequelize');
 const { Group, Membership, GroupImage, User, Venue } = require('../../db/models');
 const router = express.Router();
 
+// // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- DRAFT V2
+// Return all groups created by current user, or where current user has a membership.
+// require authentication: TRUE
+// test if shows 2 groups, after adding a group to User 1
+router.get('/current', async (req, res) => {
+    const { user } = req; // pull user from req
+
+    // console.log('////////////////////////////////')
+    // console.log(`***** user:`)
+    // console.log(user)
+    // console.log('////////////////////////////////')
+
+    if (!user) {
+        res.status(404); // change to client-side error code
+        return res.json({ message: `No user is currently logged in` });
+    };
+
+    let allGroupsObj = { Groups: [] };
+
+    const currUserId = user.dataValues.id;
+
+    // console.log('////////////////////////////////')
+    // console.log(`***** currUserId:`)
+    // console.log(currUserId)
+    // console.log('////////////////////////////////')
+
+    const groupsOrig = await Group.findAll({
+        // where: { organizerId: currUserId }, // this was limiting to only groups meeting this condition
+        include: [
+            { model: Membership, where: { userId: currUserId } }, // do not need as "currUserId"
+            { model: GroupImage }
+        ]
+    });
+
+    let groups = [];
+    groupsOrig.forEach(group => {
+        groups.push(group.toJSON()); // convert to JSON
+    });
+
+    // console.log('////////////////////////////////')
+    // console.log(`***** groupsOrig:`)
+    // console.log(groupsOrig)
+    // console.log('////////////////////////////////')
+
+    groups.forEach(group => {
+        // 1. create + add numMembers
+        membershipsArr = group.Memberships;
+        group.numMembers = membershipsArr.length;
+        delete group.Memberships;
+
+        // 2. create + add previewImage
+        group.GroupImages.forEach(image => {
+            // console.log(image.preview)
+            if (image.preview === true) {
+                // console.log(image)
+                group.previewImage = image.url;
+            };
+        });
+        if (!group.previewImage) {
+            group.previewImage = 'No preview image found';
+        };
+        delete group.GroupImages;
+
+        // 3. add group to allGroupsObj
+        allGroupsObj.Groups.push(group);
+    });
+
+    return res.json(allGroupsObj); // format: { Groups: [] }
+});
 
 
-
-
-// // GET GROUPS FOR CURRENT USER (GET /api/groups/current)
+// // // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- DRAFT V1
+// // Return all groups created by current user, or where current user has a membership.
+// // require authentication: TRUE
+// // test if shows 2 groups, after adding a group to User 1
 // router.get('/current', async (req, res) => {
+//     const { user } = req; // pull user from req
+//     const currUserId = user.dataValues.id;
+
+//     console.log('////////////////')
+//     console.log(`currUserId: `, currUserId)
+//     console.log('////////////////')
+
+//     if (!user) {
+//         res.status(404);
+//         return res.json({ message: `No user is currently logged in` });
+//     };
+
+//     let allGroupsObj = { Groups: [] };
+
+//     const groupsOrig = await Group.findAll({
+//         where: { organizerId: currUserId },
+//         include: [
+//             { model: Membership, where: { groupId: currUserId } }, // may need ""
+//             { model: GroupImage },
+//         ]
+//     });
+//     let groups = [];
+//     groupsOrig.forEach(group => {
+//         groups.push(group.toJSON()); // convert to JSON
+//     });
+
+//     groups.forEach(group => {
+//         // 1. create + add numMembers
+//         membershipsArr = group.Memberships;
+//         group.numMembers = membershipsArr.length;
+//         delete group.Memberships;
+
+//         // 2. create + add previewImage
+//         group.GroupImages.forEach(image => {
+//             // console.log(image.preview)
+//             if (image.preview === true) {
+//                 // console.log(image)
+//                 group.previewImage = image.url;
+//             };
+//         });
+//         if (!group.previewImage) {
+//             group.previewImage = 'No preview image found';
+//         };
+//         delete group.GroupImages;
+
+//         // 3. add group to allGroupsObj
+//         allGroupsObj.Groups.push(group);
+//     });
+
+//     return res.json(allGroupsObj); // format: { Groups: [] }
+// });
+
+// // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- ORIG DRAFT
+// Return all groups either created by current user or those where current user has a membership.
+// require authentication: TRUE
+// router.get('/current', async (req, res) => {
+//     let groupsObj = {};
 
 //     const currUserGroups = await Group.findAll({
 //         // include: [
@@ -23,14 +150,15 @@ const router = express.Router();
 //         }
 //     });
 
-//     return res.json(currUserGroups);
+//     groupsObj.Groups = currUserGroups;
+
+//     return res.json(groupsObj);
 // });
 
 
 
 
-
-// Get details of a Group from an id (GET /api/groups/:groupId) -- ORIG DRAFT
+// Get details of a Group from an id (GET /api/groups/:groupId) -- V1
 router.get('/:groupId', async (req, res) => {
 
     const groupOrig = await Group.findByPk(req.params.groupId,
@@ -201,6 +329,103 @@ module.exports = router;
 ////////////////// ALTERNATIVE VERSIONS //////////////////
 
 
+
+// Get details of a Group from an id (GET /api/groups/:groupId) -- V1
+// router.get('/:groupId', async (req, res) => {
+
+//     const groupOrig = await Group.findByPk(req.params.groupId,
+//         {
+//             include: [
+//                 { model: GroupImage },
+//                 // { model: User }, // this one is causing problem
+//                 { model: Venue },
+//             ]
+//         }
+//     );
+
+//     // Error response: Couldn't find a Group with the specified id
+//     if (!groupOrig) {
+//         res.status(404);
+//         return res.json({ message: `Group couldn't be found` });
+//     }
+
+//     // convert to JSON
+//     group = groupOrig.toJSON();
+
+//     // create numMembers val (totalMembers):
+//     let totalMembers;
+//     const memberships = await Membership.findAll(); // QUERY DB
+//     const membersArr = memberships.filter(membership => {
+//         return membership.groupId === group.id;
+//     });
+//     totalMembers = membersArr.length;
+
+//     // create GroupImages val (groupImagesArr):
+//     let groupImagesArr = [];
+//     const groupImagesArrOrig = group.GroupImages; // want to remove groupId from orig
+//     groupImagesArrOrig.forEach(image => {
+//         const imageObj = {};
+//         imageObj.id = image.id;
+//         imageObj.url = image.url;
+//         imageObj.preview = image.preview;
+
+//         groupImagesArr.push(imageObj);
+//     });
+
+//     // create Organizer val (organizerObj):
+//     let organizerObj = {};
+//     const users = await User.findAll(); // QUERY DB
+//     const usersArr = users.filter(user => {
+//         return user.id === group.organizerId;
+//     });
+//     const user = usersArr[0];
+//     organizerObj.id = user.id;
+//     organizerObj.firstName = user.firstName;
+//     organizerObj.lastName = user.lastName;
+
+//     // create Venues val (venuesArr):
+//     let venuesArr = [];
+//     const venuesArrOrig = group.Venues;
+//     venuesArrOrig.forEach(venue => {
+//         const venueObj = {};
+//         venueObj.id = venue.id;
+//         venueObj.groupId = venue.groupId;
+//         venueObj.address = venue.address;
+//         venueObj.city = venue.city;
+//         venueObj.state = venue.state;
+//         venueObj.lat = venue.lat;
+//         venueObj.lng = venue.lng;
+
+//         venuesArr.push(venueObj);
+//     });
+
+//     const groupObj = { // manually creating obj helps ensure ideal order
+//         id: group.id,
+//         organizerId: group.organizerId,
+//         name: group.name,
+//         about: group.about,
+//         type: group.type,
+//         private: group.private,
+//         city: group.city,
+//         state: group.state,
+//         createdAt: group.createdAt,
+//         updatedAt: group.updatedAt,
+//         numMembers: totalMembers, // add
+//         GroupImages: groupImagesArr, // add
+//         Organizer: organizerObj, // add
+//         Venues: venuesArr // add
+//     };
+
+//     // NOTES:
+//     // ideally do more efficiently, w/o querying db for:
+//     // await Membership
+//     // await User
+
+//     return res.json(groupObj);
+// });
+
+
+
 // Get all Groups (GET /api/groups) -- V2
 // router.get('/', async (req, res) => {
 //     let allGroupsObj = { Groups: [] };
@@ -244,6 +469,8 @@ module.exports = router;
 
 //     return res.json(allGroupsObj); // format: { Groups: [] }
 // });
+
+
 
 // Get all Groups (GET /api/groups) -- V1 -- ORIG BUT LONGER
 // router.get('/', async (req, res) => {
@@ -304,6 +531,29 @@ module.exports = router;
 ////////////////// OLD DRAFT CODE //////////////////
 ////////////////// OLD DRAFT CODE //////////////////
 ////////////////// OLD DRAFT CODE //////////////////
+
+// // Get all Groups joined or organized by Current User (GET /api/groups/current) -- ORIG DRAFT
+
+// Returns all the groups either created by the current user or those where the
+// current user has a membership.
+
+// router.get('/current', async (req, res) => {
+
+//     const currUserGroups = await Group.findAll({
+//         // include: [
+//         //     { model: Membership }
+//         // ],
+//         where: {
+//             [Op.or]: [
+//                 { organizerId: req.user.id },
+//                 // { groupId: req.user.id }
+//             ]
+//         }
+//     });
+
+//     return res.json(currUserGroups);
+// });
+
 
 
 // Get details of a Group from an id (GET /api/groups/:groupId) -- ORIG DRAFT

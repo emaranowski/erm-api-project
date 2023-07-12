@@ -21,6 +21,11 @@ module.exports = {
         status: 'host' // i.e. organizer
       },
       {
+        userId: 1, // added to test, so that User 1 is in 2 groups, as host & member (for: GET /api/groups/current)
+        groupId: 2,
+        status: 'member' // i.e. organizer
+      },
+      {
         userId: 2,
         groupId: 1,
         status: 'co-host'
