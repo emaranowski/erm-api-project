@@ -34,9 +34,15 @@ module.exports = {
         }
       },
       status: {
-        type: Sequelize.ENUM('pending', 'rejected', 'approved'),
-        allowNull: true, // maybe change later to defaultValue?
+        type: Sequelize.ENUM('host', 'co-host', 'member', 'pending'),
+        allowNull: true,
+        defaultValue: 'pending'
       },
+      // status: {
+      //   type: Sequelize.ENUM('pending', 'rejected', 'approved'),
+      //   allowNull: true,
+      //   // defaultValue: 'pending'
+      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

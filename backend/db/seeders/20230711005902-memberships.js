@@ -16,17 +16,22 @@ module.exports = {
       {
         userId: 1,
         groupId: 1,
-        status: 'pending'
+        status: 'host' // i.e. organizer
       },
       {
         userId: 2,
-        groupId: 2,
-        status: 'rejected'
+        groupId: 1,
+        status: 'co-host'
       },
       {
         userId: 3,
+        groupId: 2,
+        status: 'member'
+      },
+      {
+        userId: 4,
         groupId: 3,
-        status: 'approved'
+        status: 'pending'
       },
     ], { validate: true });
 
@@ -38,7 +43,7 @@ module.exports = {
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       userId: {
-        [Op.in]: [1, 2, 3]
+        [Op.in]: [1, 2, 3, 4] // added 4
       } // may need to add combos of userId & groupId?
     }, {});
 

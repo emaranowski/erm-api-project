@@ -43,9 +43,15 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     status: {
-      type: DataTypes.ENUM('pending', 'rejected', 'approved'),
-      allowNull: true, // maybe change later to defaultValue?
-    }
+      type: DataTypes.ENUM('host', 'co-host', 'member', 'pending'),
+      allowNull: true,
+      defaultValue: 'pending'
+    },
+    // status: {
+    //   type: DataTypes.ENUM('pending', 'rejected', 'approved'),
+    //   allowNull: true,
+    //   // defaultValue: 'pending'
+    // },
   }, {
     sequelize,
     modelName: 'Membership',
