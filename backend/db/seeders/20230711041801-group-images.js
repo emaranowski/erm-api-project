@@ -16,7 +16,7 @@ module.exports = {
       {
         groupId: 1,
         url: 'https://tinyurl.com/meetup-schema',
-        preview: false
+        preview: true
       },
       {
         groupId: 2,
