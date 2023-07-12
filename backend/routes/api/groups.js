@@ -2,12 +2,13 @@
 const express = require('express');
 const { Op } = require('sequelize');
 const { Group, Membership, GroupImage, User, Venue } = require('../../db/models');
+const { requireAuth } = require('../../utils/auth');
 const router = express.Router();
 
 // // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- DRAFT V3
 // Return all groups created by current user, or where current user has a membership.
 // require authentication: TRUE
-router.get('/current', async (req, res) => {
+router.get('/current', requireAuth, async (req, res) => {
     const { user } = req; // pull user from req
 
     // console.log('////////////////////////////////')
@@ -15,9 +16,11 @@ router.get('/current', async (req, res) => {
     // console.log(user)
     // console.log('////////////////////////////////')
 
+    // this 'if (!user)' will not run, since 'requireAuth' will catch any reqs lacking authentication
+    // but if 'requireAuth' didn't work, this would be a failsafe/backup
     if (!user) {
-        res.status(404); // change to client-side error code
-        return res.json({ message: `No user is currently logged in` });
+        res.status(401);
+        return res.json({ message: `Authentication Required. No user is currently logged in.` });
     };
 
     let allGroupsObj = { Groups: [] };
