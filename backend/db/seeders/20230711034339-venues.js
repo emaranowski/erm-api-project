@@ -59,7 +59,10 @@ module.exports = {
           // 'SE Cesar Chavez Blvd & Stark St',
           '3456 N Dekum St',
           '5678 N Killingsworth Ct',
-          '123 Disney Lane']
+          '123 Disney Lane',
+          '123 Disney Lane Road',
+          '1234 Disney Lane',
+          '1234 Disney Lane Road']
       }
     }, {});
 
