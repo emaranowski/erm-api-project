@@ -38,7 +38,7 @@ module.exports = {
         endDate: '2023-08-06'
       },
       {
-        venueId: 3,
+        venueId: null, // changed from 3 to null
         groupId: 3,
         name: 'Mox Board Game Night',
         description: 'Wednesday night board games at Mox Boarding House.',

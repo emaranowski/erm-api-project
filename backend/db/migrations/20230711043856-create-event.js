@@ -21,7 +21,7 @@ module.exports = {
       },
       venueId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true, // changed to true
         references: { // add ref in mig only
           model: 'Venues', // table name, so plural
           key: 'id'

@@ -68,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     venueId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true, // changed to true
     },
     groupId: {
       type: DataTypes.INTEGER,
