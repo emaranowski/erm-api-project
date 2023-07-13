@@ -101,21 +101,24 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res) => 
     await Event.bulkCreate([{ venueId, groupId, name, type, capacity, price, description, startDate, endDate }],
         { validate: true });
 
-    const createdGroupEvent = await Event.findOne({ // to get event id
-        where: { groupId, address, city, state, lat, lng }
+    const createdGroupEvent = await Event.findOne({ // to get createdGroupEvent.id
+        where: { venueId, groupId, name, type, capacity, price, description, startDate, endDate }
     });
 
-    const addedEvent = {};
-    addedEvent.id = createdGroupEvent.id;
-    addedEvent.groupId = createdGroupEvent.groupId;
-    addedEvent.address = createdGroupEvent.address;
-    addedEvent.city = createdGroupEvent.city;
-    addedEvent.state = createdGroupEvent.state;
-    addedEvent.lat = createdGroupEvent.lat;
-    addedEvent.lng = createdGroupEvent.lng;
+    const event = {};
+    event.id = createdGroupEvent.id;
+    event.groupId = createdGroupEvent.groupId;
+    event.venueId = createdGroupEvent.venueId;
+    event.name = createdGroupEvent.name;
+    event.type = createdGroupEvent.type;
+    event.capacity = createdGroupEvent.capacity;
+    event.price = createdGroupEvent.price;
+    event.description = createdGroupEvent.description;
+    event.startDate = createdGroupEvent.startDate;
+    event.endDate = createdGroupEvent.endDate;
 
     res.status(200);
-    return res.json(addedEvent);
+    return res.json(event);
 });
 
 
