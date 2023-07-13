@@ -21,6 +21,14 @@ module.exports = {
         lat: 45.547859,
         lng: -122.672447
       },
+      // {
+      //   groupId: 1,
+      //   address: 'SE Cesar Chavez Blvd & Stark St',
+      //   city: 'Portland',
+      //   state: 'OR',
+      //   lat: 45.544759,
+      //   lng: -122.672987
+      // },
       {
         groupId: 2,
         address: '3456 N Dekum St',
@@ -48,6 +56,7 @@ module.exports = {
     return queryInterface.bulkDelete(options, {
       address: {
         [Op.in]: ['1234 SE Cesar Chavez Blvd',
+          // 'SE Cesar Chavez Blvd & Stark St',
           '3456 N Dekum St',
           '5678 N Killingsworth Ct']
       }

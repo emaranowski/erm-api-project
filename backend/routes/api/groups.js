@@ -7,51 +7,78 @@ const { check } = require('express-validator'); // validates req.body
 const { handleValidationErrors } = require('../../utils/validation'); // validates req.body
 const router = express.Router();
 
-
-// Get All Venues for a Group specified by its id (GET /api/groups/:groupId/venues) -- DRAFT V1
-router.get('/:groupId/venues', async (req, res) => {
+// Create a new Venue for a Group specified by its id (POST /api/groups/:groupId/venues) -- DRAFT V1
 
 
 
+// Get All Venues for a Group specified by its id (GET /api/groups/:groupId/venues) -- V1
+router.get('/:groupId/venues', requireAuth, async (req, res) => {
+    let allGroupVenuesObj = { Venues: [] };
 
-
-});
-
-
-
-
-// Delete a Group (DELETE /api/groups/:groupId) -- V1
-router.delete('/:groupId', requireAuth, async (req, res) => {
     const { user } = req; // pull user from req
-    // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
-    // but if 'requireAuth' didn't work, this would be a failsafe/backup
-    if (!user) {
+    if (!user) { // should not run, since requireAuth should catch issues first (but here as backup)
         res.status(401); // Unauthorized/Unauthenticated
         return res.json({ message: `Authentication Required. No user is currently logged in.` });
     };
 
-    const currUserId = user.dataValues.id;
-    const groupId = req.params.groupId; // params, not query
-
-    const groupToDelete = await Group.findByPk(groupId);
-    if (!groupToDelete) {
-        res.status(404); // Not Found
+    const groupId = req.params.groupId;
+    const groupOfInterest = await Group.findByPk(groupId, {
+        include: [
+            { model: Venue }
+        ]
+    });
+    if (!groupOfInterest) {
+        res.status(404);
         return res.json({ message: `Group couldn't be found` });
     };
 
-    // If logged in, but trying to delete group organized by another user....
-    if (!(currUserId === groupToDelete.organizerId)) {
-        res.status(403); // Forbidden -- or is this 401 Unauthorized/Unauthenticated ?????
-        return res.json({ message: `Group must belong to the current user. User must be the group's organizer to delete it.` });
-    };
+    // console.log('////////////////////////////////')
+    // console.log(`***** groupOfInterest:`)
+    // console.log(groupOfInterest)
+    // console.log('////////////////////////////////')
 
-    // DELETION HERE
-    await groupToDelete.destroy();
+    const groupVenuesArrOrig = groupOfInterest.dataValues.Venues;
+
+    // console.log('////////////////////////////////')
+    // console.log(`***** groupOfInterest.dataValues.Venues:`)
+    // console.log(groupOfInterest.dataValues.Venues)
+    // console.log('////////////////////////////////')
+
+    groupVenuesArrOrig.forEach(groupVenue => {
+
+        // console.log('////////////////////////////////')
+        // console.log(`***** groupVenue:`)
+        // console.log(groupVenue)
+        // console.log('////////////////////////////////')
+
+        // console.log('////////////////////////////////')
+        // console.log(`***** groupVenue.dataValues.address:`)
+        // console.log(groupVenue.dataValues.address)
+        // console.log('////////////////////////////////')
+
+        const { id, groupId, address, city, state, lat, lng } = groupVenue.dataValues;
+
+        const groupVenueObj = { id, groupId, address, city, state, lat, lng };
+
+        // const groupVenueObj2 = { // also works, just longer
+        //     id: groupVenue.dataValues.id,
+        //     groupId: groupVenue.dataValues.groupId,
+        //     address: groupVenue.dataValues.address,
+        //     city: groupVenue.dataValues.city,
+        //     state: groupVenue.dataValues.state,
+        //     lat: groupVenue.dataValues.lat,
+        //     lng: groupVenue.dataValues.lng,
+        // };
+
+        allGroupVenuesObj.Venues.push(groupVenueObj);
+    });
 
     res.status(200);
-    return res.json({ message: `Successfully deleted` });
+    return res.json(allGroupVenuesObj);
 });
 
+
+// maybe add validator here?
 // Add an Image to a Group based on the Group's id (POST /api/groups/:groupId/images)
 router.post('/:groupId/images', requireAuth, async (req, res) => {
     const { user } = req; // pull user from req
@@ -92,6 +119,40 @@ router.post('/:groupId/images', requireAuth, async (req, res) => {
     };
     res.status(200);
     return res.json(addedImage);
+});
+
+
+
+// Delete a Group (DELETE /api/groups/:groupId) -- V1
+router.delete('/:groupId', requireAuth, async (req, res) => {
+    const { user } = req; // pull user from req
+    // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
+    // but if 'requireAuth' didn't work, this would be a failsafe/backup
+    if (!user) {
+        res.status(401); // Unauthorized/Unauthenticated
+        return res.json({ message: `Authentication Required. No user is currently logged in.` });
+    };
+
+    const currUserId = user.dataValues.id;
+    const groupId = req.params.groupId; // params, not query
+
+    const groupToDelete = await Group.findByPk(groupId);
+    if (!groupToDelete) {
+        res.status(404); // Not Found
+        return res.json({ message: `Group couldn't be found` });
+    };
+
+    // If logged in, but trying to delete group organized by another user....
+    if (!(currUserId === groupToDelete.organizerId)) {
+        res.status(403); // Forbidden -- or is this 401 Unauthorized/Unauthenticated ?????
+        return res.json({ message: `Group must belong to the current user. User must be the group's organizer to delete it.` });
+    };
+
+    // DELETION HERE
+    await groupToDelete.destroy();
+
+    res.status(200);
+    return res.json({ message: `Successfully deleted` });
 });
 
 const validateGroup = [
