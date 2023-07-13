@@ -22,7 +22,7 @@ module.exports = {
         description: 'A shady hike through Forest Park.',
         type: 'In person',
         capacity: 100,
-        price: 0,
+        price: 5,
         startDate: '2023-08-12',
         endDate: '2023-08-12'
       },
@@ -33,7 +33,7 @@ module.exports = {
         description: 'A cozy potluck. Bring your best culinary inventions!',
         type: 'In person',
         capacity: 15,
-        price: 5,
+        price: 5.75,
         startDate: '2023-08-06',
         endDate: '2023-08-06'
       },
@@ -58,7 +58,10 @@ module.exports = {
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       name: {
-        [Op.in]: ['Forest Park Hike', 'First Sunday Potluck', 'Mox Board Game Night']
+        [Op.in]: ['Forest Park Hike',
+          'First Sunday Potluck',
+          'Mox Board Game Night',
+          'Tennis Group First Meet and Greet']
       }
     }, {});
 

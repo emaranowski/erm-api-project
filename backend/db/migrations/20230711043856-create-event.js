@@ -52,7 +52,7 @@ module.exports = {
         allowNull: false,
       },
       price: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DECIMAL, // changed from INT to DEC
         allowNull: false,
       },
       startDate: {
