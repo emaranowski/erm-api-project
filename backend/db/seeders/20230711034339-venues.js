@@ -58,7 +58,8 @@ module.exports = {
         [Op.in]: ['1234 SE Cesar Chavez Blvd',
           // 'SE Cesar Chavez Blvd & Stark St',
           '3456 N Dekum St',
-          '5678 N Killingsworth Ct']
+          '5678 N Killingsworth Ct',
+          '123 Disney Lane']
       }
     }, {});
 

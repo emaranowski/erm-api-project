@@ -7,8 +7,80 @@ const { check } = require('express-validator'); // validates req.body
 const { handleValidationErrors } = require('../../utils/validation'); // validates req.body
 const router = express.Router();
 
-// Create a new Venue for a Group specified by its id (POST /api/groups/:groupId/venues) -- DRAFT V1
+const validateVenue = [
+    check('address')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage(`Street address is required`),
+    check('city')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage(`City is required`),
+    check('state')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage(`State is required`),
+    check('lat')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage(`Latitude is required`),
+    check('lat')
+        .exists({ checkFalsy: true })
+        .isDecimal() // try to figure out how to use .isLatLong()
+        .withMessage(`Latitude is not valid`),
+    check('lng')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage(`Longitude is required`),
+    check('lng')
+        .exists({ checkFalsy: true })
+        .isDecimal() // try to figure out how to use .isLatLong()
+        .withMessage(`Longitude is not valid`),
+    handleValidationErrors
+]; // if any one is empty or incorrect, err is ret as res
 
+// Create a new Venue for a Group specified by its id (POST /api/groups/:groupId/venues) -- DRAFT V1
+router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res) => {
+    const { user } = req;
+    if (!user) { // should not run, since requireAuth should catch issues first (but here as backup)
+        res.status(401);
+        return res.json({ message: `Authentication Required. No user is currently logged in.` });
+    };
+
+    const currUserId = user.dataValues.id;
+    const { address, city, state, lat, lng } = req.body;
+    const groupId = req.params.groupId;
+
+    const groupToAddVenue = await Group.findByPk(groupId);
+    if (!groupToAddVenue) {
+        res.status(404);
+        return res.json({ message: `Group couldn't be found` });
+    };
+
+    if (!(currUserId === groupToAddVenue.organizerId)) {
+        res.status(403);
+        return res.json({ message: `Group must belong to the current user. User must be the group's organizer to add a venue.` });
+    };
+
+    await Venue.bulkCreate([{ groupId, address, city, state, lat, lng }],
+        { validate: true });
+
+    const createdGroupVenue = await Venue.findOne({ // to get venue id
+        where: { groupId, address, city, state, lat, lng }
+    });
+
+    const addedVenue = {};
+    addedVenue.id = createdGroupVenue.id;
+    addedVenue.groupId = createdGroupVenue.groupId;
+    addedVenue.address = createdGroupVenue.address;
+    addedVenue.city = createdGroupVenue.city;
+    addedVenue.state = createdGroupVenue.state;
+    addedVenue.lat = createdGroupVenue.lat;
+    addedVenue.lng = createdGroupVenue.lng;
+
+    res.status(200);
+    return res.json(addedVenue);
+});
 
 
 // Get All Venues for a Group specified by its id (GET /api/groups/:groupId/venues) -- V1

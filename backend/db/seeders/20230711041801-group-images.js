@@ -43,7 +43,7 @@ module.exports = {
       //   ]
       // } // if more urls added in up, add in down too
       groupId: {
-        [Op.in]: [1, 2, 3, 4]
+        [Op.in]: [1, 2, 3, 4, 5]
       } // added to accomodate later tests
     }, {});
 
