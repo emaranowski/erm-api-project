@@ -3,9 +3,78 @@ const express = require('express');
 const { Op } = require('sequelize');
 const { Group, Membership, GroupImage, User, Venue } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
+const { check } = require('express-validator'); // validates req.body
+const { handleValidationErrors } = require('../../utils/validation'); // validates req.body
 const router = express.Router();
 
-// // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- DRAFT V3
+
+// Create a Group (POST /api/groups) -- DRAFT V1
+
+const validateCreateGroup = [
+    check('name')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage(`Name is required`),
+    check('name')
+        .exists({ checkFalsy: true })
+        .isLength({ max: 60 })
+        .withMessage(`Name must be 60 characters or less`),
+    check('about')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage(`About is required`),
+    check('about')
+        .exists({ checkFalsy: true })
+        .isLength({ min: 50 })
+        .withMessage(`About must be 50 characters or more`),
+    check('type')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage(`Type is required`),
+    check('type')
+        .exists({ checkFalsy: true })
+        // .notEmpty() // find correct thing for here
+        .not() // not + isIn might work here?
+        .isIn(['Online', 'In person']) // not + isIn might work here?
+        .withMessage(`Type must be 'Online' or 'In person'`),
+    check('private')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage(`Privacy setting is required`),
+    check('private')
+        .exists({ checkFalsy: true })
+        // .notEmpty() // find correct thing for here
+        .not() // not + isIn might work here?
+        .isIn([true, false]) // not + isIn might work here?
+        .withMessage(`Private must be a boolean`),
+    check('city')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage(`City is required`),
+    check('state')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage(`State is required`),
+    handleValidationErrors
+]; // if any one is empty, err is ret as res
+
+// not sure I can pass in both requireAuth & validateCreateGroup ?????
+router.post('/', requireAuth, validateCreateGroup, async (req, res) => {
+    const { user } = req; // pull user from req
+    // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
+    // but if 'requireAuth' didn't work, this would be a failsafe/backup
+    if (!user) {
+        res.status(401);
+        return res.json({ message: `Authentication Required. No user is currently logged in.` });
+    };
+
+    const { name, about, type, private, city, state } = req.body;
+
+
+
+});
+
+// // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- V3
 // Return all groups created by current user, or where current user has a membership.
 // require authentication: TRUE
 router.get('/current', requireAuth, async (req, res) => {
@@ -16,7 +85,7 @@ router.get('/current', requireAuth, async (req, res) => {
     // console.log(user)
     // console.log('////////////////////////////////')
 
-    // this 'if (!user)' will not run, since 'requireAuth' will catch any reqs lacking authentication
+    // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
     // but if 'requireAuth' didn't work, this would be a failsafe/backup
     if (!user) {
         res.status(401);
@@ -100,87 +169,6 @@ router.get('/current', requireAuth, async (req, res) => {
 
     return res.json(allGroupsObj); // format: { Groups: [] }
 });
-
-
-// // // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- DRAFT V1
-// // Return all groups created by current user, or where current user has a membership.
-// // require authentication: TRUE
-// router.get('/current', async (req, res) => {
-//     const { user } = req; // pull user from req
-//     const currUserId = user.dataValues.id;
-
-//     console.log('////////////////')
-//     console.log(`currUserId: `, currUserId)
-//     console.log('////////////////')
-
-//     if (!user) {
-//         res.status(404);
-//         return res.json({ message: `No user is currently logged in` });
-//     };
-
-//     let allGroupsObj = { Groups: [] };
-
-//     const groupsOrig = await Group.findAll({
-//         where: { organizerId: currUserId },
-//         include: [
-//             { model: Membership, where: { groupId: currUserId } }, // may need ""
-//             { model: GroupImage },
-//         ]
-//     });
-//     let groups = [];
-//     groupsOrig.forEach(group => {
-//         groups.push(group.toJSON()); // convert to JSON
-//     });
-
-//     groups.forEach(group => {
-//         // 1. create + add numMembers
-//         membershipsArr = group.Memberships;
-//         group.numMembers = membershipsArr.length;
-//         delete group.Memberships;
-
-//         // 2. create + add previewImage
-//         group.GroupImages.forEach(image => {
-//             // console.log(image.preview)
-//             if (image.preview === true) {
-//                 // console.log(image)
-//                 group.previewImage = image.url;
-//             };
-//         });
-//         if (!group.previewImage) {
-//             group.previewImage = 'No preview image found';
-//         };
-//         delete group.GroupImages;
-
-//         // 3. add group to allGroupsObj
-//         allGroupsObj.Groups.push(group);
-//     });
-
-//     return res.json(allGroupsObj); // format: { Groups: [] }
-// });
-
-// // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- ORIG DRAFT
-// Return all groups either created by current user or those where current user has a membership.
-// require authentication: TRUE
-// router.get('/current', async (req, res) => {
-//     let groupsObj = {};
-
-//     const currUserGroups = await Group.findAll({
-//         // include: [
-//         //     { model: Membership }
-//         // ],
-//         where: {
-//             [Op.or]: [
-//                 { organizerId: req.user.id },
-//                 // { groupId: req.user.id }
-//             ]
-//         }
-//     });
-
-//     groupsObj.Groups = currUserGroups;
-
-//     return res.json(groupsObj);
-// });
-
 
 
 
@@ -557,6 +545,104 @@ module.exports = router;
 ////////////////// OLD DRAFT CODE //////////////////
 ////////////////// OLD DRAFT CODE //////////////////
 ////////////////// OLD DRAFT CODE //////////////////
+
+// // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- DRAFT V3
+// Return all groups created by current user, or where current user has a membership.
+// require authentication: TRUE
+// router.get('/current', requireAuth, async (req, res) => {
+//     const { user } = req; // pull user from req
+
+//     // console.log('////////////////////////////////')
+//     // console.log(`***** user:`)
+//     // console.log(user)
+//     // console.log('////////////////////////////////')
+
+//     // this 'if (!user)' will not run, since 'requireAuth' will catch any reqs lacking authentication
+//     // but if 'requireAuth' didn't work, this would be a failsafe/backup
+//     if (!user) {
+//         res.status(401);
+//         return res.json({ message: `Authentication Required. No user is currently logged in.` });
+//     };
+
+//     let allGroupsObj = { Groups: [] };
+
+//     const currUserId = user.dataValues.id;
+
+//     // console.log('////////////////////////////////')
+//     // console.log(`***** currUserId:`)
+//     // console.log(currUserId)
+//     // console.log('////////////////////////////////')
+
+//     const groupsOrig = await Group.findAll({
+//         // where: { organizerId: currUserId }, // this was limiting to only groups meeting this condition
+//         include: [
+//             { model: Membership }, // removed: where: { userId: currUserId } (& do not need as "currUserId")
+//             { model: GroupImage }
+//         ]
+//     });
+
+//     let groups = [];
+//     groupsOrig.forEach(group => {
+//         groups.push(group.toJSON()); // convert to JSON
+//     });
+
+//     // console.log('////////////////////////////////')
+//     // console.log(`***** groupsOrig:`)
+//     // console.log(groupsOrig)
+//     // console.log('////////////////////////////////')
+
+
+//     // 1. get all Memberships
+//     // 2. get Memberships where: { userId: currUserId }
+//     // 3. get groupId for each Membership where: { userId: currUserId }
+//     // 4. for each group, get count of Memberships with that groupId (numMembers)
+
+//     groups.forEach(group => {
+
+//         // console.log('////////////////////////////////')
+//         // console.log(`***** group.Memberships:`)
+//         // console.log(group.Memberships)
+//         // console.log('////////////////////////////////')
+
+//         // 1. create + add numMembers
+//         membershipsArr = group.Memberships;
+//         group.numMembers = membershipsArr.length;
+//         delete group.Memberships;
+
+//         // 2. create + add previewImage
+//         group.GroupImages.forEach(image => {
+//             // console.log(image.preview)
+//             if (image.preview === true) {
+//                 // console.log(image)
+//                 group.previewImage = image.url;
+//             };
+//         });
+//         if (!group.previewImage) {
+//             group.previewImage = 'No preview image found';
+//         };
+//         delete group.GroupImages;
+
+//         let allUserIdsInGroupMemberships = [];
+//         membershipsArr.forEach(membership => {
+//             const id = membership.userId;
+//             allUserIdsInGroupMemberships.push(id);
+//         });
+
+//         // console.log('////////////////////////////////')
+//         // console.log(`***** allUserIdsInGroupMemberships:`)
+//         // console.log(allUserIdsInGroupMemberships)
+//         // console.log('////////////////////////////////')
+
+//         if (allUserIdsInGroupMemberships.includes(currUserId)) {
+//             // 3. add group to allGroupsObj
+//             allGroupsObj.Groups.push(group);
+//         };
+//     });
+
+//     return res.json(allGroupsObj); // format: { Groups: [] }
+// });
+
+
 
 // // // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- DRAFT V2
 // // Return all groups created by current user, or where current user has a membership.
