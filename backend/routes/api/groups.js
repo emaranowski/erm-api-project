@@ -8,7 +8,19 @@ const { handleValidationErrors } = require('../../utils/validation'); // validat
 const router = express.Router();
 
 
-// Delete a Group (DELETE /api/groups/:groupId) -- DRAFT V1
+// Get All Venues for a Group specified by its id (GET /api/groups/:groupId/venues) -- DRAFT V1
+router.get('/:groupId/venues', async (req, res) => {
+
+
+
+
+
+});
+
+
+
+
+// Delete a Group (DELETE /api/groups/:groupId) -- V1
 router.delete('/:groupId', requireAuth, async (req, res) => {
     const { user } = req; // pull user from req
     // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
