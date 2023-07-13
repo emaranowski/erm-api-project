@@ -1,11 +1,123 @@
 // resources for route paths beginning in: /api/groups
 const express = require('express');
 const { Op } = require('sequelize');
-const { Group, Membership, GroupImage, User, Venue } = require('../../db/models');
+const { Group, Membership, GroupImage, User, Venue, Event } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 const { check } = require('express-validator'); // validates req.body
 const { handleValidationErrors } = require('../../utils/validation'); // validates req.body
 const router = express.Router();
+
+const validateEvent = [
+    // check('venueId')
+    //     // .exists({ checkFalsy: true })
+    //     .custom(async value => { // prob need custom
+    //         const venue = await Venue.findByPk(venueId);
+    //         if (!venue) {
+    //             throw new Error(`Venue does not exist`); // this is not triggering
+    //         };
+    //     })
+    //     // .withMessage(`Venue does not exist`), // this is triggering in all cases
+    check('name')
+        .exists({ checkFalsy: true })
+        .isLength({ min: 5 })
+        .withMessage(`Name must be at least 5 characters`),
+    check('type')
+        .exists({ checkFalsy: true })
+        .isIn(['Online', 'In person'])
+        .withMessage(`Type must be 'Online' or 'In person'`),
+    check('capacity')
+        .exists({ checkFalsy: true })
+        .isInt()
+        .withMessage(`Capacity must be an integer`),
+    check('price')
+        .exists({ checkFalsy: true })
+        .isDecimal()
+        .withMessage(`Price is invalid`),
+    check('description')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage(`Description is required`),
+    // check('startDate')
+    //     .exists({ checkFalsy: true })
+    //     .isAfter('CURRENT_TIMESTAMP') // not sure correct
+    //     .withMessage(`Start date must be in the future`),
+    // check('endDate')
+    //     .exists({ checkFalsy: true })
+    //     .isAfter('startDate') // not sure correct
+    //     .withMessage(`End date must be after start date`),
+    handleValidationErrors
+]; // if any one is wrong, err is ret as res
+
+// app.post('/signup', body('email') // EXAMPLE OF CUSTOM VALIDATOR
+//     .custom(async value => {
+//         const existingUser = await Users.findUserByEmail(value);
+//         if (existingUser) {
+//             throw new Error('E-mail already in use');
+//         }
+//     })
+//     , (req, res) => {
+//         // Handle request
+//     }
+// );
+
+// Create an Event for a Group specified by its id (POST /api/groups/:groupId/events) -- DRAFT V1
+router.post('/:groupId/events', requireAuth, validateEvent, async (req, res) => {
+
+    const { user } = req;
+    if (!user) { // should not run, since requireAuth should catch issues first (but here as backup)
+        res.status(401);
+        return res.json({ message: `Authentication Required. No user is currently logged in.` });
+    };
+
+    const currUserId = user.dataValues.id;
+    const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+    const groupId = req.params.groupId;
+
+    const groupToAddEvent = await Group.findByPk(groupId);
+    if (!groupToAddEvent) {
+        res.status(404);
+        return res.json({ message: `Group couldn't be found` });
+    };
+
+    // find all memberships where: { groupId: groupId, userId: currUserId, status: 'co-host' }
+    // find all group memberships where userId: currUserId
+    const userIsCoHost = await Membership.findAll(
+        {
+            where: { groupId: groupId, userId: currUserId, status: 'co-host' }
+        }
+    ); // maybe come back and make more elegant by doing Op.in for status 'host' or 'co-host'
+
+    // COME BACK TO THIS
+    if (!(currUserId === groupToAddEvent.organizerId) && !userIsCoHost) { // if either is false
+        res.status(403);
+        return res.json({ message: `User must be a group organizer or co-host to add an event.` });
+    };
+
+    // if ((currUserId === groupToAddEvent.organizerId) || userIsCoHost) { // if either is true
+    //     await Event.bulkCreate([{ groupId, address, city, state, lat, lng }],
+    //         { validate: true });
+    // };
+
+    await Event.bulkCreate([{ venueId, groupId, name, type, capacity, price, description, startDate, endDate }],
+        { validate: true });
+
+    const createdGroupEvent = await Event.findOne({ // to get event id
+        where: { groupId, address, city, state, lat, lng }
+    });
+
+    const addedEvent = {};
+    addedEvent.id = createdGroupEvent.id;
+    addedEvent.groupId = createdGroupEvent.groupId;
+    addedEvent.address = createdGroupEvent.address;
+    addedEvent.city = createdGroupEvent.city;
+    addedEvent.state = createdGroupEvent.state;
+    addedEvent.lat = createdGroupEvent.lat;
+    addedEvent.lng = createdGroupEvent.lng;
+
+    res.status(200);
+    return res.json(addedEvent);
+});
+
 
 const validateVenue = [
     check('address')
@@ -37,7 +149,7 @@ const validateVenue = [
         .isDecimal() // try to figure out how to use .isLatLong()
         .withMessage(`Longitude is not valid`),
     handleValidationErrors
-]; // if any one is empty or incorrect, err is ret as res
+]; // if any one is wrong, err is ret as res
 
 // Create a new Venue for a Group specified by its id (POST /api/groups/:groupId/venues) -- DRAFT V1
 router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res) => {
@@ -70,10 +182,17 @@ router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res) => 
     // console.log(userIsCoHost)
     // console.log('////////////////////////////////')
 
+
+    // COME BACK TO THIS
     if (!(currUserId === groupToAddVenue.organizerId) && !userIsCoHost) { // if either is false
         res.status(403);
         return res.json({ message: `User must be a group organizer or co-host to add a venue.` });
     };
+
+    // if ((currUserId === groupToAddVenue.organizerId) || userIsCoHost) { // if either is true
+    //     await Venue.bulkCreate([{ groupId, address, city, state, lat, lng }],
+    //         { validate: true });
+    // };
 
     await Venue.bulkCreate([{ groupId, address, city, state, lat, lng }],
         { validate: true });
