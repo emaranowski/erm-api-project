@@ -8,8 +8,6 @@ const { handleValidationErrors } = require('../../utils/validation'); // validat
 const router = express.Router();
 
 
-// Create a Group (POST /api/groups) -- DRAFT V1
-
 const validateCreateGroup = [
     check('name')
         .exists({ checkFalsy: true })
@@ -59,7 +57,55 @@ const validateCreateGroup = [
     handleValidationErrors
 ]; // if any one is empty or incorrect, err is ret as res
 
-// not sure I can pass in both requireAuth & validateCreateGroup. but seems to work?????
+
+
+
+// Edit a Group (PUT /api/groups/:groupId) -- DRAFT V1
+// ***** Require proper authorization: Group must belong to current user
+router.put('/:groupId', requireAuth, validateCreateGroup, async (req, res) => {
+    const { user } = req; // pull user from req
+    // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
+    // but if 'requireAuth' didn't work, this would be a failsafe/backup
+    if (!user) {
+        res.status(401); // Unauthorized/Unauthenticated
+        return res.json({ message: `Authentication Required. No user is currently logged in.` });
+    };
+
+    const currUserId = user.dataValues.id;
+    const groupId = req.params.groupId; // params, not query
+    const { name, about, type, private, city, state } = req.body;
+
+    const groupToUpdate = await Group.findByPk(groupId);
+    if (!groupToUpdate) {
+        res.status(404);
+        return res.json({ message: `Group couldn't be found` });
+    };
+
+    // If logged in, but trying to edit group organized by another user....
+    if (!(currUserId === groupToUpdate.organizerId)) {
+        res.status(403); // Forbidden -- or is this 401 Unauthorized/Unauthenticated ?????
+        return res.json({ message: `Group must belong to the current user. User must be the group's organizer to update it.` });
+    };
+
+    // DO UPDATES HERE
+    groupToUpdate.name = name;
+    groupToUpdate.about = about;
+    groupToUpdate.type = type;
+    groupToUpdate.private = private;
+    groupToUpdate.city = city;
+    groupToUpdate.state = state;
+    await groupToUpdate.save();
+
+    const updatedGroup = await Group.findByPk(groupId); // query again, for new 'updatedAt'
+
+    res.status(200);
+    return res.json(updatedGroup);
+});
+
+
+
+
+// Create a Group (POST /api/groups) -- V1
 router.post('/', requireAuth, validateCreateGroup, async (req, res) => {
     const { user } = req; // pull user from req
     // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
