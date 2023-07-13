@@ -52,7 +52,7 @@ module.exports = {
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       name: {
-        [Op.in]: ['Hikers', 'Hobby Chefs', 'Board Game Fans']
+        [Op.in]: ['Hikers', 'Hobby Chefs', 'Board Game Fans', 'Evening Tennis on the Water', 'Evening Tennis on the Water1', 'Evening Tennis on the Water2', 'Evening Tennis on the Water3']
       }
     }, {});
 

@@ -34,7 +34,7 @@ const validateCreateGroup = [
     check('type')
         .exists({ checkFalsy: true })
         // .notEmpty() // find correct thing for here
-        .not() // not + isIn might work here?
+        // .not() // not + isIn might work here?
         .isIn(['Online', 'In person']) // not + isIn might work here?
         .withMessage(`Type must be 'Online' or 'In person'`),
     check('private')
@@ -44,9 +44,10 @@ const validateCreateGroup = [
     check('private')
         .exists({ checkFalsy: true })
         // .notEmpty() // find correct thing for here
-        .not() // not + isIn might work here?
-        .isIn([true, false]) // not + isIn might work here?
-        .withMessage(`Private must be a boolean`),
+        // .not() // not + isIn might work here?
+        // .isIn([true, false]) // not + isIn might work here?
+        .isBoolean()
+        .withMessage(`Private must be a boolean ('true' or 'false')`),
     check('city')
         .exists({ checkFalsy: true })
         .notEmpty()
@@ -56,9 +57,9 @@ const validateCreateGroup = [
         .notEmpty()
         .withMessage(`State is required`),
     handleValidationErrors
-]; // if any one is empty, err is ret as res
+]; // if any one is empty or incorrect, err is ret as res
 
-// not sure I can pass in both requireAuth & validateCreateGroup ?????
+// not sure I can pass in both requireAuth & validateCreateGroup. but seems to work?????
 router.post('/', requireAuth, validateCreateGroup, async (req, res) => {
     const { user } = req; // pull user from req
     // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
@@ -68,10 +69,35 @@ router.post('/', requireAuth, validateCreateGroup, async (req, res) => {
         return res.json({ message: `Authentication Required. No user is currently logged in.` });
     };
 
+    const currUserId = user.dataValues.id;
     const { name, about, type, private, city, state } = req.body;
 
+    await Group.bulkCreate([
+        {
+            organizerId: currUserId,
+            name,
+            about,
+            type,
+            private,
+            city,
+            state
+        },
+    ], { validate: true });
 
+    const createdGroup = await Group.findOne({ // must query for the group to get: id, createdAt, updatedAt
+        where: { // include all as failsafe against any w/ duplicate attributes (v low statistical prob, but why not)
+            organizerId: currUserId,
+            name: name,
+            about: about,
+            type: type,
+            private: private,
+            city: city,
+            state: state
+        }
+    });
 
+    res.status(201);
+    return res.json(createdGroup);
 });
 
 // // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- V3
