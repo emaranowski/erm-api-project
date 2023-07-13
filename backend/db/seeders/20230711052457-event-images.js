@@ -37,11 +37,14 @@ module.exports = {
     options.tableName = 'EventImages';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      url: {
-        [Op.in]: [
-          'https://tinyurl.com/meetup-schema'
-        ]
-      } // if more urls added in up, add in down too
+      // url: {
+      //   [Op.in]: [
+      //     'https://tinyurl.com/meetup-schema'
+      //   ]
+      // } // if more urls added in up, add in down too
+      eventId: {
+        [Op.in]: [1, 2, 3, 4]
+      } // added to accomodate later tests
     }, {});
 
   }

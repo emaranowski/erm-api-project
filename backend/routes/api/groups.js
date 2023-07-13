@@ -8,7 +8,6 @@ const { handleValidationErrors } = require('../../utils/validation'); // validat
 const router = express.Router();
 
 
-
 // Delete a Group (DELETE /api/groups/:groupId) -- DRAFT V1
 router.delete('/:groupId', requireAuth, async (req, res) => {
     const { user } = req; // pull user from req
@@ -41,8 +40,47 @@ router.delete('/:groupId', requireAuth, async (req, res) => {
     return res.json({ message: `Successfully deleted` });
 });
 
+// Add an Image to a Group based on the Group's id (POST /api/groups/:groupId/images)
+router.post('/:groupId/images', requireAuth, async (req, res) => {
+    const { user } = req; // pull user from req
+    // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
+    // but if 'requireAuth' didn't work, this would be a failsafe/backup
+    if (!user) {
+        res.status(401); // Unauthorized/Unauthenticated
+        return res.json({ message: `Authentication Required. No user is currently logged in.` });
+    };
 
+    const currUserId = user.dataValues.id;
+    const { url, preview } = req.body;
+    const groupId = req.params.groupId;
 
+    const groupToAddImage = await Group.findByPk(groupId);
+    if (!groupToAddImage) {
+        res.status(404); // Not Found
+        return res.json({ message: `Group couldn't be found` });
+    };
+
+    // If logged in, but trying to add image to group organized by another user....
+    if (!(currUserId === groupToAddImage.organizerId)) {
+        res.status(403); // Forbidden -- or is this 401 Unauthorized/Unauthenticated ?????
+        return res.json({ message: `Group must belong to the current user. User must be the group's organizer to delete it.` });
+    };
+
+    await GroupImage.bulkCreate([{ groupId, url, preview },],
+        { validate: true });
+
+    const createdGroupImage = await GroupImage.findOne({
+        where: { groupId, url, preview }
+    });
+
+    const addedImage = {
+        id: createdGroupImage.id,
+        url: createdGroupImage.url,
+        preview: createdGroupImage.preview
+    };
+    res.status(200);
+    return res.json(addedImage);
+});
 
 const validateGroup = [
     check('name')
