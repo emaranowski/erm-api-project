@@ -57,9 +57,22 @@ router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res) => 
         return res.json({ message: `Group couldn't be found` });
     };
 
-    if (!(currUserId === groupToAddVenue.organizerId)) {
+    // find all memberships where: { groupId: groupId, userId: currUserId, status: 'co-host' }
+    // find all group memberships where userId: currUserId
+    const userIsCoHost = await Membership.findAll(
+        {
+            where: { groupId: groupId, userId: currUserId, status: 'co-host' }
+        }
+    ); // maybe come back and make more elegant by doing Op.in for status 'host' or 'co-host'
+
+    // console.log('////////////////////////////////')
+    // console.log(`***** userIsCoHost:`)
+    // console.log(userIsCoHost)
+    // console.log('////////////////////////////////')
+
+    if (!(currUserId === groupToAddVenue.organizerId) && !userIsCoHost) { // if either is false
         res.status(403);
-        return res.json({ message: `Group must belong to the current user. User must be the group's organizer to add a venue.` });
+        return res.json({ message: `User must be a group organizer or co-host to add a venue.` });
     };
 
     await Venue.bulkCreate([{ groupId, address, city, state, lat, lng }],
