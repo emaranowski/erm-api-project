@@ -6,3 +6,6 @@ const { requireAuth } = require('../../utils/auth');
 const { check } = require('express-validator'); // validates req.body
 const { handleValidationErrors } = require('../../utils/validation'); // validates req.body
 const router = express.Router();
+
+
+module.exports = router;
