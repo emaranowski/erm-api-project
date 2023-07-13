@@ -8,7 +8,43 @@ const { handleValidationErrors } = require('../../utils/validation'); // validat
 const router = express.Router();
 
 
-const validateCreateGroup = [
+
+// Delete a Group (DELETE /api/groups/:groupId) -- DRAFT V1
+router.delete('/:groupId', requireAuth, async (req, res) => {
+    const { user } = req; // pull user from req
+    // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
+    // but if 'requireAuth' didn't work, this would be a failsafe/backup
+    if (!user) {
+        res.status(401); // Unauthorized/Unauthenticated
+        return res.json({ message: `Authentication Required. No user is currently logged in.` });
+    };
+
+    const currUserId = user.dataValues.id;
+    const groupId = req.params.groupId; // params, not query
+
+    const groupToDelete = await Group.findByPk(groupId);
+    if (!groupToDelete) {
+        res.status(404); // Not Found
+        return res.json({ message: `Group couldn't be found` });
+    };
+
+    // If logged in, but trying to delete group organized by another user....
+    if (!(currUserId === groupToDelete.organizerId)) {
+        res.status(403); // Forbidden -- or is this 401 Unauthorized/Unauthenticated ?????
+        return res.json({ message: `Group must belong to the current user. User must be the group's organizer to delete it.` });
+    };
+
+    // DELETION HERE
+    await groupToDelete.destroy();
+
+    res.status(200);
+    return res.json({ message: `Successfully deleted` });
+});
+
+
+
+
+const validateGroup = [
     check('name')
         .exists({ checkFalsy: true })
         .notEmpty()
@@ -60,9 +96,9 @@ const validateCreateGroup = [
 
 
 
-// Edit a Group (PUT /api/groups/:groupId) -- DRAFT V1
+// Edit a Group (PUT /api/groups/:groupId) -- V1
 // ***** Require proper authorization: Group must belong to current user
-router.put('/:groupId', requireAuth, validateCreateGroup, async (req, res) => {
+router.put('/:groupId', requireAuth, validateGroup, async (req, res) => {
     const { user } = req; // pull user from req
     // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
     // but if 'requireAuth' didn't work, this would be a failsafe/backup
@@ -106,7 +142,7 @@ router.put('/:groupId', requireAuth, validateCreateGroup, async (req, res) => {
 
 
 // Create a Group (POST /api/groups) -- V1
-router.post('/', requireAuth, validateCreateGroup, async (req, res) => {
+router.post('/', requireAuth, validateGroup, async (req, res) => {
     const { user } = req; // pull user from req
     // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
     // but if 'requireAuth' didn't work, this would be a failsafe/backup
