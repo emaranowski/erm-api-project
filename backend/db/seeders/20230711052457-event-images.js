@@ -15,18 +15,18 @@ module.exports = {
     await EventImage.bulkCreate([
       {
         eventId: 1,
-        url: 'https://tinyurl.com/meetup-schema',
-        preview: false
+        url: 'https://event1.com/event-image-1.png',
+        preview: true
       },
       {
         eventId: 2,
-        url: 'https://tinyurl.com/meetup-schema',
-        preview: false
+        url: 'https://event2.com/event-image-2.png',
+        preview: true
       },
       {
         eventId: 3,
-        url: 'https://tinyurl.com/meetup-schema',
-        preview: false
+        url: 'https://event3.com/event-image-3.png',
+        preview: true
       }
     ], { validate: true });
 
@@ -43,7 +43,7 @@ module.exports = {
       //   ]
       // } // if more urls added in up, add in down too
       eventId: {
-        [Op.in]: [1, 2, 3, 4]
+        [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
       } // added to accomodate later tests
     }, {});
 

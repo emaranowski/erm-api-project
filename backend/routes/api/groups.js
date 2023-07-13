@@ -1,7 +1,7 @@
 // resources for route paths beginning in: /api/groups
 const express = require('express');
 const { Op } = require('sequelize');
-const { Group, Membership, GroupImage, User, Venue, Event } = require('../../db/models');
+const { Group, Membership, GroupImage, User, Venue, Event, Attendance, EventImage } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 const { check } = require('express-validator'); // validates req.body
 const { handleValidationErrors } = require('../../utils/validation'); // validates req.body
@@ -120,6 +120,123 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res) => 
     res.status(200);
     return res.json(event);
 });
+
+
+
+
+// Get all Events of a Group specified by its id (GET /api/groups/:groupId/events) -- V1
+router.get('/:groupId/events', async (req, res) => {
+    let groupEventsObj = { Events: [] };
+
+    const groupId = req.params.groupId;
+    const group = await Group.findByPk(groupId,
+        { include: [{ model: Event }] }
+    );
+
+    if (!group) {
+        res.status(404);
+        res.json({ message: `Group couldn't be found` })
+    };
+
+    // const groupEventsArrOrig = await Event.findAll({
+    //     where: { groupId: groupId }
+    // });
+
+    const allAttendances = await Attendance.findAll();
+    const allEventImages = await EventImage.findAll();
+    const allVenues = await Venue.findAll();
+
+    group.Events.forEach(event => {
+
+        // console.log('////////////////////////////////')
+        // console.log(`***** event:`)
+        // console.log(event)
+        // console.log('////////////////////////////////')
+
+        const { id, groupId, venueId, name, type, startDate, endDate } = event.dataValues;
+
+        // console.log('////////////////////////////////')
+        // console.log(`***** event.dataValues:`)
+        // console.log(name)
+        // console.log('////////////////////////////////')
+
+        // create totalAttending
+        let totalAttending;
+        const attendances = allAttendances.filter(attendance => {
+            return attendance.eventId === event.dataValues.id;
+        });
+        totalAttending = attendances.length;
+
+        // create previewImageVal
+        let previewImageVal;
+        const eventImages = allEventImages.filter(eventImage => {
+            return ((eventImage.dataValues.eventId === event.dataValues.id)
+                && (eventImage.dataValues.preview === true));
+        });
+        if (eventImages.length === 0) previewImageVal = null;
+        if (eventImages.length > 0) previewImageVal = eventImages[0].url;
+
+
+        // console.log('////////////////////////////////')
+        // console.log(`***** allEventImages:`)
+        // console.log(allEventImages)
+        // console.log('////////////////////////////////')
+
+
+        // console.log('////////////////////////////////')
+        // console.log(`***** event.dataValues.id:`)
+        // console.log(event.dataValues.id)
+        // console.log('////////////////////////////////')
+
+        // create groupObj
+        const groupObj = {
+            id: group.id,
+            name: group.name,
+            city: group.city,
+            state: group.state
+        };
+
+        // create venueVal
+        let venueVal;
+        const eventVenue = allVenues.filter(venue => {
+            return venue.id === event.dataValues.venueId;
+        });
+        if (eventVenue.length === 0) venueVal = null;
+        if (eventVenue.length > 0) venueVal = {
+            id: eventVenue[0].id,
+            city: eventVenue[0].city,
+            state: eventVenue[0].state
+        };
+
+        // console.log('////////////////////////////////')
+        // console.log(`***** eventVenue:`)
+        // console.log(eventVenue)
+        // console.log('////////////////////////////////')
+
+        const eventObj = {
+            id,
+            groupId,
+            venueId,
+            name,
+            type,
+            startDate,
+            endDate,
+            numAttending: totalAttending,
+            previewImage: previewImageVal,
+            Group: groupObj,
+            Venue: venueVal
+        };
+
+        groupEventsObj.Events.push(eventObj);
+    });
+
+    // groupEventsObj.Events = allGroupEventsArr;
+
+    res.status(200);
+    return res.json(groupEventsObj);
+});
+
+
 
 
 const validateVenue = [
