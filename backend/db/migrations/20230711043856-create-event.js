@@ -33,7 +33,8 @@ module.exports = {
         references: { // add ref in mig only
           model: 'Groups', // table name, so plural
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE'
       },
       name: {
         type: Sequelize.STRING,

@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       // one group hasMany memberships
       Membership.belongsTo(
         models.Group,
-        { foreignKey: 'groupId' }
+        { foreignKey: 'groupId', onDelete: 'CASCADE', hooks: true }
       );
 
     }
@@ -43,6 +43,7 @@ module.exports = (sequelize, DataTypes) => {
     groupId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE'
     },
     status: {
       type: DataTypes.ENUM('host', 'co-host', 'member', 'pending'),

@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       // one event belongsTo one group
       Event.belongsTo(
         models.Group,
-        { foreignKey: 'groupId' }
+        { foreignKey: 'groupId', onDelete: 'CASCADE', hooks: true }
       );
 
       // BUG HERE when both commented in
@@ -73,6 +73,7 @@ module.exports = (sequelize, DataTypes) => {
     groupId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE'
     },
     name: {
       type: DataTypes.STRING,

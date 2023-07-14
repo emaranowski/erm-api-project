@@ -33,7 +33,8 @@ module.exports = {
         references: {
           model: 'Groups', // table name, so plural; only add refs on mig
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE'
       },
       status: {
         type: Sequelize.ENUM('host', 'co-host', 'member', 'pending'),
