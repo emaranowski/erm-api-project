@@ -748,26 +748,23 @@ router.post('/:groupId/images', requireAuth, async (req, res) => {
 
 // Delete a Group (DELETE /api/groups/:groupId) -- V1
 router.delete('/:groupId', requireAuth, async (req, res) => {
-    const { user } = req; // pull user from req
-    // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
-    // but if 'requireAuth' didn't work, this would be a failsafe/backup
+    const { user } = req;
     if (!user) {
-        res.status(401); // Unauthorized/Unauthenticated
+        res.status(401);
         return res.json({ message: `Authentication Required. No user is currently logged in.` });
     };
 
     const currUserId = user.dataValues.id;
-    const groupId = req.params.groupId; // params, not query
+    const groupId = req.params.groupId;
 
     const groupToDelete = await Group.findByPk(groupId);
     if (!groupToDelete) {
-        res.status(404); // Not Found
+        res.status(404);
         return res.json({ message: `Group couldn't be found` });
     };
 
-    // If logged in, but trying to delete group organized by another user....
     if (!(currUserId === groupToDelete.organizerId)) {
-        res.status(403); // Forbidden -- or is this 401 Unauthorized/Unauthenticated ?????
+        res.status(403);
         return res.json({ message: `Group must belong to the current user. User must be the group's organizer to delete it.` });
     };
 

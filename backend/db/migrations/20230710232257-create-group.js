@@ -25,7 +25,8 @@ module.exports = {
         references: { // add ref to organizerId/userId in migration only
           model: 'Users', // table name, so plural
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE'
       },
       name: {
         type: Sequelize.STRING,

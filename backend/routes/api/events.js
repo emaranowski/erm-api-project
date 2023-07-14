@@ -112,92 +112,93 @@ router.post('/:eventId/images', requireAuth, async (req, res) => {
 
 
 // Delete attendance to an event specified by id (DELETE /api/groups/:groupId/attendance)
-// router.delete('/:eventId/attendance', requireAuth, async (req, res) => {
-//     const { user } = req;
-//     if (!user) {
-//         res.status(401);
-//         return res.json({ message: `Authentication Required. No user is currently logged in.` });
-//     };
+router.delete('/:eventId/attendance', requireAuth, async (req, res) => {
+    const { user } = req;
+    if (!user) {
+        res.status(401);
+        return res.json({ message: `Authentication Required. No user is currently logged in.` });
+    };
 
-//     const eventId = req.params.eventId;
-//     // Error: Couldn't find an Event with the specified id
-//     const event = await Event.findByPk(eventId, { include: [{ model: Group }] });
-//     // const event = await Event.findByPk(eventId,
-//     //     {
-//     //         include: [
-//     //             { model: Group },
-//     //             { model: Venue },
-//     //         ]
-//     //     }
-//     // );
-//     if (!event) {
-//         res.status(404);
-//         return res.json({ message: `Event couldn't be found` });
-//     };
+    const eventId = req.params.eventId;
+    // Error: Couldn't find an Event with the specified id
+    const event = await Event.findByPk(eventId, { include: [{ model: Group }] });
+    // const event = await Event.findByPk(eventId,
+    //     {
+    //         include: [
+    //             { model: Group },
+    //             { model: Venue },
+    //         ]
+    //     }
+    // );
+    if (!event) {
+        res.status(404);
+        return res.json({ message: `Event couldn't be found` });
+    };
 
-//     const userId = user.dataValues.id;
-//     const groupId = event.Group.id;
-//     const attendanceIdToDelete = req.body.userId;
-//     const allAttendance = await Attendance.findAll();
-//     const allMemberships = await Membership.findAll();
+    const userId = user.dataValues.id;
+    const groupId = event.Group.id;
+    const attendanceIdToDelete = req.body.userId;
+    const allAttendance = await Attendance.findAll();
+    const allMemberships = await Membership.findAll();
 
-//     // Current User must be host of group, or be user whose attendance is being deleted
+    // Current User must be host of group, or be user whose attendance is being deleted
 
-//     // create isHost
-//     let isHost = false;
-//     allMemberships.forEach(membership => {
-//         if (
-//             membership.userId === userId &&
-//             membership.groupId === groupId &&
-//             membership.status === 'host'
-//         ) {
-//             isHost = true;
-//         }
-//     });
+    // create isHost
+    let isHost = false;
+    allMemberships.forEach(membership => {
+        if (
+            membership.userId === userId &&
+            membership.groupId === groupId &&
+            membership.status === 'host'
+        ) {
+            isHost = true;
+        }
+    });
 
-//     // create isDeletingSelf
-//     let isDeletingSelf = false;
-//     allAttendance.forEach(attendance => {
-//         if (
-//             attendance.userId === userId &&
-//             attendance.eventId === eventId &&
-//             attendance.id === attendanceIdToDelete
-//         ) {
-//             isDeletingSelf = true;
-//         }
-//     });
+    // create isDeletingSelf
+    let isDeletingSelf = false;
+    allAttendance.forEach(attendance => {
+        if (
+            attendance.userId === userId &&
+            attendance.eventId === eventId &&
+            attendance.id === attendanceIdToDelete
+        ) {
+            isDeletingSelf = true;
+        }
+    });
 
-//     // find event that matches userId + eventId
-//     const attendanceToDelete = await Attendance.findByPk(attendanceIdToDelete
-//         // { include: [{ model: User }, { model: Group }] }
-//     );
+    // find event that matches userId + eventId
+    const attendanceToDelete = await Attendance.findByPk(attendanceIdToDelete
+        // { include: [{ model: User }, { model: Group }] }
+    );
 
-//     console.log('////////////////////////////////')
-//     console.log(`***** allAttendance:`)
-//     console.log(allAttendance)
-//     console.log('////////////////////////////////')
+    // DELETION HERE
+    if (isHost || isDeletingSelf) {
 
-//     // DELETION HERE
-//     if (isHost || isDeletingSelf) {
+        await attendanceToDelete.destroy();
 
-//         await attendanceToDelete.destroy();
+        res.status(200);
+        return res.json({ message: `Successfully deleted attendance from event` });
+    }
 
-//         res.status(200);
-//         return res.json({ message: `Successfully deleted attendance from event` });
-//     }
+    console.log('////////////////////////////////')
+    console.log(`***** allAttendance:`)
+    console.log(allAttendance)
+    console.log('////////////////////////////////')
+    return res.json({ message: 'test' });
 
-//     // Error: Attendance does not exist for this User
-//     if (!attendanceToDelete) {
-//         res.status(404);
-//         return res.json({ message: `Attendance does not exist for this User` });
-//     };
+    // Error: Attendance does not exist for this User
+    if (!attendanceToDelete) {
+        res.status(404);
+        return res.json({ message: `Attendance does not exist for this User` });
+    };
 
-//     // Error: Only the User or organizer may delete an Attendance
-//     if (!isHost && !isDeletingSelf) {
-//         res.status(403);
-//         return res.json({ message: `Only the User or organizer may delete an Attendance` });
-//     };
-// });
+    // Error: Only the User or organizer may delete an Attendance
+    if (!isHost && !isDeletingSelf) {
+        res.status(403);
+        return res.json({ message: `Only the User or organizer may delete an Attendance` });
+    };
+});
 
 
 
