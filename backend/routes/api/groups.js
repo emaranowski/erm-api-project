@@ -507,6 +507,73 @@ router.get('/:groupId/venues', requireAuth, async (req, res) => {
 });
 
 
+
+// Request a Membership for a Group based on the Group's id (POST /api/groups/:groupId/membership)
+router.post('/:groupId/membership', requireAuth, async (req, res) => {
+    const { user } = req;
+    if (!user) {
+        res.status(401);
+        return res.json({ message: `Authentication Required. No user is currently logged in.` });
+    };
+
+    const currUserId = user.dataValues.id;
+    const groupId = req.params.groupId;
+
+    const group = await Group.findByPk(groupId);
+    if (!group) {
+        res.status(404);
+        return res.json({ message: `Group couldn't be found` });
+    };
+
+    const existingMembership = await Membership.findOne({
+        where: { userId: currUserId, groupId: groupId }
+    });
+
+    // console.log('////////////////////////////////')
+    // console.log(`***** existingMembership:`)
+    // console.log(existingMembership.status)
+    // console.log('////////////////////////////////')
+
+    if (!existingMembership) {
+        await Membership.bulkCreate([{
+            userId: currUserId,
+            groupId: groupId,
+            status: 'pending'
+        }], { validate: true });
+
+        const createdMember = await Membership.findOne({
+            where: {
+                userId: currUserId,
+                groupId: groupId,
+                status: 'pending'
+            }
+        });
+
+        const newMembershipObj = {
+            groupId: createdMember.groupId,
+            memberId: createdMember.id,
+            status: createdMember.status
+        };
+
+        res.status(200);
+        return res.json(newMembershipObj);
+    };
+
+    if (existingMembership.status === 'pending') {
+        res.status(400);
+        return res.json({ message: `Membership has already been requested (pending)` });
+    };
+
+    if (existingMembership.status === 'host' ||
+        existingMembership.status === 'co-host' ||
+        existingMembership.status === 'member') {
+        res.status(400);
+        return res.json({ message: `User is already a member of the group` });
+    };
+});
+
+
+
 // maybe add validator here?
 // Add an Image to a Group based on the Group's id (POST /api/groups/:groupId/images)
 router.post('/:groupId/images', requireAuth, async (req, res) => {
@@ -541,13 +608,13 @@ router.post('/:groupId/images', requireAuth, async (req, res) => {
         where: { groupId, url, preview }
     });
 
-    const addedImage = {
+    const addedImageObj = {
         id: createdGroupImage.id,
         url: createdGroupImage.url,
         preview: createdGroupImage.preview
     };
     res.status(200);
-    return res.json(addedImage);
+    return res.json(addedImageObj);
 });
 
 
