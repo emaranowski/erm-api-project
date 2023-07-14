@@ -169,6 +169,12 @@ router.delete('/:eventId/attendance', requireAuth, async (req, res) => {
     res.status(200);
     return res.json({ message: `Successfully deleted attendance from event` });
 
+    // was getting some kind of timeout / infinite loop at .destroy()
+    // fixed by removing onDelete cascade from belongsTo side of associations
+    // but keeping it for hasMany side of associations
+    // for EventImage & Event (did same on all other models as well)
+    // however, kept onDelete cascade on all model constraints, on both sides, and seems fine
+
     // Executing (default):
     // SELECT `id`, `eventId`, `url`, `preview`
     // FROM `EventImages` AS `EventImage`

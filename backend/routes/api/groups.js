@@ -515,42 +515,9 @@ router.get('/:groupId/venues', requireAuth, async (req, res) => {
 });
 
 
-// EXAMPLE
-// router.delete('/:groupId', requireAuth, async (req, res) => {
-//     const { user } = req; // pull user from req
-//     // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
-//     // but if 'requireAuth' didn't work, this would be a failsafe/backup
-//     if (!user) {
-//         res.status(401); // Unauthorized/Unauthenticated
-//         return res.json({ message: `Authentication Required. No user is currently logged in.` });
-//     };
-
-//     const currUserId = user.dataValues.id;
-//     const groupId = req.params.groupId; // params, not query
-
-//     const groupToDelete = await Group.findByPk(groupId);
-//     if (!groupToDelete) {
-//         res.status(404); // Not Found
-//         return res.json({ message: `Group couldn't be found` });
-//     };
-
-//     // If logged in, but trying to delete group organized by another user....
-//     if (!(currUserId === groupToDelete.organizerId)) {
-//         res.status(403); // Forbidden -- or is this 401 Unauthorized/Unauthenticated ?????
-//         return res.json({ message: `Group must belong to the current user. User must be the group's organizer to delete it.` });
-//     };
-
-//     // DELETION HERE
-//     await groupToDelete.destroy();
-
-//     res.status(200);
-//     return res.json({ message: `Successfully deleted` });
-// });
 
 
-
-
-// Delete membership to a group specified by id (DELETE /api/groups/:groupId/membership) -- V1
+// Delete membership to a group specified by id (DELETE /api/groups/:groupId/membership)
 router.delete('/:groupId/membership', requireAuth, async (req, res) => {
     const { user } = req;
     if (!user) {
@@ -558,80 +525,58 @@ router.delete('/:groupId/membership', requireAuth, async (req, res) => {
         return res.json({ message: `Authentication Required. No user is currently logged in.` });
     };
 
-    const currUserId = user.dataValues.id;
-    const memberIdToDelete = req.body.memberId;
     const groupId = req.params.groupId;
-    const allMemberships = await Membership.findAll();
-
-    // Current User must be host of group, or user whose membership is being deleted
-
-    // create isHost
-    let isHost = false;
-    allMemberships.forEach(membership => {
-        if (
-            membership.userId === currUserId &&
-            membership.groupId === groupId &&
-            membership.status === 'host'
-        ) {
-            isHost = true;
-        }
-    });
-
-    // create isDeletingSelf
-    let isDeletingSelf = false;
-    allMemberships.forEach(membership => {
-        if (
-            membership.userId === currUserId &&
-            membership.groupId === groupId &&
-            membership.id === memberIdToDelete
-        ) {
-            isDeletingSelf = true;
-        }
-    });
-
-    // // find membership that matches currUserId + groupId
-    const membershipToDelete = await Membership.findByPk(memberIdToDelete,
-        // { include: [{ model: User }, { model: Group }] }
-    );
-
-    // const membershipToDelete = allMemberships.filter(membership => {
-    //     return membership.id === memberIdToDelete;
-    // });
-
-    // DELETION HERE
-    if (isHost || isDeletingSelf) {
-
-        await membershipToDelete.destroy();
-
-        res.status(200);
-        return res.json({ message: `Successfully deleted membership from group` });
-    };
-
-    // Error: Couldn't find a User with the specified memberIdToDelete
-    if (!membershipToDelete) {
-        res.status(400);
-        const err = {
-            "message": "Validation Error",
-            "errors": {
-                "memberId": "User couldn't be found"
-            }
-        };
-        return res.json(err);
-    };
-
-    // Error: Couldn't find a Group with the specified id
-    const group = await Membership.findByPk(groupId);
-    if (!group) {
+    const group = await Event.findByPk(groupId); // , { include: [{ model: Group }] }
+    if (!group) { // 404 Error: Couldn't find a Group with the specified id
         res.status(404);
         return res.json({ message: `Group couldn't be found` });
     };
 
-    // Error: Membership does not exist for this User
-    if (!isHost && !isDeletingSelf) {
+    const currUserId = user.dataValues.id; // -- from session
+    const memberId = req.body.memberId; // -- from body
+
+    const membership = await Membership.findByPk(memberId); // membership to delete
+    // const membership = await Membership.findOne( // membership to delete
+    //     { where: { groupId: groupId, userId: userId } }
+    // );
+    if (!membership) { // 404 Error: Membership does not exist for this User
         res.status(404);
         return res.json({ message: `Membership does not exist for this User` });
     };
+
+    const userId = membership.userId;
+    const userOfInterest = await User.findByPk(userId);
+    if (!userOfInterest) { // 400 Error: Couldn't find User with specified memberId
+        res.status(400);
+        return res.json({ message: `Couldn't find User with specified memberId` });
+    };
+
+    // create isHost
+    let isHost = false;
+    const currUserHostMembership = await Membership.findOne({
+        where: {
+            userId: currUserId,
+            groupId: groupId,
+            status: 'host'
+        }
+    });
+    if (currUserHostMembership) isHost = true;
+
+    // create isDeletingSelf
+    let isDeletingSelf = false;
+    if (currUserId === membership.userId) isDeletingSelf = true;
+
+    if (!isHost && !isDeletingSelf) { // Error: Only User or organizer may delete an Membership
+        res.status(403); // To delete membership, currUser must be group host, or deleting self
+        return res.json({ message: `Only the User or organizer may delete a Membership` });
+    };
+
+    await membership.destroy();
+
+    res.status(200);
+    return res.json({ message: `Successfully deleted membership from group` });
 });
+
 
 
 
@@ -1539,6 +1484,94 @@ module.exports = router;
 ////////////////// OLD DRAFT CODE //////////////////
 ////////////////// OLD DRAFT CODE //////////////////
 ////////////////// OLD DRAFT CODE //////////////////
+
+
+
+
+
+// // Delete membership to a group specified by id (DELETE /api/groups/:groupId/membership) -- V1
+// router.delete('/:groupId/membership', requireAuth, async (req, res) => {
+//     const { user } = req;
+//     if (!user) {
+//         res.status(401);
+//         return res.json({ message: `Authentication Required. No user is currently logged in.` });
+//     };
+
+//     const currUserId = user.dataValues.id;
+//     const memberIdToDelete = req.body.memberId;
+//     const groupId = req.params.groupId;
+//     const allMemberships = await Membership.findAll();
+
+//     // Current User must be host of group, or user whose membership is being deleted
+
+//     // create isHost
+//     let isHost = false;
+//     allMemberships.forEach(membership => {
+//         if (
+//             membership.userId === currUserId &&
+//             membership.groupId === groupId &&
+//             membership.status === 'host'
+//         ) {
+//             isHost = true;
+//         }
+//     });
+
+//     // create isDeletingSelf
+//     let isDeletingSelf = false;
+//     allMemberships.forEach(membership => {
+//         if (
+//             membership.userId === currUserId &&
+//             membership.groupId === groupId &&
+//             membership.id === memberIdToDelete
+//         ) {
+//             isDeletingSelf = true;
+//         }
+//     });
+
+//     // // find membership that matches currUserId + groupId
+//     const membershipToDelete = await Membership.findByPk(memberIdToDelete,
+//         // { include: [{ model: User }, { model: Group }] }
+//     );
+
+//     // DELETION HERE
+//     if (isHost || isDeletingSelf) {
+
+//         await membershipToDelete.destroy();
+
+//         res.status(200);
+//         return res.json({ message: `Successfully deleted membership from group` });
+//     };
+
+//     // Error: Couldn't find a User with the specified memberIdToDelete
+//     if (!membershipToDelete) {
+//         res.status(400);
+//         const err = {
+//             "message": "Validation Error",
+//             "errors": {
+//                 "memberId": "User couldn't be found"
+//             }
+//         };
+//         return res.json(err);
+//     };
+
+//     // Error: Couldn't find a Group with the specified id
+//     const group = await Membership.findByPk(groupId);
+//     if (!group) {
+//         res.status(404);
+//         return res.json({ message: `Group couldn't be found` });
+//     };
+
+//     // Error: Membership does not exist for this User
+//     if (!isHost && !isDeletingSelf) {
+//         res.status(404);
+//         return res.json({ message: `Membership does not exist for this User` });
+//     };
+// });
+
+
+
+
+
 
 // // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- DRAFT V3
 // Return all groups created by current user, or where current user has a membership.

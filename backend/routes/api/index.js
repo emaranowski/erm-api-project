@@ -3,12 +3,10 @@ const sessionRouter = require('./session.js');
 
 const usersRouter = require('./users.js');
 const groupsRouter = require('./groups.js');
-// const membershipsRouter = require('./memberships.js');
 const venuesRouter = require('./venues.js');
 const groupImagesRouter = require('./group-images.js');
 const eventsRouter = require('./events.js');
 const eventImagesRouter = require('./event-images.js');
-// const attendancesRouter = require('./attendances.js');
 
 
 const { restoreUser } = require('../../utils/auth.js');
@@ -27,12 +25,10 @@ router.use('/session', sessionRouter);
 
 router.use('/users', usersRouter);
 router.use('/groups', groupsRouter);
-// router.use('/memberships', membershipsRouter);
 router.use('/venues', venuesRouter);
 router.use('/group-images', groupImagesRouter);
 router.use('/events', eventsRouter);
 router.use('/event-images', eventImagesRouter);
-// router.use('/attendances', attendancesRouter);
 
 
 router.post('/test', (req, res) => {
