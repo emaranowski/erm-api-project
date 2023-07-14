@@ -16,17 +16,52 @@ module.exports = {
       {
         eventId: 1,
         userId: 1,
+        status: 'attending'
+      },
+      {
+        eventId: 1,
+        userId: 2,
+        status: 'attending'
+      },
+      {
+        eventId: 1,
+        userId: 3,
+        status: 'attending'
+      },
+      {
+        eventId: 1,
+        userId: 4,
         status: 'pending'
       },
       {
         eventId: 2,
         userId: 1,
-        status: 'pending'
+        status: 'attending'
+      },
+      {
+        eventId: 2,
+        userId: 2,
+        status: 'attending'
       },
       {
         eventId: 3,
         userId: 1,
         status: 'pending'
+      },
+      {
+        eventId: 3,
+        userId: 2,
+        status: 'attending'
+      },
+      {
+        eventId: 3,
+        userId: 3,
+        status: 'pending'
+      },
+      {
+        eventId: 3,
+        userId: 4,
+        status: 'attending'
       },
     ], { validate: true });
 

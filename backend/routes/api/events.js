@@ -247,7 +247,7 @@ router.delete('/:eventId', requireAuth, async (req, res) => {
 
 
 
-
+// FEEDBACK: did not return any body
 // Get all Attendees of an Event specified by its id (GET /api/events/:eventId/attendees) -- V1
 router.get('/:eventId/attendees', async (req, res) => {
     let attendeesObj = { Attendees: [] };
