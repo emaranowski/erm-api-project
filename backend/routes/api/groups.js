@@ -828,7 +828,65 @@ const validateGroup = [
 
 
 
+// Change the status of a membership for a group specified by id (PUT /api/events/:groupId/membership)
+router.put('/:groupId/membership', requireAuth, async (req, res) => {
+    const { user } = req;
+    if (!user) {
+        res.status(401);
+        return res.json({ message: `Authentication Required. No user is currently logged in.` });
+    };
 
+    const groupId = req.params.groupId;
+
+    // 404 Error: Couldn't find an Event with the specified id
+    const event = await Event.findByPk(groupId);
+    if (!event) {
+        res.status(404);
+        return res.json({ message: `Event couldn't be found` });
+    };
+
+    const currUserId = user.dataValues.id;
+    const { userId, status } = req.body;
+
+    // Current User must be host or co-host of group that event belongs to
+    const group = await Group.findByPk(groupId);
+    let hostOrCoHost = false;
+    if (group.status === 'host' || group.status === 'co-host') hostOrCoHost = true;
+
+
+    const attendance = await Attendance.findOne({
+        where: { groupId: groupId, userId: userId }
+    });
+
+    // 404 Error: If attendance does not exist
+    if (!attendance) {
+        res.status(404);
+        return res.json({ message: `Attendance between the user and the event does not exist` });
+    };
+
+    // 400 Error: Cannot change status from "attending" to "pending"
+    if (attendance.status === 'attending') {
+        res.status(400);
+        return res.json({ message: `Cannot change status from "attending" to "pending"` });
+    };
+
+    attendance.userId = userId;
+    attendance.status = status;
+    await attendance.save();
+
+    const updatedAttendance = await Attendance.findOne({
+        where: { userId: userId, status: status }
+    });
+
+    const attandanceObj = {
+        id: updatedAttendance.id,
+        groupId,
+        userId,
+        status
+    };
+    res.status(200);
+    return res.json(attandanceObj);
+});
 
 
 

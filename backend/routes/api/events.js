@@ -494,25 +494,35 @@ router.put('/:eventId/attendance', requireAuth, async (req, res) => {
     // 400 Error: Cannot change status from "attending" to "pending"
     if (attendance.status === 'attending') {
         res.status(400);
-        return res.json({ message: `Cannot change status from "attending" to "pending"` });
+        return res.json({ message: `Cannot change status from 'attending' to 'pending'` });
     };
 
-    attendance.userId = userId;
-    attendance.status = status;
-    await attendance.save();
+    // console.log('////////////////////////////////')
+    // console.log(`***** hostOrCoHost:`)
+    // console.log(hostOrCoHost)
+    // console.log('////////////////////////////////')
 
-    const updatedAttendance = await Attendance.findOne({
-        where: { userId: userId, status: status }
-    });
+    if (hostOrCoHost) {
+        attendance.userId = userId;
+        attendance.status = status;
+        await attendance.save();
 
-    const attandanceObj = {
-        id: updatedAttendance.id,
-        eventId,
-        userId,
-        status
+        const updatedAttendance = await Attendance.findOne({
+            where: { userId: userId, status: status }
+        });
+
+        const attandanceObj = {
+            id: updatedAttendance.id,
+            eventId,
+            userId,
+            status
+        };
+        res.status(200);
+        return res.json(attandanceObj);
+    } else {
+        res.status(403);
+        return res.json({ message: `Attendance can only be updated by a host or co-host of the group putting on the event` });
     };
-    res.status(200);
-    return res.json(attandanceObj);
 });
 
 
