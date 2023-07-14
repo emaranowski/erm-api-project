@@ -838,54 +838,125 @@ router.put('/:groupId/membership', requireAuth, async (req, res) => {
 
     const groupId = req.params.groupId;
 
-    // 404 Error: Couldn't find an Event with the specified id
-    const event = await Event.findByPk(groupId);
-    if (!event) {
-        res.status(404);
-        return res.json({ message: `Event couldn't be found` });
-    };
-
-    const currUserId = user.dataValues.id;
-    const { userId, status } = req.body;
-
-    // Current User must be host or co-host of group that event belongs to
+    // 404 Error: Couldn't find a Group with the specified id
     const group = await Group.findByPk(groupId);
-    let hostOrCoHost = false;
-    if (group.status === 'host' || group.status === 'co-host') hostOrCoHost = true;
-
-
-    const attendance = await Attendance.findOne({
-        where: { groupId: groupId, userId: userId }
-    });
-
-    // 404 Error: If attendance does not exist
-    if (!attendance) {
+    if (!group) {
         res.status(404);
-        return res.json({ message: `Attendance between the user and the event does not exist` });
+        return res.json({ message: `Group couldn't be found` });
     };
 
-    // 400 Error: Cannot change status from "attending" to "pending"
-    if (attendance.status === 'attending') {
-        res.status(400);
-        return res.json({ message: `Cannot change status from "attending" to "pending"` });
-    };
+    const { memberId, status } = req.body;
+    const currUserId = user.dataValues.id;
 
-    attendance.userId = userId;
-    attendance.status = status;
-    await attendance.save();
-
-    const updatedAttendance = await Attendance.findOne({
-        where: { userId: userId, status: status }
+    const membership = await Membership.findOne({ // membership to edit
+        where: { groupId: groupId, userId: memberId }
     });
 
-    const attandanceObj = {
-        id: updatedAttendance.id,
-        groupId,
-        userId,
-        status
+    const currentUserMembership = await Membership.findOne({ // membership that will perform the edit
+        where: { groupId: groupId, userId: currUserId }
+    });
+
+    // 404 Error: If membership does not exist
+    if (!membership) {
+        res.status(404);
+        return res.json({ message: `Membership between the user and the group does not exist` });
     };
-    res.status(200);
-    return res.json(attandanceObj);
+
+    const userId = membership.userId;
+    const userOfInterest = await User.findByPk(userId);
+
+    // 400 Error: Couldn't find a User with the specified memberId
+    if (!userOfInterest) {
+        res.status(400);
+        return res.json({
+            message: `Validation Error`,
+            errors: {
+                status: `User couldn't be found`
+            }
+        });
+    }
+
+    // 400 Error: Cannot change status to "pending"
+    if (status === 'pending') {
+        res.status(400);
+        return res.json({
+            message: `Validation Error`,
+            errors: {
+                status: `Cannot change a membership status to pending`
+            }
+        });
+    };
+
+    // Current User must be host or co-host of group that group belongs to
+    let host = false;
+    if (currentUserMembership.status === 'host') host = true;
+    let coHost = false;
+    if (currentUserMembership.status === 'co-host') coHost = true;
+
+    // console.log('////////////////////////////////')
+    // console.log(`***** membership.status:`)
+    // console.log(membership.status)
+    // console.log('////////////////////////////////')
+    // return res.json({ message: `test` });
+
+    if (membership.status === 'pending' && status === 'member' && !host && !coHost) {
+
+        res.status(403);
+        return res.json({ message: `Membership can only be updated by a group host or co-host` });
+
+    } else if (membership.status === 'member' && status === 'co-host' && !host) {
+
+        res.status(403);
+        return res.json({ message: `Co-host membership can only be updated by a group host` });
+
+    } else if (membership.status === 'pending' && status === 'member' && (host || coHost)) {
+
+        membership.userId = memberId;
+        membership.status = status;
+        await membership.save();
+
+        const updatedMembership = await Membership.findOne({
+            where: { userId: memberId, status: status }
+        });
+
+        const membershipObj = {
+            id: updatedMembership.id,
+            groupId,
+            memberId,
+            status
+        };
+        res.status(200);
+        return res.json(membershipObj);
+
+    } else if (status !== 'pending' && (host)) {
+
+        membership.userId = memberId;
+        membership.status = status;
+        await membership.save();
+
+        const updatedMembership = await Membership.findOne({
+            where: { userId: memberId, status: status }
+        });
+
+        const membershipObj = {
+            id: updatedMembership.id,
+            groupId,
+            memberId: updatedMembership.userId,
+            status
+        };
+        res.status(200);
+        return res.json(membershipObj);
+
+    }
+
+    // else {
+    //     // return res.json({ message: `test` });
+    // }
+
+    // console.log('////////////////////////////////')
+    // console.log(`***** hostOrCoHost:`)
+    // console.log(hostOrCoHost)
+    // console.log('////////////////////////////////')
 });
 
 
@@ -2097,4 +2168,138 @@ module.exports = router;
 
 //     return res.json(groups);
 
+// });
+
+
+
+
+//////
+
+// Change the status of a membership for a group specified by id (PUT /api/events/:groupId/membership)
+// router.put('/:groupId/membership', requireAuth, async (req, res) => {
+//     const { user } = req;
+//     if (!user) {
+//         res.status(401);
+//         return res.json({ message: `Authentication Required. No user is currently logged in.` });
+//     };
+
+//     const groupId = req.params.groupId;
+
+//     // 404 Error: Couldn't find a Group with the specified id
+//     const group = await Group.findByPk(groupId);
+//     if (!group) {
+//         res.status(404);
+//         return res.json({ message: `Group couldn't be found` });
+//     };
+
+//     const { memberId, status } = req.body;
+//     const currUserId = user.dataValues.id;
+
+//     const membership = await Membership.findOne({ // membership to edit
+//         where: { groupId: groupId, userId: memberId }
+//     });
+
+//     const currentUserMembership = await Membership.findOne({ // membership that will perform the edit
+//         where: { groupId: groupId, userId: currUserId }
+//     });
+
+//     // 404 Error: If membership does not exist
+//     if (!membership) {
+//         res.status(404);
+//         return res.json({ message: `Membership between the user and the group does not exist` });
+//     };
+
+//     const userId = membership.userId;
+//     const userOfInterest = await User.findByPk(userId);
+
+//     // 400 Error: Couldn't find a User with the specified memberId
+//     if (!userOfInterest) {
+//         res.status(400);
+//         return res.json({
+//             message: `Validation Error`,
+//             errors: {
+//                 status: `User couldn't be found`
+//             }
+//         });
+//     }
+
+//     // 400 Error: Cannot change status to "pending"
+//     if (status === 'pending') {
+//         res.status(400);
+//         return res.json({
+//             message: `Validation Error`,
+//             errors: {
+//                 status: `Cannot change a membership status to pending`
+//             }
+//         });
+//     };
+
+//     // Current User must be host or co-host of group that group belongs to
+//     let host = false;
+//     if (currentUserMembership.status === 'host') host = true;
+//     let coHost = false;
+//     if (currentUserMembership.status === 'co-host') coHost = true;
+
+//     // console.log('////////////////////////////////')
+//     // console.log(`***** membership.status:`)
+//     // console.log(membership.status)
+//     // console.log('////////////////////////////////')
+//     // return res.json({ message: `test` });
+
+//     if (membership.status === 'pending' && status === 'member' && !host && !coHost) {
+
+//         res.status(403);
+//         return res.json({ message: `Membership can only be updated by a group host or co-host` });
+
+//     } else if (membership.status === 'member' && status === 'co-host' && !host) {
+
+//         res.status(403);
+//         return res.json({ message: `Co-host membership can only be updated by a group host` });
+
+//     } else if (membership.status === 'member' && status === 'co-host' && (host)) {
+
+//         membership.memberId = memberId;
+//         membership.status = status;
+//         await membership.save();
+
+//         const updatedMembership = await Membership.findOne({
+//             where: { memberId: memberId, status: status }
+//         });
+
+//         const membershipObj = {
+//             id: updatedMembership.id,
+//             groupId,
+//             memberId,
+//             status
+//         };
+//         res.status(200);
+//         return res.json(membershipObj);
+
+//     } else if (membership.status === 'pending' && status === 'member' && (host || coHost)) {
+
+//         membership.memberId = memberId;
+//         membership.status = status;
+//         await membership.save();
+
+//         const updatedMembership = await Membership.findOne({
+//             where: { memberId: memberId, status: status }
+//         });
+
+//         const membershipObj = {
+//             id: updatedMembership.id,
+//             groupId,
+//             memberId,
+//             status
+//         };
+//         res.status(200);
+//         return res.json(membershipObj);
+
+//     } else {
+//         // return res.json({ message: `test` });
+//     }
+
+//     // console.log('////////////////////////////////')
+//     // console.log(`***** hostOrCoHost:`)
+//     // console.log(hostOrCoHost)
+//     // console.log('////////////////////////////////')
 // });
