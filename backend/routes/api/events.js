@@ -451,6 +451,74 @@ const validateEvent = [
 ]; // if any one is wrong, err is ret as res
 
 
+
+
+
+// Change the status of an attendance for an event specified by id (PUT /api/events/:eventId/attendance)
+router.put('/:eventId/attendance', requireAuth, async (req, res) => {
+    const { user } = req;
+    if (!user) {
+        res.status(401);
+        return res.json({ message: `Authentication Required. No user is currently logged in.` });
+    };
+
+    const eventId = req.params.eventId;
+
+    // 404 Error: Couldn't find an Event with the specified id
+    const event = await Event.findByPk(eventId);
+    if (!event) {
+        res.status(404);
+        return res.json({ message: `Event couldn't be found` });
+    };
+
+    const currUserId = user.dataValues.id;
+    const { userId, status } = req.body;
+    const groupId = event.groupId;
+
+    // Current User must be host or co-host of group that event belongs to
+    const group = await Group.findByPk(groupId);
+    let hostOrCoHost = false;
+    if (group.status === 'host' || group.status === 'co-host') hostOrCoHost = true;
+
+
+    const attendance = await Attendance.findOne({
+        where: { eventId: eventId, userId: userId }
+    });
+
+    // 404 Error: If attendance does not exist
+    if (!attendance) {
+        res.status(404);
+        return res.json({ message: `Attendance between the user and the event does not exist` });
+    };
+
+    // 400 Error: Cannot change status from "attending" to "pending"
+    if (attendance.status === 'attending') {
+        res.status(400);
+        return res.json({ message: `Cannot change status from "attending" to "pending"` });
+    };
+
+    attendance.userId = userId;
+    attendance.status = status;
+    await attendance.save();
+
+    const updatedAttendance = await Attendance.findOne({
+        where: { userId: userId, status: status }
+    });
+
+    const attandanceObj = {
+        id: updatedAttendance.id,
+        eventId,
+        userId,
+        status
+    };
+    res.status(200);
+    return res.json(attandanceObj);
+});
+
+
+
+
+
 // Edit an Event specified by its id (PUT /api/events/:eventId)
 router.put('/:eventId', requireAuth, validateEvent, async (req, res) => {
     const { user } = req;

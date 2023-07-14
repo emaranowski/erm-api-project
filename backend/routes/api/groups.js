@@ -824,6 +824,20 @@ const validateGroup = [
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Edit a Group (PUT /api/groups/:groupId) -- V1
 // ***** Require proper authorization: Group must belong to current user
 router.put('/:groupId', requireAuth, validateGroup, async (req, res) => {
