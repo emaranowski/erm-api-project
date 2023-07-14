@@ -7,23 +7,68 @@ const { check } = require('express-validator'); // validates req.body
 const { handleValidationErrors } = require('../../utils/validation'); // validates req.body
 const router = express.Router();
 
+
+
+
 // Delete an Image for a Group (DELETE /api/group-images/:imageId)
 router.delete('/:imageId', requireAuth, async (req, res) => {
 
-    const allMemberships = await Membership.findAll();
-    const hostOrCoHost = [];
-    allMemberships.forEach(membership => {
+    // get imageId
+    const imageId = req.params.imageId;
 
-        if (membership.userId === currUserId &&
-            (membership.status === 'host' || membership.status === 'co-host')
-        ) {
-            hostOrCoHost.push(membership.status)
+    // get image to delete
+    const imageToDelete = await GroupImage.findByPk(imageId);
+
+    // if no image w/ specified id
+    if (!imageToDelete) {
+        res.status(404);
+        return res.json({ message: `Group Image couldn't be found` });
+    };
+
+    // get groupId
+    const group = await Group.findOne({ where: { id: imageId } });
+    const groupId = group.id;
+
+    // get userId
+    const { user } = req;
+    const userId = user.dataValues.id;
+
+    // get membership
+    const membership = await Membership.findOne({
+        where: {
+            userId: userId,
+            groupId: groupId,
+            status: {
+                [Op.in]: ['host', 'co-host']
+            }
         }
     });
 
-    // Error: Couldn't find an Image with the specified id
+    // Current user must be "host" or "co-host" of group
+    if (!membership) {
+        res.status(403);
+        return res.json({
+            message: `User must be a group organizer or co-host to delete a Group Image.`
+        });
+    };
 
+    // //
+    // const hostOrCoHost = [];
+    // allMemberships.forEach(membership => {
+
+    //     if (membership.userId === currUserId &&
+    //         (membership.status === 'host' || membership.status === 'co-host')
+    //     ) {
+    //         hostOrCoHost.push(membership.status)
+    //     }
+    // });
+
+    await imageToDelete.destroy();
+    res.status(200);
+    return res.json({ message: `Successfully deleted` });
 });
+
+
 
 
 
