@@ -3,6 +3,7 @@ const sessionRouter = require('./session.js');
 const usersRouter = require('./users.js');
 const groupsRouter = require('./groups.js'); // added
 const venuesRouter = require('./venues.js'); // added
+const groupImagesRouter = require('./group-images.js'); // added
 const { restoreUser } = require('../../utils/auth.js');
 
 
@@ -15,12 +16,10 @@ router.use(restoreUser); // keep restoreUser midware connected before any other 
 // If NO valid current user session, req.user = null
 
 router.use('/session', sessionRouter);
-
 router.use('/users', usersRouter);
-
 router.use('/groups', groupsRouter); // added
-
 router.use('/venues', venuesRouter); // added
+router.use('/group-images', groupImagesRouter); // added
 
 router.post('/test', (req, res) => {
     res.json({ requestBody: req.body });
