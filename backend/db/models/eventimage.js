@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       // one eventimage belongsTo one event
       EventImage.belongsTo(
         models.Event,
-        { foreignKey: 'eventId', onDelete: 'CASCADE', hooks: true } // , onDelete: 'CASCADE', hooks: true
+        { foreignKey: 'eventId' }
       );
 
     }

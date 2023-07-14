@@ -10,21 +10,21 @@ module.exports = (sequelize, DataTypes) => {
       // one group belongsTo one user/organizer
       User.hasMany(
         models.Group,
-        { foreignKey: 'organizerId' } // may need to alias? like.. { foreignKey: 'currentTeamId', as: 'TeamRoster' }
+        { foreignKey: 'organizerId', onDelete: 'CASCADE', hooks: true } // may need to alias? like.. { foreignKey: 'currentTeamId', as: 'TeamRoster' }
       );
 
       // one membership belongsTo one user
       // one user hasMany memberships
       User.hasMany(
         models.Membership,
-        { foreignKey: 'userId' }
+        { foreignKey: 'userId', onDelete: 'CASCADE', hooks: true }
       );
 
       // one user hasMany attendances
       // one attendance belongsTo one user
       User.hasMany(
         models.Attendance,
-        { foreignKey: 'userId' }
+        { foreignKey: 'userId', onDelete: 'CASCADE', hooks: true }
       );
 
       // one user belongsToMany groups ?

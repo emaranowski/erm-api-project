@@ -14,15 +14,15 @@ module.exports = (sequelize, DataTypes) => {
       // one event hasMany attendances
       // one attendance belongsTo one event
       Attendance.belongsTo(
-        models.Event,
-        { foreignKey: 'eventId', onDelete: 'CASCADE', hooks: true }
+        models.Event, // DO NOT add for belongsTo: onDelete: 'CASCADE', hooks: true
+        { foreignKey: 'eventId' } // but seems fine to keep below for .init()
       );
 
       // one user hasMany attendances
       // one attendance belongsTo one user
       Attendance.belongsTo(
-        models.User,
-        { foreignKey: 'userId', onDelete: 'CASCADE', hooks: true }
+        models.User, // DO NOT add for belongsTo: onDelete: 'CASCADE', hooks: true
+        { foreignKey: 'userId' } // but seems fine to keep below for .init()
       );
 
       // ?

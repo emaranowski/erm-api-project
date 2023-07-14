@@ -31,14 +31,14 @@ module.exports = (sequelize, DataTypes) => {
       // one event belongsTo one venue
       Event.belongsTo(
         models.Venue,
-        { foreignKey: 'venueId', onDelete: 'CASCADE', hooks: true }
+        { foreignKey: 'venueId' }
       ); // could be SET NULL?
 
       // one group hasMany events
       // one event belongsTo one group
       Event.belongsTo(
         models.Group,
-        { foreignKey: 'groupId', onDelete: 'CASCADE', hooks: true }
+        { foreignKey: 'groupId' }
       );
 
       // BUG HERE when both commented in

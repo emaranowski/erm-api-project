@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       // one group belongsTo one user/organizer
       Group.belongsTo(
         models.User,
-        { foreignKey: 'organizerId', onDelete: 'CASCADE', hooks: true } // may need to alias? like.. { foreignKey: 'currentTeamId', as: 'TeamRoster' }
+        { foreignKey: 'organizerId' } // may need to alias? like.. { foreignKey: 'currentTeamId', as: 'TeamRoster' }
       ); // , onDelete: 'CASCADE', hooks: true // figure out how to on del cascade w/ alias
 
       // one membership belongsTo one group

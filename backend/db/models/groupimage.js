@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       // one group hasMany groupimages
       GroupImage.belongsTo(
         models.Group,
-        { foreignKey: 'groupId', onDelete: 'CASCADE', hooks: true }
+        { foreignKey: 'groupId' }
       );
 
     }

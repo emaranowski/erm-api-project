@@ -17,14 +17,14 @@ module.exports = (sequelize, DataTypes) => {
       // one user hasMany memberships
       Membership.belongsTo(
         models.User,
-        { foreignKey: 'userId', onDelete: 'CASCADE', hooks: true }
+        { foreignKey: 'userId' }
       );
 
       // one membership belongsTo one group
       // one group hasMany memberships
       Membership.belongsTo(
         models.Group,
-        { foreignKey: 'groupId', onDelete: 'CASCADE', hooks: true }
+        { foreignKey: 'groupId' }
       );
 
     }

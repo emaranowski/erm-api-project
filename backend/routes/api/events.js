@@ -158,11 +158,11 @@ router.delete('/:eventId/attendance', requireAuth, async (req, res) => {
         return res.json({ message: `Only the User or organizer may delete an Attendance` });
     };
 
-    console.log('////////////////////////////////')
-    console.log(`attendance:`)
-    console.log(attendance)
-    console.log('////////////////////////////////')
-    return res.json({ message: 'test' });
+    // console.log('////////////////////////////////')
+    // console.log(`attendance:`)
+    // console.log(attendance)
+    // console.log('////////////////////////////////')
+    // return res.json({ message: 'test' });
 
     await attendance.destroy();
 
