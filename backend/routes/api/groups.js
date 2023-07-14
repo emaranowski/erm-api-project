@@ -132,13 +132,11 @@ router.get('/:groupId/members', async (req, res) => {
     const currUserId = user.dataValues.id;
     const groupId = req.params.groupId;
 
-    // const hostOrCoHost = await Membership.findAll({
-    //     where: {
-    //         userId: currUserId,
-    //         groupId: groupId,
-    //         status: { [Op.in]: ['host', 'co-host'] }
-    //     }
-    // });
+    const group = await Group.findByPk(groupId);
+    if (!group) {
+        res.status(404);
+        res.json({ message: `Group couldn't be found` })
+    };
 
     const allMemberships = await Membership.findAll({ where: { groupId: groupId } });
     const allUsers = await User.findAll();
