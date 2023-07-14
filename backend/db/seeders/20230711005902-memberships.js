@@ -21,14 +21,24 @@ module.exports = {
         status: 'host' // i.e. organizer
       },
       {
-        userId: 1, // added to test, so that User 1 is in 2 groups, as host & member (for: GET /api/groups/current)
-        groupId: 2,
-        status: 'member'
-      },
-      {
         userId: 2,
         groupId: 1,
         status: 'co-host'
+      },
+      {
+        userId: 3,
+        groupId: 1,
+        status: 'member'
+      },
+      {
+        userId: 4,
+        groupId: 1,
+        status: 'pending'
+      },
+      {
+        userId: 1, // added to test, so that User 1 is in 2 groups, as host & member (for: GET /api/groups/current)
+        groupId: 2,
+        status: 'member'
       },
       {
         userId: 3,
@@ -50,7 +60,7 @@ module.exports = {
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       userId: {
-        [Op.in]: [1, 2, 3, 4] // added 4
+        [Op.in]: [1, 2, 3, 4, 4, 5, 6, 7, 8, 9, 10] // added 4
       } // may need to add combos of userId & groupId?
     }, {});
 

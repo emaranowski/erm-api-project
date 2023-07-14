@@ -209,7 +209,7 @@ router.get('/:groupId/members', async (req, res) => {
                 return user.id === member.dataValues.userId;
             });
 
-            if (member.dataValues.status === 'pending') {
+            if (member.dataValues.status !== 'pending') {
 
                 const memberObj = {
                     id: member.id,
