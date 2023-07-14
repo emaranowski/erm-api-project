@@ -8,6 +8,62 @@ const { handleValidationErrors } = require('../../utils/validation'); // validat
 const router = express.Router();
 
 
+// Add an Image to an Event based on the Event's id (POST /api/events/:eventId/images)
+router.post('/:eventId/images', requireAuth, async (req, res) => {
+    const { user } = req;
+    if (!user) {
+        res.status(401);
+        return res.json({ message: `Authentication Required. No user is currently logged in.` });
+    };
+
+    const userId = user.dataValues.id;
+    const { url, preview } = req.body;
+    const eventId = req.params.eventId;
+
+    const event = await Event.findByPk(eventId, { include: [{ model: Group }] });
+    if (!event) {
+        res.status(404);
+        return res.json({ message: `Event couldn't be found` });
+    };
+
+    groupId = event.groupId;
+
+    // Current User must be event host, co-host, or attendee
+    const memberships = await Membership.findAll({ include: [{ model: Group }] });
+    const canAddImage = memberships.filter(member => {
+        return member.userId === userId &&
+            member.groupId === groupId &&
+            (member.status === 'host' ||
+                member.status === 'co-host');
+    });
+
+    const attendance = await Attendance.findOne({ where: { userId: userId, eventId: eventId } });
+    if (attendance) canAddImage.push('attendee');
+
+    if (canAddImage.length === 0) {
+        res.status(403);
+        return res.json({
+            message: `User must be an attendee, host, or co-host of the event to add an image.`
+        });
+    };
+
+    await EventImage.bulkCreate([{ eventId, url, preview },],
+        { validate: true });
+
+    const createdImage = await EventImage.findOne({ // to get id
+        where: { eventId, url, preview }
+    });
+
+    const createdImageObj = {
+        id: createdImage.id,
+        url: createdImage.url,
+        preview: createdImage.preview
+    };
+    res.status(200);
+    return res.json(createdImageObj);
+});
+
+
 const validateEvent = [
     // check('venueId')
     //     // .exists({ checkFalsy: true })
