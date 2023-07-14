@@ -742,11 +742,54 @@ router.get('/:eventId', async (req, res) => {
 });
 
 
+const validatePage = [
+    check('page')
+        .exists({ checkFalsy: true })
+        .custom(async value => {
+            if (value <= 0) {
+                throw new Error();
+            }
+        })
+        .withMessage(`Page must be greater than or equal to 1`),
+    check('size')
+        .exists({ checkFalsy: true })
+        .custom(async value => {
+            if (value <= 0) {
+                throw new Error();
+            }
+        })
+        .withMessage(`Size must be greater than or equal to 1`),
+    // check('name')
+    //     .exists({ checkFalsy: true })
+    //     .isString()
+    //     .withMessage(`Name must be a string`),
+    // check('type')
+    //     .exists({ checkFalsy: true })
+    //     .isIn(['Online', 'In person'])
+    //     .withMessage(`Type must be 'Online' or 'In person'`),
+    // check('startDate')
+    //     .exists({ checkFalsy: true })
+    //     .isDate() // try to figure out how to use .isLatLong()
+    //     .withMessage(`Start date must be a valid datetime`),
+    handleValidationErrors
+];
 
-
-// Get all Events (GET /api/events) -- V2
-router.get('/', async (req, res) => {
+// Get all Events (GET /api/events)
+router.get('/', validatePage, async (req, res) => {
     let allEventsObj = { Events: [] };
+
+    // `GET /` **OR**
+    // `GET /?page=hello&size=world`
+    // should return items 1-20
+
+    let { page, size } = req.query;
+    page = parseInt(page);
+    size = parseInt(size);
+
+    // if (!page || Number.isNaN(page) || page <= 0 || page >= 11) page = 1;
+    // if (!size || Number.isNaN(size) || size <= 0 || size >= 21) size = 20;
+    if (!page || Number.isNaN(page) || page <= 0 || page >= 11) page = 1;
+    if (!size || Number.isNaN(size) || size <= 0 || size >= 21) size = 20;
 
     const eventsOrig = await Event.findAll({
         include: [
@@ -754,7 +797,9 @@ router.get('/', async (req, res) => {
             { model: EventImage },
             { model: Group },
             { model: Venue }
-        ]
+        ],
+        offset: (page - 1) * size,
+        limit: size,
     });
 
     // convert to JSON
@@ -826,9 +871,122 @@ router.get('/', async (req, res) => {
         allEventsObj.Events.push(event);
     });
 
+
+
     return res.json(allEventsObj);
 });
 
 
-
 module.exports = router;
+
+
+
+    // `GET /` **OR**
+    // `GET /?page=hello&size=world`
+    // should return items 1-20
+
+    // let { page, size } = req.query;
+    // page = parseInt(page);
+    // size = parseInt(size);
+
+    // if (!page || Number.isNaN(page) || page <= 0 || page >= 11) page = 1;
+    // if (!size || Number.isNaN(size) || size <= 0 || size >= 21) size = 20;
+
+    // const allEventsObj = await Event.findAll({
+    //     offset: (page - 1) * size,
+    //     limit: size,
+    // });
+
+    // return res.json({
+    //     ...allEventsObj,
+    //     page,
+    // });
+
+
+
+// // Get all Events (GET /api/events)
+// router.get('/', async (req, res) => {
+//     let allEventsObj = { Events: [] };
+
+//     const eventsOrig = await Event.findAll({
+//         include: [
+//             { model: Attendance },
+//             { model: EventImage },
+//             { model: Group },
+//             { model: Venue }
+//         ],
+//     });
+
+//     // convert to JSON
+//     let events = [];
+//     eventsOrig.forEach(event => {
+//         events.push(event.toJSON());
+//     });
+
+//     events.forEach(event => {
+
+//         // 1. create + add numAttending
+//         const attendancesArr = event.Attendances;
+//         event.numAttending = attendancesArr.length;
+//         delete event.Attendances;
+
+//         // 2. create + add previewImage
+//         event.EventImages.forEach(image => {
+//             if (image.preview === true) {
+//                 event.previewImage = image.url;
+//             };
+//         });
+//         if (!event.previewImage) {
+//             event.previewImage = 'No preview image found';
+//         };
+//         delete event.EventImages;
+//         delete event.description;
+//         delete event.capacity;
+//         delete event.price;
+
+//         // get group
+//         const group = event.Group;
+
+//         // get venue
+//         const venue = event.Venue;
+//         let venueVal;
+
+//         if (!venue) {
+//             venueVal = null;
+//         };
+
+//         if (venue) {
+//             venueVal = {
+//                 id: venue.id,
+//                 city: venue.city,
+//                 state: venue.state
+//             }
+//         };
+
+//         // console.log('////////////////////////////////')
+//         // console.log(`***** group:`)
+//         // console.log(group)
+//         // console.log('////////////////////////////////')
+
+//         // console.log('////////////////////////////////')
+//         // console.log(`***** venue:`)
+//         // console.log(venue)
+//         // console.log('////////////////////////////////')
+
+//         event.Group = {
+//             id: group.id,
+//             name: group.name,
+//             city: group.city,
+//             state: group.state
+//         };
+
+//         event.Venue = venueVal;
+
+//         // 3. add event to allEventsObj
+//         allEventsObj.Events.push(event);
+//     });
+
+
+
+//     return res.json(allEventsObj);
+// });
