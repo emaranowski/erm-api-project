@@ -16,17 +16,17 @@ module.exports = {
       {
         eventId: 1,
         userId: 1,
-        status: 'yes'
+        status: 'attending'
       },
       {
         eventId: 2,
         userId: 1,
-        status: 'no'
+        status: 'attending'
       },
       {
         eventId: 3,
         userId: 1,
-        status: 'maybe'
+        status: 'pending'
       },
     ], { validate: true });
 
@@ -38,7 +38,7 @@ module.exports = {
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       status: {
-        [Op.in]: ['yes', 'no', 'maybe']
+        [Op.in]: ['attending', 'pending']
       } // ideally use something better than status
     }, {});
 

@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE'
     },
     status: {
-      type: DataTypes.ENUM('yes', 'no', 'maybe'),
+      type: DataTypes.ENUM('attending', 'pending'),
       allowNull: false,
     },
   }, {

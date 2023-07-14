@@ -597,7 +597,7 @@ router.delete('/:groupId/membership', requireAuth, async (req, res) => {
 
         res.status(200);
         return res.json({ message: `Successfully deleted membership from group` });
-    }
+    };
 
     // Error: Couldn't find a User with the specified memberIdToDelete
     if (!membershipToDelete) {
@@ -622,9 +622,7 @@ router.delete('/:groupId/membership', requireAuth, async (req, res) => {
     if (!isHost && !isDeletingSelf) {
         res.status(404);
         return res.json({ message: `Membership does not exist for this User` });
-    }
-
-
+    };
 });
 
 
