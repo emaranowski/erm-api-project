@@ -43,7 +43,6 @@ const validateVenue = [
 
 // Edit a Venue specified by its id (PUT /api/venues/:venueId) -- DRAFT V1
 router.put('/:venueId', requireAuth, validateVenue, async (req, res) => {
-    // user must be authorized
     const { user } = req;
     if (!user) {
         res.status(401); // Unauthorized/Unauthenticated
@@ -54,7 +53,6 @@ router.put('/:venueId', requireAuth, validateVenue, async (req, res) => {
     const venueId = req.params.venueId;
     const { address, city, state, lat, lng } = req.body;
 
-    // venue must exist
     const venueToUpdate = await Venue.findByPk(venueId);
     if (!venueToUpdate) {
         res.status(404);
@@ -81,7 +79,7 @@ router.put('/:venueId', requireAuth, validateVenue, async (req, res) => {
 
     if (hostOrCoHost.length === 0) {
         res.status(403); // 403 Not Authorized: User must be group organizer or co-host to create an event
-        return res.json({ message: `User must be group organizer or co-host to create an event` });
+        return res.json({ message: `User must be group organizer or co-host to edit a venue` });
     };
 
     // // COME BACK TO THIS

@@ -531,15 +531,7 @@ router.put('/:eventId', requireAuth, validateEvent, async (req, res) => {
     const eventId = req.params.eventId;
     const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
 
-    const event = await Event.findByPk(eventId,
-        {
-            include: [
-                { model: Group },
-                { model: Venue },
-            ]
-        }
-    );
-
+    const event = await Event.findByPk(eventId, { include: [{ model: Group }, { model: Venue },] });
     if (!event) {
         res.status(404);
         return res.json({ message: `Event couldn't be found` });
@@ -551,7 +543,7 @@ router.put('/:eventId', requireAuth, validateEvent, async (req, res) => {
         return res.json({ message: `Venue does not exist` });
     };
 
-    const groupId = event.Group.groupId;
+    const groupId = event.Group.id;
     const hostOrCoHost = await Membership.findAll({
         where: {
             userId: userId,
@@ -562,39 +554,8 @@ router.put('/:eventId', requireAuth, validateEvent, async (req, res) => {
 
     if (hostOrCoHost.length === 0) {
         res.status(403); // 403 Not Authorized: User must be group organizer or co-host to create an event
-        return res.json({ message: `User must be group organizer or co-host to create an event` });
+        return res.json({ message: `User must be group organizer or co-host to edit an event` });
     };
-
-
-    // get membership
-    // const membership = await Membership.findOne({
-    //     where: {
-    //         userId: userId,
-    //         groupId: groupId,
-    //         status: {
-    //             [Op.in]: ['host', 'co-host']
-    //         }
-    //     }
-    // });
-
-    // const membersArr = event.Memberships;
-
-    // const memberships = await Membership.findAll();
-
-    // const hostOrCoHost = memberships.filter(member => {
-    //     return member.userId === userId &&
-    //         member.groupId === groupId &&
-    //         (member.status === 'host' ||
-    //             member.status === 'co-host');
-    // });
-
-    // // Current user must be "host" or "co-host" of Group that Event belongs to
-    // if (hostOrCoHost.length === 0) {
-    //     res.status(403);
-    //     return res.json({
-    //         message: `User must be a group's organizer or co-host to update its events.`
-    //     });
-    // };
 
     event.venueId = venueId;
     event.name = name;
@@ -1094,4 +1055,111 @@ module.exports = router;
 
 
 //     return res.json(allEventsObj);
+// });
+
+
+
+////
+
+// // Edit an Event specified by its id (PUT /api/events/:eventId)
+// router.put('/:eventId', requireAuth, validateEvent, async (req, res) => {
+//     const { user } = req;
+//     if (!user) {
+//         res.status(401);
+//         return res.json({ message: `Authentication Required. No user is currently logged in.` });
+//     };
+
+//     const userId = user.dataValues.id;
+//     const eventId = req.params.eventId;
+//     const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+
+//     const event = await Event.findByPk(eventId,
+//         {
+//             include: [
+//                 { model: Group },
+//                 { model: Venue },
+//             ]
+//         }
+//     );
+
+//     if (!event) {
+//         res.status(404);
+//         return res.json({ message: `Event couldn't be found` });
+//     };
+
+//     const venue = event.Venue;
+//     if (!venue) {
+//         res.status(400);
+//         return res.json({ message: `Venue does not exist` });
+//     };
+
+//     const groupId = event.Group.groupId;
+//     const hostOrCoHost = await Membership.findAll({
+//         where: {
+//             userId: userId,
+//             groupId: groupId,
+//             status: { [Op.in]: ['host', 'co-host'] }
+//         }
+//     });
+
+//     if (hostOrCoHost.length === 0) {
+//         res.status(403); // 403 Not Authorized: User must be group organizer or co-host to create an event
+//         return res.json({ message: `User must be group organizer or co-host to create an event` });
+//     };
+
+
+//     // get membership
+//     // const membership = await Membership.findOne({
+//     //     where: {
+//     //         userId: userId,
+//     //         groupId: groupId,
+//     //         status: {
+//     //             [Op.in]: ['host', 'co-host']
+//     //         }
+//     //     }
+//     // });
+
+//     // const membersArr = event.Memberships;
+
+//     // const memberships = await Membership.findAll();
+
+//     // const hostOrCoHost = memberships.filter(member => {
+//     //     return member.userId === userId &&
+//     //         member.groupId === groupId &&
+//     //         (member.status === 'host' ||
+//     //             member.status === 'co-host');
+//     // });
+
+//     // // Current user must be "host" or "co-host" of Group that Event belongs to
+//     // if (hostOrCoHost.length === 0) {
+//     //     res.status(403);
+//     //     return res.json({
+//     //         message: `User must be a group's organizer or co-host to update its events.`
+//     //     });
+//     // };
+
+//     event.venueId = venueId;
+//     event.name = name;
+//     event.type = type;
+//     event.capacity = capacity;
+//     event.price = price;
+//     event.description = description;
+//     event.startDate = startDate;
+//     event.endDate = endDate;
+//     await event.save();
+
+//     const eventObj = {
+//         id: event.id,
+//         groupId: event.groupId,
+//         venueId: event.venueId,
+//         name: event.name,
+//         type: event.type,
+//         capacity: event.capacity,
+//         price: event.price,
+//         description: event.description,
+//         startDate: event.startDate,
+//         endDate: event.endDate,
+//     };
+//     res.status(200);
+//     return res.json(eventObj);
 // });
