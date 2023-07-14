@@ -881,12 +881,12 @@ router.post('/', requireAuth, validateGroup, async (req, res) => {
         return res.json({ message: `Authentication Required. No user is currently logged in.` });
     };
 
-    const currUserId = user.dataValues.id;
+    const userId = user.dataValues.id;
     const { name, about, type, private, city, state } = req.body;
 
     await Group.bulkCreate([
         {
-            organizerId: currUserId,
+            organizerId: userId,
             name,
             about,
             type,
@@ -898,7 +898,7 @@ router.post('/', requireAuth, validateGroup, async (req, res) => {
 
     const createdGroup = await Group.findOne({ // must query for the group to get: id, createdAt, updatedAt
         where: { // include all as failsafe against any w/ duplicate attributes (v low statistical prob, but why not)
-            organizerId: currUserId,
+            organizerId: userId,
             name: name,
             about: about,
             type: type,
@@ -907,6 +907,15 @@ router.post('/', requireAuth, validateGroup, async (req, res) => {
             state: state
         }
     });
+
+    const createdGroupId = createdGroup.id;
+    await Membership.bulkCreate([
+        {
+            userId: userId,
+            groupId: createdGroupId,
+            status: 'host'
+        },
+    ], { validate: true });
 
     res.status(201);
     return res.json(createdGroup);
