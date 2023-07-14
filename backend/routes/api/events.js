@@ -443,7 +443,8 @@ const validateEvent = [
 
 
 
-
+// FEEDBACK: seems like this endpoint returns a 403 error message, the request
+// SHOULD BE FIXED NOW?
 // Change the status of an attendance for an event specified by id (PUT /api/events/:eventId/attendance)
 router.put('/:eventId/attendance', requireAuth, async (req, res) => {
     const { user } = req;
@@ -453,46 +454,42 @@ router.put('/:eventId/attendance', requireAuth, async (req, res) => {
     };
 
     const eventId = req.params.eventId;
-
-    // 404 Error: Couldn't find an Event with the specified id
     const event = await Event.findByPk(eventId);
     if (!event) {
-        res.status(404);
+        res.status(404); // 404 Error: Couldn't find an Event with the specified id
         return res.json({ message: `Event couldn't be found` });
     };
 
-    const currUserId = user.dataValues.id;
     const { userId, status } = req.body;
+    const currUserId = user.dataValues.id;
     const groupId = event.groupId;
 
-    // Current User must be host or co-host of group that event belongs to
-    const group = await Group.findByPk(groupId);
-    let hostOrCoHost = false;
-    if (group.status === 'host' || group.status === 'co-host') hostOrCoHost = true;
-
+    const hostOrCoHost = await Membership.findAll({
+        where: {
+            userId: currUserId,
+            groupId: groupId,
+            status: { [Op.in]: ['host', 'co-host'] }
+        }
+    });
+    if (hostOrCoHost.length === 0) {
+        res.status(403); // 403 Not Authorized: User must be host/co-host to edit event attendance
+        return res.json({ message: `To edit attendance, user must be an organizer or co-host of the group holding the event.` });
+    };
 
     const attendance = await Attendance.findOne({
         where: { eventId: eventId, userId: userId }
     });
-
-    // 404 Error: If attendance does not exist
     if (!attendance) {
-        res.status(404);
+        res.status(404); // 404 Error: Attendance does not exist
         return res.json({ message: `Attendance between the user and the event does not exist` });
     };
 
-    // 400 Error: Cannot change status from "attending" to "pending"
-    if (attendance.status === 'attending') {
-        res.status(400);
+    if (attendance.status === 'attending' && status === 'pending') {
+        res.status(400); // 400 Error: Cannot change status from "attending" to "pending"
         return res.json({ message: `Cannot change status from 'attending' to 'pending'` });
     };
 
-    // console.log('////////////////////////////////')
-    // console.log(`***** hostOrCoHost:`)
-    // console.log(hostOrCoHost)
-    // console.log('////////////////////////////////')
-
-    if (hostOrCoHost) {
+    if (hostOrCoHost.length > 0) {
         attendance.userId = userId;
         attendance.status = status;
         await attendance.save();
@@ -507,9 +504,18 @@ router.put('/:eventId/attendance', requireAuth, async (req, res) => {
             userId,
             status
         };
+
+        // console.log('////////////////////////////////')
+        // console.log(`***** attandanceObj:`)
+        // console.log(attandanceObj)
+        // console.log('////////////////////////////////')
+        // return res.json({ test: `test` });
+
         res.status(200);
         return res.json(attandanceObj);
+
     } else {
+
         res.status(403);
         return res.json({ message: `Attendance can only be updated by a host or co-host of the group putting on the event` });
     };
@@ -706,7 +712,7 @@ router.get('/:eventId', async (req, res) => {
 });
 
 
-const validatePage = [
+const validatePageOrig = [
     check('page')
         .exists({ checkFalsy: true })
         .custom(async value => {
@@ -738,22 +744,44 @@ const validatePage = [
     handleValidationErrors
 ];
 
-// Get all Events (GET /api/events)
-router.get('/', validatePage, async (req, res) => {
-    let allEventsObj = { Events: [] };
+const validatePageAndSize = [
+    check('page')
+        .custom(async value => {
+            if (value < 0) {
+                throw new Error();
+            }
+        })
+        .withMessage(`Page must be greater than or equal to 1`),
+    check('size')
+        .custom(async value => {
+            if (value < 0) {
+                throw new Error();
+            }
+        })
+        .withMessage(`Size must be greater than or equal to 1`),
+    handleValidationErrors
+];
 
-    // `GET /` **OR**
-    // `GET /?page=hello&size=world`
-    // should return items 1-20
+// Get all Events (GET /api/events)
+router.get('/', validatePageAndSize, async (req, res) => {
+    let allEventsObj = { Events: [] };
 
     let { page, size } = req.query;
     page = parseInt(page);
     size = parseInt(size);
 
-    // if (!page || Number.isNaN(page) || page <= 0 || page >= 11) page = 1;
-    // if (!size || Number.isNaN(size) || size <= 0 || size >= 21) size = 20;
-    if (!page || Number.isNaN(page) || page <= 0 || page >= 11) page = 1;
-    if (!size || Number.isNaN(size) || size <= 0 || size >= 21) size = 20;
+    if (!page || Number.isNaN(page) || page === 0 || page > 10) page = 1;
+    if (!size || Number.isNaN(size) || size === 0 || size > 20) size = 20;
+
+    // `GET /` **OR**
+    // `GET /?page=hello&size=world`
+    // should return items 1-20
+
+    // FEEDBACK
+    // SHOULD BE FIXED NOW?
+    // when request does not specify page & size,
+    // should assume default vals,
+    // or display all data.
 
     const eventsOrig = await Event.findAll({
         include: [
