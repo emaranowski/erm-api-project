@@ -57,12 +57,13 @@ module.exports = {
     options.tableName = 'Events';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      name: {
-        [Op.in]: ['Forest Park Hike',
-          'First Sunday Potluck',
-          'Mox Board Game Night',
-          'Tennis Group First Meet and Greet']
-      }
+      // name: {
+      //   [Op.in]: ['Forest Park Hike',
+      //     'First Sunday Potluck',
+      //     'Mox Board Game Night',
+      //     'Tennis Group First Meet and Greet']
+      // },
+      groupId: { [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }
     }, {});
 
   }

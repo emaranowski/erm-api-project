@@ -8,6 +8,138 @@ const { handleValidationErrors } = require('../../utils/validation'); // validat
 const router = express.Router();
 
 
+const validateEvent = [
+    // check('venueId')
+    //     // .exists({ checkFalsy: true })
+    //     .custom(async value => { // prob need custom
+    //         const venue = await Venue.findByPk(venueId);
+    //         if (!venue) {
+    //             throw new Error(`Venue does not exist`); // this is not triggering
+    //         };
+    //     })
+    //     // .withMessage(`Venue does not exist`), // this is triggering in all cases
+    check('name')
+        .exists({ checkFalsy: true })
+        .isLength({ min: 5 })
+        .withMessage(`Name must be at least 5 characters`),
+    check('type')
+        .exists({ checkFalsy: true })
+        .isIn(['Online', 'In person'])
+        .withMessage(`Type must be 'Online' or 'In person'`),
+    check('capacity')
+        .exists({ checkFalsy: true })
+        .isInt()
+        .withMessage(`Capacity must be an integer`),
+    check('price')
+        .exists({ checkFalsy: true })
+        .isDecimal()
+        .withMessage(`Price is invalid`),
+    check('description')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage(`Description is required`),
+    // check('startDate')
+    //     .exists({ checkFalsy: true })
+    //     .isAfter('CURRENT_TIMESTAMP') // not sure correct
+    //     .withMessage(`Start date must be in the future`),
+    // check('endDate')
+    //     .exists({ checkFalsy: true })
+    //     .isAfter('startDate') // not sure correct
+    //     .withMessage(`End date must be after start date`),
+    handleValidationErrors
+]; // if any one is wrong, err is ret as res
+
+
+// Edit an Event specified by its id (PUT /api/events/:eventId)
+router.put('/:eventId', requireAuth, validateEvent, async (req, res) => {
+    const { user } = req;
+    if (!user) {
+        res.status(401);
+        return res.json({ message: `Authentication Required. No user is currently logged in.` });
+    };
+
+    const userId = user.dataValues.id;
+    const eventId = req.params.eventId;
+    const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+
+    const event = await Event.findByPk(eventId,
+        {
+            include: [
+                { model: Group },
+                { model: Venue },
+            ]
+        }
+    );
+
+    if (!event) {
+        res.status(404);
+        return res.json({ message: `Event couldn't be found` });
+    };
+
+    const venue = event.Venue;
+    if (!venue) {
+        res.status(400);
+        return res.json({ message: `Venue does not exist` });
+    };
+
+    const groupId = event.Group.groupId;
+
+    // get membership
+    // const membership = await Membership.findOne({
+    //     where: {
+    //         userId: userId,
+    //         groupId: groupId,
+    //         status: {
+    //             [Op.in]: ['host', 'co-host']
+    //         }
+    //     }
+    // });
+
+    const memberships = await Membership.findAll();
+
+    // const membersArr = event.Memberships;
+
+    const hostOrCoHost = memberships.filter(member => {
+        return member.userId === userId &&
+            member.groupId === groupId &&
+            (member.status === 'host' ||
+                member.status === 'co-host');
+    });
+
+    // Current user must be "host" or "co-host" of Group that Event belongs to
+    if (hostOrCoHost.length === 0) {
+        res.status(403);
+        return res.json({
+            message: `User must be a group's organizer or co-host to update its events.`
+        });
+    };
+
+    event.venueId = venueId;
+    event.name = name;
+    event.type = type;
+    event.capacity = capacity;
+    event.price = price;
+    event.description = description;
+    event.startDate = startDate;
+    event.endDate = endDate;
+    await event.save();
+
+    const eventObj = {
+        id: event.id,
+        groupId: event.groupId,
+        venueId: event.venueId,
+        name: event.name,
+        type: event.type,
+        capacity: event.capacity,
+        price: event.price,
+        description: event.description,
+        startDate: event.startDate,
+        endDate: event.endDate,
+    };
+    res.status(200);
+    return res.json(eventObj);
+});
+
 
 // Get details of an Event specified by its id (GET /api/events/:eventId) -- V1
 router.get('/:eventId', async (req, res) => {
