@@ -257,6 +257,91 @@ router.delete('/:eventId', requireAuth, async (req, res) => {
 
 
 
+
+// Get all Attendees of an Event specified by its id (GET /api/events/:eventId/attendees) -- V1
+router.get('/:eventId/attendees', async (req, res) => {
+    let attendeesObj = { Attendees: [] };
+
+    const { user } = req;
+    const currUserId = user.dataValues.id;
+    const eventId = req.params.eventId;
+
+    const event = await Event.findByPk(eventId);
+    if (!event) {
+        res.status(404);
+        res.json({ message: `Event couldn't be found` })
+    };
+
+    const allAttendances = await Attendance.findAll({ where: { eventId: eventId } });
+    const allUsers = await User.findAll();
+
+    // create hostOrCoHost
+    const hostOrCoHost = [];
+    allAttendances.forEach(attendance => {
+
+        if (attendance.userId === currUserId &&
+            (attendance.status === 'host' || attendance.status === 'co-host')
+        ) {
+            hostOrCoHost.push(attendance.status)
+        }
+    });
+
+    // If user IS host/co-host, show attendees w/ status: host, co-host, member, pending
+    if (hostOrCoHost.length === 1) {
+
+        allAttendances.forEach(attendance => {
+
+            const user = allUsers.filter(user => {
+                return user.id === attendance.dataValues.userId;
+            });
+
+            const attendeeObj = {
+                id: attendance.id,
+                firstName: user[0].dataValues.firstName,
+                lastName: user[0].dataValues.lastName,
+                Attendance: {
+                    status: attendance.status
+                }
+            };
+
+            attendeesObj.Attendees.push(attendeeObj);
+        });
+        res.status(200);
+        return res.json(attendeesObj);
+    };
+
+    // If user IS NOT host/co-host, show attendances w/ status: attending, pending
+    if (hostOrCoHost.length === 0) {
+
+        allAttendances.forEach(attendance => {
+
+            const user = allUsers.filter(user => {
+                return user.id === attendance.dataValues.userId;
+            });
+
+            if (attendance.dataValues.status !== 'pending') {
+
+                const attendeeObj = {
+                    id: attendance.id,
+                    firstName: user[0].dataValues.firstName,
+                    lastName: user[0].dataValues.lastName,
+                    Attendance: {
+                        status: attendance.status
+                    }
+                };
+
+                attendeesObj.Attendees.push(attendeeObj);
+            };
+        });
+        res.status(200);
+        return res.json(attendeesObj);
+    };
+});
+
+
+
+
+
 // Request to Attend an Event based on the Event's id (POST /api/events/:eventId/attendance)
 router.post('/:eventId/attendance', requireAuth, async (req, res) => {
     const { user } = req;
