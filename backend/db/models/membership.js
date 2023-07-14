@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       // one user hasMany memberships
       Membership.belongsTo(
         models.User,
-        { foreignKey: 'userId' }
+        { foreignKey: 'userId', onDelete: 'CASCADE', hooks: true }
       );
 
       // one membership belongsTo one group
@@ -39,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE'
     },
     groupId: {
       type: DataTypes.INTEGER,

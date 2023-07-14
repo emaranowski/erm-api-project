@@ -25,7 +25,8 @@ module.exports = {
         references: {
           model: 'Users', // table name, so plural; only add refs on mig
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE'
       },
       groupId: {
         type: Sequelize.INTEGER,

@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       // one attendance belongsTo one user
       Attendance.belongsTo(
         models.User,
-        { foreignKey: 'userId' }
+        { foreignKey: 'userId', onDelete: 'CASCADE', hooks: true }
       );
 
       // ?
@@ -47,6 +47,7 @@ module.exports = (sequelize, DataTypes) => {
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE'
     },
     status: {
       type: DataTypes.ENUM('yes', 'no', 'maybe'),
