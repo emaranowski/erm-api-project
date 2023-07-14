@@ -746,6 +746,7 @@ router.post('/:groupId/images', requireAuth, async (req, res) => {
 
 
 
+
 // Delete a Group (DELETE /api/groups/:groupId) -- V1
 router.delete('/:groupId', requireAuth, async (req, res) => {
     const { user } = req;
