@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       // one event belongsTo one venue
       Event.belongsTo(
         models.Venue,
-        { foreignKey: 'venueId' }
+        { foreignKey: 'venueId', onDelete: 'CASCADE', hooks: true }
       );
 
       // one group hasMany events
@@ -69,6 +69,7 @@ module.exports = (sequelize, DataTypes) => {
     venueId: {
       type: DataTypes.INTEGER,
       allowNull: true, // changed to true
+      onDelete: 'CASCADE'
     },
     groupId: {
       type: DataTypes.INTEGER,

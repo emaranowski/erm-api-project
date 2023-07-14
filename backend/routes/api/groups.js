@@ -765,7 +765,6 @@ router.delete('/:groupId', requireAuth, async (req, res) => {
         return res.json({ message: `Group must belong to the current user. User must be the group's organizer to delete it.` });
     };
 
-    // DELETION HERE
     await groupToDelete.destroy();
 
     res.status(200);
