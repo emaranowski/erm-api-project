@@ -1126,7 +1126,7 @@ router.get('/', async (req, res) => {
     groupsList.forEach(group => {
 
         // 1. create + add numMembers
-        membershipsArr = group.Memberships;
+        const membershipsArr = group.Memberships;
         group.numMembers = membershipsArr.length;
         delete group.Memberships;
 
