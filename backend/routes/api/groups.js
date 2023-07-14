@@ -439,6 +439,7 @@ const validateVenue = [
     handleValidationErrors
 ]; // if any one is wrong, err is ret as res
 
+
 // Create a new Venue for a Group specified by its id (POST /api/groups/:groupId/venues) -- DRAFT V1
 router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res) => {
     const { user } = req;
@@ -448,36 +449,49 @@ router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res) => 
     };
 
     const currUserId = user.dataValues.id;
-    const { address, city, state, lat, lng } = req.body;
     const groupId = req.params.groupId;
+    const { address, city, state, lat, lng } = req.body;
 
-    const groupToAddVenue = await Group.findByPk(groupId);
-    if (!groupToAddVenue) {
+    const group = await Group.findByPk(groupId);
+    if (!group) { // 404 Error: Couldn't find Group with specified id
         res.status(404);
         return res.json({ message: `Group couldn't be found` });
     };
 
-    // find all memberships where: { groupId: groupId, userId: currUserId, status: 'co-host' }
     // find all group memberships where userId: currUserId
-    const userIsCoHost = await Membership.findAll(
-        {
-            where: { groupId: groupId, userId: currUserId, status: 'co-host' }
+    const hostOrCoHost = await Membership.findAll({
+        where: {
+            userId: currUserId,
+            groupId: groupId,
+            status: { [Op.in]: ['host', 'co-host'] }
         }
-    ); // maybe come back and make more elegant by doing Op.in for status 'host' or 'co-host'
+    });
+
+    if (hostOrCoHost.length === 0) {
+        res.status(403); // 403 Not Authorized: User must be group organizer or co-host to create an event
+        return res.json({ message: `User must be group organizer or co-host to create an event` });
+    };
+
+    // // find all memberships where: { groupId: groupId, userId: currUserId, status: 'co-host' }
+    // // find all group memberships where userId: currUserId
+    // const userIsCoHost = await Membership.findAll(
+    //     {
+    //         where: { groupId: groupId, userId: currUserId, status: 'co-host' }
+    //     }
+    // ); // maybe come back and make more elegant by doing Op.in for status 'host' or 'co-host'
 
     // console.log('////////////////////////////////')
     // console.log(`***** userIsCoHost:`)
     // console.log(userIsCoHost)
     // console.log('////////////////////////////////')
 
+    // // COME BACK TO THIS
+    // if (!(currUserId === group.organizerId) && !userIsCoHost) { // if either is false
+    //     res.status(403);
+    //     return res.json({ message: `User must be a group organizer or co-host to add a venue.` });
+    // };
 
-    // COME BACK TO THIS
-    if (!(currUserId === groupToAddVenue.organizerId) && !userIsCoHost) { // if either is false
-        res.status(403);
-        return res.json({ message: `User must be a group organizer or co-host to add a venue.` });
-    };
-
-    // if ((currUserId === groupToAddVenue.organizerId) || userIsCoHost) { // if either is true
+    // if ((currUserId === group.organizerId) || userIsCoHost) { // if either is true
     //     await Venue.bulkCreate([{ groupId, address, city, state, lat, lng }],
     //         { validate: true });
     // };

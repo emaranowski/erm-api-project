@@ -552,6 +552,19 @@ router.put('/:eventId', requireAuth, validateEvent, async (req, res) => {
     };
 
     const groupId = event.Group.groupId;
+    const hostOrCoHost = await Membership.findAll({
+        where: {
+            userId: userId,
+            groupId: groupId,
+            status: { [Op.in]: ['host', 'co-host'] }
+        }
+    });
+
+    if (hostOrCoHost.length === 0) {
+        res.status(403); // 403 Not Authorized: User must be group organizer or co-host to create an event
+        return res.json({ message: `User must be group organizer or co-host to create an event` });
+    };
+
 
     // get membership
     // const membership = await Membership.findOne({
@@ -566,22 +579,22 @@ router.put('/:eventId', requireAuth, validateEvent, async (req, res) => {
 
     // const membersArr = event.Memberships;
 
-    const memberships = await Membership.findAll();
+    // const memberships = await Membership.findAll();
 
-    const hostOrCoHost = memberships.filter(member => {
-        return member.userId === userId &&
-            member.groupId === groupId &&
-            (member.status === 'host' ||
-                member.status === 'co-host');
-    });
+    // const hostOrCoHost = memberships.filter(member => {
+    //     return member.userId === userId &&
+    //         member.groupId === groupId &&
+    //         (member.status === 'host' ||
+    //             member.status === 'co-host');
+    // });
 
-    // Current user must be "host" or "co-host" of Group that Event belongs to
-    if (hostOrCoHost.length === 0) {
-        res.status(403);
-        return res.json({
-            message: `User must be a group's organizer or co-host to update its events.`
-        });
-    };
+    // // Current user must be "host" or "co-host" of Group that Event belongs to
+    // if (hostOrCoHost.length === 0) {
+    //     res.status(403);
+    //     return res.json({
+    //         message: `User must be a group's organizer or co-host to update its events.`
+    //     });
+    // };
 
     event.venueId = venueId;
     event.name = name;

@@ -69,19 +69,19 @@ router.put('/:venueId', requireAuth, validateVenue, async (req, res) => {
     // for each event using this venue, push that event's groupId into groupIdsArr
     // for each id in groupIdsArr -- check if that id is in isHostOrCoHost
 
-    // user must be owner or "co-host" of group to edit its venue
-    venueGroupId = venueToUpdate.groupId;
-    const isHostOrCoHost = await Membership.findAll({
+
+    const groupId = venueToUpdate.groupId;
+    const hostOrCoHost = await Membership.findAll({
         where: {
             userId: currUserId,
-            groupId: venueGroupId,
+            groupId: groupId,
             status: { [Op.in]: ['host', 'co-host'] }
         }
     });
 
-    if (!isHostOrCoHost) { // if either is false
-        res.status(403);
-        return res.json({ message: `User must be a group organizer or co-host to update its venue.` });
+    if (hostOrCoHost.length === 0) {
+        res.status(403); // 403 Not Authorized: User must be group organizer or co-host to create an event
+        return res.json({ message: `User must be group organizer or co-host to create an event` });
     };
 
     // // COME BACK TO THIS
