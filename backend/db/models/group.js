@@ -24,28 +24,28 @@ module.exports = (sequelize, DataTypes) => {
       // one group hasMany memberships
       Group.hasMany(
         models.Membership,
-        { foreignKey: 'groupId' }
+        { foreignKey: 'groupId', onDelete: 'CASCADE', hooks: true }
       );
 
       // one group hasMany venues
       // one venue belongsTo one group
       Group.hasMany(
         models.Venue,
-        { foreignKey: 'groupId' }
+        { foreignKey: 'groupId', onDelete: 'CASCADE', hooks: true }
       );
 
       // one groupimage belongsTo one group
       // one group hasMany groupimages
       Group.hasMany(
         models.GroupImage,
-        { foreignKey: 'groupId' }
+        { foreignKey: 'groupId', onDelete: 'CASCADE', hooks: true }
       );
 
       // one group hasMany events
       // one event belongsTo one group
       Group.hasMany(
         models.Event,
-        { foreignKey: 'groupId' }
+        { foreignKey: 'groupId', onDelete: 'CASCADE', hooks: true }
       );
 
       // one user belongsToMany groups ?

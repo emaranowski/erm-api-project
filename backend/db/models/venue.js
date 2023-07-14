@@ -22,8 +22,8 @@ module.exports = (sequelize, DataTypes) => {
       // one event belongsTo one venue
       Venue.hasMany(
         models.Event,
-        { foreignKey: 'venueId' }
-      );
+        { foreignKey: 'venueId', onDelete: 'CASCADE', hooks: true }
+      ); // could be SET NULL?
 
       // ?
       // many to many: venues-to-groups, via events

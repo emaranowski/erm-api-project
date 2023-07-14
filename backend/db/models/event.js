@@ -17,14 +17,14 @@ module.exports = (sequelize, DataTypes) => {
       // one eventimage belongsTo one event
       Event.hasMany(
         models.EventImage,
-        { foreignKey: 'eventId' }
+        { foreignKey: 'eventId', onDelete: 'CASCADE', hooks: true }
       );
 
       // one event hasMany attendances
       // one attendance belongsTo one event
       Event.hasMany(
         models.Attendance,
-        { foreignKey: 'eventId' }
+        { foreignKey: 'eventId', onDelete: 'CASCADE', hooks: true }
       );
 
       // one venue hasMany events
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       Event.belongsTo(
         models.Venue,
         { foreignKey: 'venueId', onDelete: 'CASCADE', hooks: true }
-      );
+      ); // could be SET NULL?
 
       // one group hasMany events
       // one event belongsTo one group
