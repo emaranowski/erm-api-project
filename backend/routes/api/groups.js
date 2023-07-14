@@ -17,6 +17,14 @@ const validateEvent = [
     //         };
     //     })
     //     // .withMessage(`Venue does not exist`), // this is triggering in all cases
+    // check('venueId')
+    //     // .exists({ checkFalsy: true })
+    //     .custom(async value => {
+    //         if (!value) {
+    //             throw new Error();
+    //         }
+    //     })
+    //     .withMessage(`Venue does not exist`),
     check('name')
         .exists({ checkFalsy: true })
         .isLength({ min: 5 })
