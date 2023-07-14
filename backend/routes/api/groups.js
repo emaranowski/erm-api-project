@@ -68,9 +68,15 @@ const validateEvent = [
 //     }
 // );
 
-// Create an Event for a Group specified by its id (POST /api/groups/:groupId/events) -- DRAFT V1
-router.post('/:groupId/events', requireAuth, validateEvent, async (req, res) => {
 
+
+
+
+
+
+// Create an Event for a Group specified by its id (POST /api/groups/:groupId/events) -- DRAFT V1
+// To create event, current User must be group organizer or "co-host"
+router.post('/:groupId/events', requireAuth, validateEvent, async (req, res) => {
     const { user } = req;
     if (!user) { // should not run, since requireAuth should catch issues first (but here as backup)
         res.status(401);
@@ -78,56 +84,105 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res) => 
     };
 
     const currUserId = user.dataValues.id;
-    const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
     const groupId = req.params.groupId;
+    const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
 
-    const groupToAddEvent = await Group.findByPk(groupId);
-    if (!groupToAddEvent) {
+    const group = await Group.findByPk(groupId);
+    if (!group) { // 404 Error: Couldn't find Group with specified id
         res.status(404);
         return res.json({ message: `Group couldn't be found` });
     };
 
-    // find all memberships where: { groupId: groupId, userId: currUserId, status: 'co-host' }
     // find all group memberships where userId: currUserId
-    const userIsCoHost = await Membership.findAll(
-        {
-            where: { groupId: groupId, userId: currUserId, status: 'co-host' }
+    const hostOrCoHost = await Membership.findAll({
+        where: {
+            userId: currUserId,
+            groupId: groupId,
+            status: { [Op.in]: ['host', 'co-host'] }
         }
-    ); // maybe come back and make more elegant by doing Op.in for status 'host' or 'co-host'
+    });
 
-    // COME BACK TO THIS
-    if (!(currUserId === groupToAddEvent.organizerId) && !userIsCoHost) { // if either is false
-        res.status(403);
-        return res.json({ message: `User must be a group organizer or co-host to add an event.` });
+    if (hostOrCoHost.length === 0) {
+        res.status(403); // 403 Not Authorized: User must be group organizer or co-host to create an event
+        return res.json({ message: `User must be group organizer or co-host to create an event` });
     };
 
-    // if ((currUserId === groupToAddEvent.organizerId) || userIsCoHost) { // if either is true
+    // COME BACK TO THIS
+    // if (!(currUserId === group.organizerId) && !userIsCoHost) { // if either is false
+    //     res.status(403);
+    //     return res.json({ message: `User must be a group organizer or co-host to add an event.` });
+    // };
+
+    // if ((currUserId === group.organizerId) || userIsCoHost) { // if either is true
     //     await Event.bulkCreate([{ groupId, address, city, state, lat, lng }],
     //         { validate: true });
     // };
 
-    await Event.bulkCreate([{ venueId, groupId, name, type, capacity, price, description, startDate, endDate }],
-        { validate: true });
+    await Event.bulkCreate([{
+        venueId, groupId, name, type, capacity, price, description, startDate, endDate
+    }], { validate: true });
 
     const createdGroupEvent = await Event.findOne({ // to get createdGroupEvent.id
         where: { venueId, groupId, name, type, capacity, price, description, startDate, endDate }
     });
 
-    const event = {};
-    event.id = createdGroupEvent.id;
-    event.groupId = createdGroupEvent.groupId;
-    event.venueId = createdGroupEvent.venueId;
-    event.name = createdGroupEvent.name;
-    event.type = createdGroupEvent.type;
-    event.capacity = createdGroupEvent.capacity;
-    event.price = createdGroupEvent.price;
-    event.description = createdGroupEvent.description;
-    event.startDate = createdGroupEvent.startDate;
-    event.endDate = createdGroupEvent.endDate;
+    const eventObj = {};
+    eventObj.id = createdGroupEvent.id;
+    eventObj.groupId = createdGroupEvent.groupId;
+    eventObj.venueId = createdGroupEvent.venueId;
+    eventObj.name = createdGroupEvent.name;
+    eventObj.type = createdGroupEvent.type;
+    eventObj.capacity = createdGroupEvent.capacity;
+    eventObj.price = createdGroupEvent.price;
+    eventObj.description = createdGroupEvent.description;
+    eventObj.startDate = createdGroupEvent.startDate;
+    eventObj.endDate = createdGroupEvent.endDate;
 
     res.status(200);
-    return res.json(event);
+    return res.json(eventObj);
+
+
+    // const memberId = req.body.memberId; // -- from body
+    // const membership = await Membership.findByPk(memberId); // membership to delete
+
+    // // create isHost
+    // let isHost = false;
+    // const currUserHostMembership = await Membership.findOne({
+    //     where: {
+    //         userId: currUserId,
+    //         groupId: groupId,
+    //         status: 'host'
+    //     }
+    // });
+    // if (currUserHostMembership) isHost = true;
+
+
+
+
+
+
+
+    // // const hostOrCoHost = [];
+    // allMemberships.forEach(membership => {
+    //     // console.log('////////////////////////////////')
+    //     // console.log(`***** membership.status:`)
+    //     // console.log(membership.status)
+    //     // console.log('////////////////////////////////')
+
+    //     // console.log('////////////////////////////////')
+    //     // console.log(`***** groupId:`)
+    //     // console.log(groupId)
+    //     // console.log('////////////////////////////////')
+
+    //     if (membership.userId === currUserId &&
+    //         (membership.status === 'host' || membership.status === 'co-host')
+    //     ) {
+    //         hostOrCoHost.push(membership.status)
+    //     }
+    // });
 });
+
+
 
 
 
