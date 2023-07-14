@@ -124,6 +124,115 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res) => 
 
 
 
+// Get all Members of a Group specified by its id (GET /api/groups/:groupId/members) -- V1
+router.get('/:groupId/members', async (req, res) => {
+    let groupMembersObj = { Members: [] };
+
+    const { user } = req;
+    const currUserId = user.dataValues.id;
+    const groupId = req.params.groupId;
+
+    // const hostOrCoHost = await Membership.findAll({
+    //     where: {
+    //         userId: currUserId,
+    //         groupId: groupId,
+    //         status: { [Op.in]: ['host', 'co-host'] }
+    //     }
+    // });
+
+    const allMemberships = await Membership.findAll({ where: { groupId: groupId } });
+    const allUsers = await User.findAll();
+
+    // console.log('////////////////////////////////')
+    // console.log(`***** allMemberships:`)
+    // console.log(allMemberships)
+    // console.log('////////////////////////////////')
+
+    // create hostOrCoHost
+    const hostOrCoHost = [];
+    allMemberships.forEach(membership => {
+        // console.log('////////////////////////////////')
+        // console.log(`***** membership.status:`)
+        // console.log(membership.status)
+        // console.log('////////////////////////////////')
+
+        // console.log('////////////////////////////////')
+        // console.log(`***** groupId:`)
+        // console.log(groupId)
+        // console.log('////////////////////////////////')
+
+        if (membership.userId === currUserId &&
+            (membership.status === 'host' || membership.status === 'co-host')
+        ) {
+            hostOrCoHost.push(membership.status)
+        }
+    });
+
+    // console.log('////////////////////////////////')
+    // console.log(`***** hostOrCoHost:`)
+    // console.log(hostOrCoHost)
+    // console.log('////////////////////////////////')
+
+    // If user IS host/co-host, show members w/ status: host, co-host, member, pending
+    if (hostOrCoHost.length === 1) {
+
+        allMemberships.forEach(member => {
+
+            const user = allUsers.filter(user => {
+                return user.id === member.dataValues.userId;
+            });
+
+            // console.log('////////////////////////////////')
+            // console.log(`***** user:`)
+            // console.log(user)
+            // console.log('////////////////////////////////')
+
+            const memberObj = {
+                id: member.id,
+                firstName: user[0].dataValues.firstName,
+                lastName: user[0].dataValues.lastName,
+                Membership: {
+                    status: member.status
+                }
+            };
+
+            groupMembersObj.Members.push(memberObj);
+        });
+        res.status(200);
+        return res.json(groupMembersObj);
+    };
+
+    // If user IS NOT host/co-host, show members w/ status: host, co-host, member
+    if (hostOrCoHost.length === 0) {
+
+        allMemberships.forEach(member => {
+
+            const user = allUsers.filter(user => {
+                return user.id === member.dataValues.userId;
+            });
+
+            if (member.dataValues.status === 'pending') {
+
+                const memberObj = {
+                    id: member.id,
+                    firstName: user[0].dataValues.firstName,
+                    lastName: user[0].dataValues.lastName,
+                    Membership: {
+                        status: member.status
+                    }
+                };
+
+                groupMembersObj.Members.push(memberObj);
+            };
+        });
+        res.status(200);
+        return res.json(groupMembersObj);
+    };
+});
+
+
+
+
 // Get all Events of a Group specified by its id (GET /api/groups/:groupId/events) -- V1
 router.get('/:groupId/events', async (req, res) => {
     let groupEventsObj = { Events: [] };
@@ -229,8 +338,6 @@ router.get('/:groupId/events', async (req, res) => {
 
         groupEventsObj.Events.push(eventObj);
     });
-
-    // groupEventsObj.Events = allGroupEventsArr;
 
     res.status(200);
     return res.json(groupEventsObj);
