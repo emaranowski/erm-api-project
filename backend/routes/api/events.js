@@ -7,6 +7,10 @@ const { check } = require('express-validator'); // validates req.body
 const { handleValidationErrors } = require('../../utils/validation'); // validates req.body
 const router = express.Router();
 
+// console.log('////////////////////////////////')
+// console.log(`***** venue:`)
+// console.log(venue)
+// console.log('////////////////////////////////')
 
 // Add an Image to an Event based on the Event's id (POST /api/events/:eventId/images)
 router.post('/:eventId/images', requireAuth, async (req, res) => {
@@ -62,6 +66,63 @@ router.post('/:eventId/images', requireAuth, async (req, res) => {
     res.status(200);
     return res.json(createdImageObj);
 });
+
+
+
+
+// Delete an Event (DELETE /api/events/:eventId)
+router.delete('/:eventId', requireAuth, async (req, res) => {
+    const { user } = req;
+    if (!user) {
+        res.status(401);
+        return res.json({ message: `Authentication Required. No user is currently logged in.` });
+    };
+
+    const eventId = req.params.eventId;
+    const event = await Event.findByPk(eventId,
+        {
+            include: [
+                { model: Group },
+                { model: Venue },
+            ]
+        }
+    );
+    if (!event) {
+        res.status(404);
+        return res.json({ message: `Event couldn't be found` });
+    };
+
+    // Current user must be "host" or "co-host" of Group that Event belongs to
+    const memberships = await Membership.findAll();
+    const userId = user.dataValues.id;
+    const groupId = event.Group.id;
+
+    const hostOrCoHost = memberships.filter(member => {
+        return member.userId === userId &&
+            member.groupId === groupId &&
+            (member.status === 'host' ||
+                member.status === 'co-host');
+    });
+
+    if (hostOrCoHost.length === 0) {
+        res.status(403);
+        return res.json({
+            message: `User must be a group's organizer or co-host to delete its events.`
+        });
+    };
+
+    // console.log('////////////////////////////////')
+    // console.log(`***** hostOrCoHost:`)
+    // console.log(hostOrCoHost)
+    // console.log('////////////////////////////////')
+
+    await event.destroy();
+
+    res.status(200);
+    return res.json({ message: `Successfully deleted` });
+});
+
+
 
 
 const validateEvent = [
@@ -151,9 +212,9 @@ router.put('/:eventId', requireAuth, validateEvent, async (req, res) => {
     //     }
     // });
 
-    const memberships = await Membership.findAll();
-
     // const membersArr = event.Memberships;
+
+    const memberships = await Membership.findAll();
 
     const hostOrCoHost = memberships.filter(member => {
         return member.userId === userId &&

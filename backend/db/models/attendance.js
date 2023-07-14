@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       // one attendance belongsTo one event
       Attendance.belongsTo(
         models.Event,
-        { foreignKey: 'eventId' }
+        { foreignKey: 'eventId', onDelete: 'CASCADE', hooks: true }
       );
 
       // one user hasMany attendances
@@ -42,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     eventId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE'
     },
     userId: {
       type: DataTypes.INTEGER,

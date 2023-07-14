@@ -772,6 +772,9 @@ router.delete('/:groupId', requireAuth, async (req, res) => {
     return res.json({ message: `Successfully deleted` });
 });
 
+
+
+
 const validateGroup = [
     check('name')
         .exists({ checkFalsy: true })
