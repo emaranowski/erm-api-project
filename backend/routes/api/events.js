@@ -248,6 +248,10 @@ router.delete('/:eventId', requireAuth, async (req, res) => {
 
 
 // FEEDBACK: did not return any body
+// SHOULD BE FIXED NOW?
+// I believe the issue was that all seed data for attendance had status: 'pending'.
+// I added more seed data, and the full functionality appears visible now.
+// I believe the router had no isseus.
 // Get all Attendees of an Event specified by its id (GET /api/events/:eventId/attendees) -- V1
 router.get('/:eventId/attendees', async (req, res) => {
     let attendeesObj = { Attendees: [] };

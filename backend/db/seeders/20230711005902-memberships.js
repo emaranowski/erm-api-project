@@ -36,7 +36,7 @@ module.exports = {
         status: 'pending'
       },
       {
-        userId: 1, // added to test, so that User 1 is in 2 groups, as host & member (for: GET /api/groups/current)
+        userId: 1,
         groupId: 2,
         status: 'member'
       },

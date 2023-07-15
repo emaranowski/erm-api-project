@@ -185,8 +185,13 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res) => 
 
 
 
-
-
+// FEEDBACK
+// seems like the ids stored here do not match with actual users who are members.
+// Subsequently, this hinders a host user to change attendance status of a test user.
+// Delete endpoints seem to work, but could not confirm (GET all attendees did not return any body, due to lack of seed data)
+// SHOULD BE FINE / NOT ACTUALLY AN ISSUE:
+// have to be logged in as host/co-host to view all members of group
+// if group only has pending members, will appear empty
 // Get all Members of a Group specified by its id (GET /api/groups/:groupId/members) -- V1
 router.get('/:groupId/members', async (req, res) => {
     let groupMembersObj = { Members: [] };
@@ -439,6 +444,14 @@ const validateVenue = [
     handleValidationErrors
 ]; // if any one is wrong, err is ret as res
 
+
+// FEEDBACK
+// Creating and updating venues -
+// It seems like we get the correct responses, but the new venue does not show in either
+// GET group details by id/ groups by current user endpoints, or GET all venues by group id.
+// It does seem like we do indeed create data, so the issue might be on our queries.
+// I’d start by looking at our dev.db
+// and see if my venue data has proper id’s saved in appropriate columns
 
 // Create a new Venue for a Group specified by its id (POST /api/groups/:groupId/venues) -- DRAFT V1
 router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res) => {
