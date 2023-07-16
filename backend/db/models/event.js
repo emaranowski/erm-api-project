@@ -106,8 +106,6 @@ module.exports = (sequelize, DataTypes) => {
         isAfterCurrentDateTime(value) {
           if (Date.parse(value) <= Date.now()) {
             throw new Error('Start date must be in the future');
-            // res.status(400);
-            // return res.json({ message: `Start date must be in the future` })
           }
         }
       }
@@ -115,18 +113,18 @@ module.exports = (sequelize, DataTypes) => {
     endDate: {
       type: DataTypes.DATE,
       allowNull: false,
-      // validate: {
-      //   // isAfterCurrentDateTime(value) {
-      //   //   if (parseInt(value) <= parseInt(this.startDate)) {
-      //   //     throw new Error('End date must be after start date');
-      //   //   }
-      //   // }
-      //   isAfterStartDateTime(value) {
-      //     if (Date.parse(value) <= Date.parse(this.startDate)) {
-      //       throw new Error('End date must be after start date');
-      //     }
-      //   }
-      // }
+      validate: {
+        // isAfterCurrentDateTime(value) {
+        //   if (parseInt(value) <= parseInt(this.startDate)) {
+        //     throw new Error('End date must be after start date');
+        //   }
+        // }
+        isAfterStartDateTime(value) {
+          if (Date.parse(value) <= Date.parse(this.startDate)) {
+            throw new Error('End date must be after start date');
+          }
+        }
+      }
     },
   }, {
     sequelize,
