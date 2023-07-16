@@ -54,16 +54,19 @@ module.exports = {
     options.tableName = 'Venues';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      address: {
-        [Op.in]: ['1234 SE Cesar Chavez Blvd',
-          // 'SE Cesar Chavez Blvd & Stark St',
-          '3456 N Dekum St',
-          '5678 N Killingsworth Ct',
-          '123 Disney Lane',
-          '123 Disney Lane Road',
-          '1234 Disney Lane',
-          '1234 Disney Lane Road']
-      }
+      groupId: {
+        [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      },
+      // address: {
+      //   [Op.in]: ['1234 SE Cesar Chavez Blvd',
+      //     // 'SE Cesar Chavez Blvd & Stark St',
+      //     '3456 N Dekum St',
+      //     '5678 N Killingsworth Ct',
+      //     '123 Disney Lane',
+      //     '123 Disney Lane Road',
+      //     '1234 Disney Lane',
+      //     '1234 Disney Lane Road']
+      // }
     }, {});
 
   }

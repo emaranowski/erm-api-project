@@ -52,6 +52,8 @@ const validateVenue = [
 // It does seem like we do indeed create data,
 // so the issue might be on our queries.
 // Start by looking at dev.db: see if venue data has proper id’s saved in appropriate cols.
+// -- Edit a Venue SEEMS TO BE WORKING FINE
+// EDITS MADE HERE APPEAR CORRECTLY IN OTHER QUERIES
 
 // Edit a Venue specified by its id (PUT /api/venues/:venueId) -- DRAFT V1
 router.put('/:venueId', requireAuth, validateVenue, async (req, res) => {

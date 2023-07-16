@@ -1235,7 +1235,7 @@ router.get('/:groupId', async (req, res) => {
         include: [
             // { model: GroupImage },
             // { model: User }, // this one is causing problem
-            { model: Venue },
+            // { model: Venue },
         ]
     });
     if (!groupOrig) {
