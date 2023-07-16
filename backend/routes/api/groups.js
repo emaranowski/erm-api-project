@@ -798,7 +798,7 @@ router.post('/:groupId/images', requireAuth, async (req, res) => {
     // If logged in, but trying to add image to group organized by another user....
     if (!(currUserId === groupToAddImage.organizerId)) {
         res.status(403); // Forbidden -- or is this 401 Unauthorized/Unauthenticated ?????
-        return res.json({ message: `Forbidden: Group must belong to the current user. User must be the group's organizer to delete it.` });
+        return res.json({ message: `Forbidden: User must be the group organizer to add an image.` });
     };
 
     await GroupImage.bulkCreate([{ groupId, url, preview },],
