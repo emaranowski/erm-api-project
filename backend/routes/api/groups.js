@@ -507,8 +507,8 @@ router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res) => 
     });
 
     if (hostOrCoHost.length === 0) {
-        res.status(403); // 403 Not Authorized: User must be group organizer or co-host to create an event
-        return res.json({ message: `Forbidden: User must be group organizer or co-host to create an event` });
+        res.status(403); // 403 Not Authorized: User must be group organizer or co-host to create a venue
+        return res.json({ message: `Forbidden: User must be group organizer or co-host to create a venue` });
     };
 
     // // find all memberships where: { groupId: groupId, userId: currUserId, status: 'co-host' }
