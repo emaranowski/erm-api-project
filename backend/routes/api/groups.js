@@ -8,6 +8,21 @@ const { handleValidationErrors } = require('../../utils/validation'); // validat
 const router = express.Router();
 
 const validateEvent = [
+    check('venueId')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage(`Venue cannot be empty`),
+    check('venueId')
+        .exists({ checkFalsy: true })
+        .isInt()
+        .withMessage(`Venue must be an integer`),
+    check('venueId')
+        .exists({ checkFalsy: true })
+        .custom(async value => {
+            const venue = await Venue.findByPk(value);
+            if (!venue) throw new Error();
+        })
+        .withMessage(`Venue does not exist`),
     // check('venueId')
     //     // .exists({ checkFalsy: true })
     //     .custom(async value => { // prob need custom
