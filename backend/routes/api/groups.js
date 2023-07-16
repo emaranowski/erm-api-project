@@ -428,7 +428,7 @@ const validateVenue = [
     check('lat')
         .exists({ checkFalsy: true })
         .notEmpty()
-        .withMessage(`Latitude is required`),
+        .withMessage(`Latitude is not valid (cannot be empty)`),
     check('lat')
         .exists({ checkFalsy: true })
         .isDecimal() // try to figure out how to use .isLatLong()
@@ -436,7 +436,7 @@ const validateVenue = [
     check('lng')
         .exists({ checkFalsy: true })
         .notEmpty()
-        .withMessage(`Longitude is required`),
+        .withMessage(`Longitude is not valid (cannot be empty)`),
     check('lng')
         .exists({ checkFalsy: true })
         .isDecimal() // try to figure out how to use .isLatLong()
@@ -445,13 +445,16 @@ const validateVenue = [
 ]; // if any one is wrong, err is ret as res
 
 
-// FEEDBACK
-// Creating and updating venues -
-// It seems like we get the correct responses, but the new venue does not show in either
-// GET group details by id/ groups by current user endpoints, or GET all venues by group id.
-// It does seem like we do indeed create data, so the issue might be on our queries.
-// I’d start by looking at our dev.db
-// and see if my venue data has proper id’s saved in appropriate columns
+
+
+/// FEEDBACK
+// Creating & updating venues -
+// It seems like we get the correct responses,
+// but the new venue does not show in either:
+// GET group details by id/ groups by current user endpoints, or in GET all venues by group id.
+// It does seem like we do indeed create data,
+// so the issue might be on our queries.
+// Start by looking at dev.db: see if venue data has proper id’s saved in appropriate cols.
 
 // Create a new Venue for a Group specified by its id (POST /api/groups/:groupId/venues) -- DRAFT V1
 router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res) => {
@@ -466,12 +469,12 @@ router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res) => 
     const { address, city, state, lat, lng } = req.body;
 
     const group = await Group.findByPk(groupId);
-    if (!group) { // 404 Error: Couldn't find Group with specified id
-        res.status(404);
+    if (!group) {
+        res.status(404); // 404 Error: Couldn't find Group with specified id
         return res.json({ message: `Group couldn't be found` });
     };
 
-    // find all group memberships where userId: currUserId
+    // Must be group organizer or co-host to create venue
     const hostOrCoHost = await Membership.findAll({
         where: {
             userId: currUserId,
@@ -512,58 +515,78 @@ router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res) => 
     await Venue.bulkCreate([{ groupId, address, city, state, lat, lng }],
         { validate: true });
 
-    const createdGroupVenue = await Venue.findOne({ // to get venue id
+    const createdVenue = await Venue.findOne({ // to get createdVenue.id
         where: { groupId, address, city, state, lat, lng }
     });
 
-    const addedVenue = {};
-    addedVenue.id = createdGroupVenue.id;
-    addedVenue.groupId = createdGroupVenue.groupId;
-    addedVenue.address = createdGroupVenue.address;
-    addedVenue.city = createdGroupVenue.city;
-    addedVenue.state = createdGroupVenue.state;
-    addedVenue.lat = createdGroupVenue.lat;
-    addedVenue.lng = createdGroupVenue.lng;
+    const createdVenueObj = {
+        id: createdVenue.id,
+        groupId: createdVenue.groupId,
+        address: createdVenue.address,
+        city: createdVenue.city,
+        state: createdVenue.state,
+        lat: createdVenue.lat,
+        lng: createdVenue.lng
+    };
+    // createdVenueObj.id = createdVenue.id;
+    // createdVenueObj.groupId = createdVenue.groupId;
+    // createdVenueObj.address = createdVenue.address;
+    // createdVenueObj.city = createdVenue.city;
+    // createdVenueObj.state = createdVenue.state;
+    // createdVenueObj.lat = createdVenue.lat;
+    // createdVenueObj.lng = createdVenue.lng;
 
     res.status(200);
-    return res.json(addedVenue);
+    return res.json(createdVenueObj);
 });
 
 
+
+
+/// FEEDBACK
+// Creating & updating venues -
+// It seems like we get the correct responses,
+// but the new venue does not show in either:
+// GET group details by id/ groups by current user endpoints, or in GET all venues by group id.
+// It does seem like we do indeed create data,
+// so the issue might be on our queries.
+// Start by looking at dev.db: see if venue data has proper id’s saved in appropriate cols.
+// -- Get All Venues WAS NOT GETTING ALL VENUES AFTER CREATING ONE
+// -- NOW SEEMS FIXED
+
 // Get All Venues for a Group specified by its id (GET /api/groups/:groupId/venues) -- V1
 router.get('/:groupId/venues', requireAuth, async (req, res) => {
-    let allGroupVenuesObj = { Venues: [] };
-
-    const { user } = req; // pull user from req
+    const { user } = req;
     if (!user) { // should not run, since requireAuth should catch issues first (but here as backup)
         res.status(401); // Unauthorized/Unauthenticated
         return res.json({ message: `Authentication Required. No user is currently logged in.` });
     };
 
     const groupId = req.params.groupId;
-    const groupOfInterest = await Group.findByPk(groupId, {
-        include: [
-            { model: Venue }
-        ]
-    });
-    if (!groupOfInterest) {
-        res.status(404);
+    const group = await Group.findByPk(groupId); // removed after using 2nd approach: , { include: [{ model: Venue }] }
+    if (!group) {
+        res.status(404); // 404 Error: Couldn't find Group with specified id
         return res.json({ message: `Group couldn't be found` });
     };
 
     // console.log('////////////////////////////////')
-    // console.log(`***** groupOfInterest:`)
-    // console.log(groupOfInterest)
+    // console.log(`***** group:`)
+    // console.log(group)
     // console.log('////////////////////////////////')
 
-    const groupVenuesArrOrig = groupOfInterest.dataValues.Venues;
+    // 1st approach: was ONLY getting venue(s) already existing in seed data
+    // const groupVenuesArrOrig = group.dataValues.Venues;
 
-    // console.log('////////////////////////////////')
-    // console.log(`***** groupOfInterest.dataValues.Venues:`)
-    // console.log(groupOfInterest.dataValues.Venues)
-    // console.log('////////////////////////////////')
+    // 2nd approach: gets ALL of group's venues, including those added after seed data
+    const groupVenuesArrOrig = await Venue.findAll({ where: { groupId: groupId } });
 
-    groupVenuesArrOrig.forEach(groupVenue => {
+    console.log('////////////////////////////////')
+    console.log(`***** groupVenuesArrOrig:`)
+    console.log(groupVenuesArrOrig)
+    console.log('////////////////////////////////')
+
+    let allGroupVenuesObj = { Venues: [] };
+    groupVenuesArrOrig.forEach(venue => {
 
         // console.log('////////////////////////////////')
         // console.log(`***** groupVenue:`)
@@ -575,21 +598,21 @@ router.get('/:groupId/venues', requireAuth, async (req, res) => {
         // console.log(groupVenue.dataValues.address)
         // console.log('////////////////////////////////')
 
-        const { id, groupId, address, city, state, lat, lng } = groupVenue.dataValues;
+        const { id, groupId, address, city, state, lat, lng } = venue.dataValues;
 
-        const groupVenueObj = { id, groupId, address, city, state, lat, lng };
+        const venueObj = { id, groupId, address, city, state, lat, lng };
 
         // const groupVenueObj2 = { // also works, just longer
-        //     id: groupVenue.dataValues.id,
-        //     groupId: groupVenue.dataValues.groupId,
-        //     address: groupVenue.dataValues.address,
-        //     city: groupVenue.dataValues.city,
-        //     state: groupVenue.dataValues.state,
-        //     lat: groupVenue.dataValues.lat,
-        //     lng: groupVenue.dataValues.lng,
+        //     id: venue.dataValues.id,
+        //     groupId: venue.dataValues.groupId,
+        //     address: venue.dataValues.address,
+        //     city: venue.dataValues.city,
+        //     state: venue.dataValues.state,
+        //     lat: venue.dataValues.lat,
+        //     lng: venue.dataValues.lng,
         // };
 
-        allGroupVenuesObj.Venues.push(groupVenueObj);
+        allGroupVenuesObj.Venues.push(venueObj);
     });
 
     res.status(200);
@@ -1097,7 +1120,6 @@ router.post('/', requireAuth, validateGroup, async (req, res) => {
 
 // // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- V3
 // Return all groups created by current user, or where current user has a membership.
-// require authentication: TRUE
 router.get('/current', requireAuth, async (req, res) => {
     const { user } = req; // pull user from req
 
@@ -1193,24 +1215,33 @@ router.get('/current', requireAuth, async (req, res) => {
 
 
 
+
+
+/// FEEDBACK
+// Creating & updating venues -
+// It seems like we get the correct responses,
+// but the new venue does not show in either:
+// GET group details by id/ groups by current user endpoints, or in GET all venues by group id.
+// It does seem like we do indeed create data,
+// so the issue might be on our queries.
+// Start by looking at dev.db: see if venue data has proper id’s saved in appropriate cols.
+// -- WAS NOT GETTING ALL VENUES AFTER CREATING ONE
+
 // Get details of a Group from an id (GET /api/groups/:groupId) -- V1
 router.get('/:groupId', async (req, res) => {
 
-    const groupOrig = await Group.findByPk(req.params.groupId,
-        {
-            include: [
-                { model: GroupImage },
-                // { model: User }, // this one is causing problem
-                { model: Venue },
-            ]
-        }
-    );
+    const groupOrig = await Group.findByPk(req.params.groupId, {
+        include: [
+            { model: GroupImage },
+            // { model: User }, // this one is causing problem
+            { model: Venue },
+        ]
+    });
 
-    // Error response: Couldn't find a Group with the specified id
     if (!groupOrig) {
-        res.status(404);
+        res.status(404); // 404 Error: Couldn't find a Group with the specified id
         return res.json({ message: `Group couldn't be found` });
-    }
+    };
 
     // convert to JSON
     group = groupOrig.toJSON();

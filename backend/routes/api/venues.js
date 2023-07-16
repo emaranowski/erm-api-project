@@ -40,13 +40,18 @@ const validateVenue = [
     handleValidationErrors
 ];
 
-// FEEDBACK
-// Creating and updating venues -
-// It seems like we get the correct responses, but the new venue does not show in either
-// GET group details by id/ groups by current user endpoints, or GET all venues by group id.
-// It does seem like we do indeed create data, so the issue might be on our queries.
-// I’d start by looking at our dev.db
-// and see if my venue data has proper id’s saved in appropriate columns
+
+
+
+
+/// FEEDBACK
+// Creating & updating venues -
+// It seems like we get the correct responses,
+// but the new venue does not show in either:
+// GET group details by id/ groups by current user endpoints, or in GET all venues by group id.
+// It does seem like we do indeed create data,
+// so the issue might be on our queries.
+// Start by looking at dev.db: see if venue data has proper id’s saved in appropriate cols.
 
 // Edit a Venue specified by its id (PUT /api/venues/:venueId) -- DRAFT V1
 router.put('/:venueId', requireAuth, validateVenue, async (req, res) => {
