@@ -46,7 +46,7 @@ router.delete('/:imageId', requireAuth, async (req, res) => {
     if (!membership) {
         res.status(403);
         return res.json({
-            message: `User must be a group organizer or co-host to delete a Group Image.`
+            message: `Forbidden: User must be a group organizer or co-host to delete a Group Image.`
         });
     };
 

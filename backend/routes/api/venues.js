@@ -93,7 +93,7 @@ router.put('/:venueId', requireAuth, validateVenue, async (req, res) => {
 
     if (hostOrCoHost.length === 0) {
         res.status(403); // 403 Not Authorized: User must be group organizer or co-host to create an event
-        return res.json({ message: `User must be group organizer or co-host to edit a venue` });
+        return res.json({ message: `Forbidden: User must be group organizer or co-host to edit a venue` });
     };
 
     // // COME BACK TO THIS

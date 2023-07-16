@@ -50,7 +50,7 @@ router.post('/:eventId/images', requireAuth, async (req, res) => {
     if (canAddImage.length === 0) {
         res.status(403);
         return res.json({
-            message: `User must be an attendee, host, or co-host of the event to add an image.`
+            message: `Forbidden: User must be an attendee, host, or co-host of the event to add an image.`
         });
     };
 
@@ -155,7 +155,7 @@ router.delete('/:eventId/attendance', requireAuth, async (req, res) => {
 
     if (!isHost && !isDeletingSelf) { // Error: Only User or organizer may delete an Attendance
         res.status(403); // To delete attendance, currUser must be group host, or deleting self
-        return res.json({ message: `Only the User or organizer may delete an Attendance` });
+        return res.json({ message: `Forbidden: Only the User or organizer may delete an Attendance` });
     };
 
     // console.log('////////////////////////////////')
@@ -229,7 +229,7 @@ router.delete('/:eventId', requireAuth, async (req, res) => {
     if (hostOrCoHost.length === 0) {
         res.status(403);
         return res.json({
-            message: `User must be a group's organizer or co-host to delete its events.`
+            message: `Forbidden: User must be a group's organizer or co-host to delete its events.`
         });
     };
 
@@ -500,7 +500,7 @@ router.put('/:eventId/attendance', requireAuth, async (req, res) => {
     });
     if (hostOrCoHost.length === 0) {
         res.status(403); // 403 Not Authorized: User must be host/co-host to edit event attendance
-        return res.json({ message: `To edit attendance, user must be an organizer or co-host of the group holding the event.` });
+        return res.json({ message: `Forbidden: To edit attendance, user must be an organizer or co-host of the group holding the event.` });
     };
 
     const attendance = await Attendance.findOne({
@@ -544,7 +544,7 @@ router.put('/:eventId/attendance', requireAuth, async (req, res) => {
     } else {
 
         res.status(403);
-        return res.json({ message: `Attendance can only be updated by a host or co-host of the group putting on the event` });
+        return res.json({ message: `Forbidden: Attendance can only be updated by a host or co-host of the group putting on the event` });
     };
 });
 
@@ -587,7 +587,7 @@ router.put('/:eventId', requireAuth, validateEvent, async (req, res) => {
 
     if (hostOrCoHost.length === 0) {
         res.status(403); // 403 Not Authorized: User must be group organizer or co-host to create an event
-        return res.json({ message: `User must be group organizer or co-host to edit an event` });
+        return res.json({ message: `Forbidden: User must be group organizer or co-host to edit an event` });
     };
 
     event.venueId = venueId;

@@ -127,7 +127,7 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res) => 
 
     if (hostOrCoHost.length === 0) {
         res.status(403); // 403 Not Authorized: User must be group organizer or co-host to create an event
-        return res.json({ message: `User must be group organizer or co-host to create an event` });
+        return res.json({ message: `Forbidden: User must be group organizer or co-host to create an event` });
     };
 
     // COME BACK TO THIS
@@ -508,7 +508,7 @@ router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res) => 
 
     if (hostOrCoHost.length === 0) {
         res.status(403); // 403 Not Authorized: User must be group organizer or co-host to create an event
-        return res.json({ message: `User must be group organizer or co-host to create an event` });
+        return res.json({ message: `Forbidden: User must be group organizer or co-host to create an event` });
     };
 
     // // find all memberships where: { groupId: groupId, userId: currUserId, status: 'co-host' }
@@ -696,7 +696,7 @@ router.delete('/:groupId/membership', requireAuth, async (req, res) => {
 
     if (!isHost && !isDeletingSelf) { // Error: Only User or organizer may delete an Membership
         res.status(403); // To delete membership, currUser must be group host, or deleting self
-        return res.json({ message: `Only the User or organizer may delete a Membership` });
+        return res.json({ message: `Forbidden: Only the User or organizer may delete a Membership` });
     };
 
     await membership.destroy();
@@ -798,7 +798,7 @@ router.post('/:groupId/images', requireAuth, async (req, res) => {
     // If logged in, but trying to add image to group organized by another user....
     if (!(currUserId === groupToAddImage.organizerId)) {
         res.status(403); // Forbidden -- or is this 401 Unauthorized/Unauthenticated ?????
-        return res.json({ message: `Group must belong to the current user. User must be the group's organizer to delete it.` });
+        return res.json({ message: `Forbidden: Group must belong to the current user. User must be the group's organizer to delete it.` });
     };
 
     await GroupImage.bulkCreate([{ groupId, url, preview },],
@@ -839,7 +839,7 @@ router.delete('/:groupId', requireAuth, async (req, res) => {
 
     if (!(currUserId === groupToDelete.organizerId)) {
         res.status(403);
-        return res.json({ message: `Group must belong to the current user. User must be the group's organizer to delete it.` });
+        return res.json({ message: `Forbidden: Group must belong to the current user. User must be the group's organizer to delete it.` });
     };
 
     await groupToDelete.destroy();
@@ -981,12 +981,12 @@ router.put('/:groupId/membership', requireAuth, async (req, res) => {
     if (membership.status === 'pending' && status === 'member' && !host && !coHost) {
 
         res.status(403);
-        return res.json({ message: `Membership can only be updated by a group host or co-host` });
+        return res.json({ message: `Forbidden: Membership can only be updated by a group host or co-host` });
 
     } else if (membership.status === 'member' && status === 'co-host' && !host) {
 
         res.status(403);
-        return res.json({ message: `Co-host membership can only be updated by a group host` });
+        return res.json({ message: `Forbidden: Co-host membership can only be updated by a group host` });
 
     } else if (membership.status === 'pending' && status === 'member' && (host || coHost)) {
 
@@ -1070,7 +1070,7 @@ router.put('/:groupId', requireAuth, validateGroup, async (req, res) => {
     // If logged in, but trying to edit group organized by another user....
     if (!(currUserId === groupToUpdate.organizerId)) {
         res.status(403); // Forbidden -- or is this 401 Unauthorized/Unauthenticated ?????
-        return res.json({ message: `Group must belong to the current user. User must be the group's organizer to update it.` });
+        return res.json({ message: `Forbidden: Group must belong to the current user. User must be the group's organizer to update it.` });
     };
 
     // DO UPDATES HERE
