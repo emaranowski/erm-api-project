@@ -437,6 +437,10 @@ const validateEvent = [
         .exists({ checkFalsy: true })
         .isAfter(Date.parse(Date.now()))
         .withMessage(`Start date must be in the future`),
+    check('endDate')
+        .exists({ checkFalsy: true })
+        .isAfter(Date.parse(this.startDate))
+        .withMessage(`End date must be after start date`),
     // check('startDate')
     //     .exists({ checkFalsy: true })
     //     .isAfter('CURRENT_TIMESTAMP') // not sure correct
