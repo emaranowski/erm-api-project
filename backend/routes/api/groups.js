@@ -1225,61 +1225,63 @@ router.get('/current', requireAuth, async (req, res) => {
 // It does seem like we do indeed create data,
 // so the issue might be on our queries.
 // Start by looking at dev.db: see if venue data has proper id’s saved in appropriate cols.
-// -- WAS NOT GETTING ALL VENUES AFTER CREATING ONE
+// -- Get details of a Group WAS NOT GETTING ALL VENUES AFTER CREATING ONE
+// -- NOW SEEMS FIXED
 
 // Get details of a Group from an id (GET /api/groups/:groupId) -- V1
 router.get('/:groupId', async (req, res) => {
-
-    const groupOrig = await Group.findByPk(req.params.groupId, {
+    const groupId = req.params.groupId;
+    const groupOrig = await Group.findByPk(groupId, {
         include: [
-            { model: GroupImage },
+            // { model: GroupImage },
             // { model: User }, // this one is causing problem
             { model: Venue },
         ]
     });
-
     if (!groupOrig) {
         res.status(404); // 404 Error: Couldn't find a Group with the specified id
         return res.json({ message: `Group couldn't be found` });
     };
 
-    // convert to JSON
-    group = groupOrig.toJSON();
+    group = groupOrig.toJSON(); // convert to JSON
 
-    // create numMembers val (totalMembers):
-    let totalMembers;
+    // create totalMembers:
     const memberships = await Membership.findAll(); // QUERY DB
     const membersArr = memberships.filter(membership => {
         return membership.groupId === group.id;
     });
-    totalMembers = membersArr.length;
+    const totalMembers = membersArr.length;
 
-    // create GroupImages val (groupImagesArr):
-    let groupImagesArr = [];
-    const groupImagesArrOrig = group.GroupImages; // want to remove groupId from orig
+    // create groupImagesArr:
+    const groupImagesArr = [];
+    const groupImagesArrOrig = await GroupImage.findAll({ where: { groupId: groupId } }); // QUERY DB
+    // const groupImagesArrOrig = group.GroupImages; // want to remove groupId from orig
     groupImagesArrOrig.forEach(image => {
-        const imageObj = {};
-        imageObj.id = image.id;
-        imageObj.url = image.url;
-        imageObj.preview = image.preview;
+        const imageObj = {
+            id: image.id,
+            url: image.url,
+            preview: image.preview
+        };
 
         groupImagesArr.push(imageObj);
     });
 
-    // create Organizer val (organizerObj):
-    let organizerObj = {};
+    // create organizerObj:
     const users = await User.findAll(); // QUERY DB
     const usersArr = users.filter(user => {
         return user.id === group.organizerId;
     });
     const user = usersArr[0];
-    organizerObj.id = user.id;
-    organizerObj.firstName = user.firstName;
-    organizerObj.lastName = user.lastName;
+    const organizerObj = {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName
+    };
 
-    // create Venues val (venuesArr):
-    let venuesArr = [];
-    const venuesArrOrig = group.Venues;
+    // create venuesArr:
+    const venuesArr = [];
+    const venuesArrOrig = await Venue.findAll({ where: { groupId: groupId } }); // QUERY DB
+    // const venuesArrOrig = group.Venues;
     venuesArrOrig.forEach(venue => {
         const venueObj = {};
         venueObj.id = venue.id;
@@ -1310,11 +1312,7 @@ router.get('/:groupId', async (req, res) => {
         Venues: venuesArr // add
     };
 
-    // NOTES:
-    // ideally do more efficiently, w/o querying db for:
-    // await Membership
-    // await User
-
+    res.status(200);
     return res.json(groupObj);
 });
 
