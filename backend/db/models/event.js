@@ -99,10 +99,34 @@ module.exports = (sequelize, DataTypes) => {
     startDate: {
       type: DataTypes.DATE,
       allowNull: false,
+      validate: {
+        // Date.parse(): converts "2011-10-10T14:48:00.000+09:00" (date-time form, w/ ms & time zone)
+        // into ms since 1 Jan 1970 00:00:00 UTC
+        // Date.now(): rets ms since 1 Jan 1970 00:00:00 UTC
+        isAfterCurrentDateTime(value) {
+          if (Date.parse(value) <= Date.now()) {
+            throw new Error('Start date must be in the future');
+            // res.status(400);
+            // return res.json({ message: `Start date must be in the future` })
+          }
+        }
+      }
     },
     endDate: {
       type: DataTypes.DATE,
       allowNull: false,
+      // validate: {
+      //   // isAfterCurrentDateTime(value) {
+      //   //   if (parseInt(value) <= parseInt(this.startDate)) {
+      //   //     throw new Error('End date must be after start date');
+      //   //   }
+      //   // }
+      //   isAfterStartDateTime(value) {
+      //     if (Date.parse(value) <= Date.parse(this.startDate)) {
+      //       throw new Error('End date must be after start date');
+      //     }
+      //   }
+      // }
     },
   }, {
     sequelize,
