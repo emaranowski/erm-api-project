@@ -149,6 +149,11 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res) => 
         where: { venueId, groupId, name, type, capacity, price, description, startDate, endDate }
     });
 
+    // const eventId = createdGroupEvent.id;
+    // await Attendance.bulkCreate([{
+    //     eventId: eventId, userId: currUserId, status: 'attending'
+    // }], { validate: true });
+
     const eventObj = {};
     eventObj.id = createdGroupEvent.id;
     eventObj.groupId = createdGroupEvent.groupId;
@@ -454,7 +459,9 @@ const validateVenue = [
         .withMessage(`Latitude is not valid (cannot be empty)`),
     check('lat')
         .exists({ checkFalsy: true })
-        .isDecimal() // try to figure out how to use .isLatLong()
+        // .isDecimal() // try to figure out how to use .isLatLong()
+        .isFloat()
+        // .isLatLong()
         .withMessage(`Latitude is not valid`),
     check('lng')
         .exists({ checkFalsy: true })
@@ -462,7 +469,9 @@ const validateVenue = [
         .withMessage(`Longitude is not valid (cannot be empty)`),
     check('lng')
         .exists({ checkFalsy: true })
-        .isDecimal() // try to figure out how to use .isLatLong()
+        // .isDecimal() // try to figure out how to use .isLatLong()
+        .isFloat()
+        // .isLatLong()
         .withMessage(`Longitude is not valid`),
     handleValidationErrors
 ]; // if any one is wrong, err is ret as res

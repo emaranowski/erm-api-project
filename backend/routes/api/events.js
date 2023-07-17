@@ -336,7 +336,7 @@ router.get('/:eventId/attendees', async (req, res) => {
 
 
 
-// Request to Attend an Event based on the Event's id (POST /api/events/:eventId/attendance)
+// Request to Attend an Event based on the Event's id (POST /api/events/:eventId/attendance) -- REVISED
 router.post('/:eventId/attendance', requireAuth, async (req, res) => {
     const { user } = req;
     if (!user) {
@@ -349,57 +349,125 @@ router.post('/:eventId/attendance', requireAuth, async (req, res) => {
 
     const event = await Event.findByPk(eventId);
     if (!event) {
-        res.status(404);
+        res.status(404); // 404 Error: Couldn't find an Event with the specified id
         return res.json({ message: `Event couldn't be found` });
+    };
+
+    const groupId = event.groupId;
+    const membership = await Membership.findOne({
+        where: { userId: currUserId, groupId: groupId }
+    });
+    if (!membership) {
+        res.status(403); // 403 Error: Current User must be a member of the group holding the event
+        return res.json({ message: `Forbidden: To request attendance, user must be a member of the group holding the event` });
     };
 
     const existingAttendance = await Attendance.findOne({
         where: { userId: currUserId, eventId: eventId }
     });
 
-    // console.log('////////////////////////////////')
-    // console.log(`***** existingAttendance:`)
-    // console.log(existingAttendance.status)
-    // console.log('////////////////////////////////')
-
     if (!existingAttendance) {
         await Attendance.bulkCreate([{
-            userId: currUserId,
             eventId: eventId,
+            userId: currUserId,
             status: 'pending'
         }], { validate: true });
 
-        const createdMember = await Attendance.findOne({
+        const createdAttendance = await Attendance.findOne({
             where: {
-                userId: currUserId,
                 eventId: eventId,
+                userId: currUserId,
                 status: 'pending'
             }
         });
 
-        const newAttendanceObj = {
-            eventId: createdMember.eventId,
-            memberId: createdMember.id,
-            status: createdMember.status
+        const createdAttendanceObj = {
+            eventId: createdAttendance.eventId,
+            userId: createdAttendance.userId,
+            status: createdAttendance.status
         };
 
         res.status(200);
-        return res.json(newAttendanceObj);
+        return res.json(createdAttendanceObj);
     };
 
+    // these have to be after 'if (!existingAttendance)'
+    // because if no attendance exists (null), and these are before,
+    // then it will try to read existingAttendance.status, which will be null.status
+    // null.status is not a thing, so will cause a 500 server error
     if (existingAttendance.status === 'pending') {
-        res.status(400);
+        res.status(400); // 400 Error: Current User already has a pending attendance for the event
         return res.json({ message: `Attendance has already been requested (pending)` });
     };
 
-    if (existingAttendance.status !== 'pending') {
-        res.status(400);
+    if (existingAttendance.status === 'attending') {
+        res.status(400); // 400 Error: Current User is already an accepted attendee of the event
         return res.json({ message: `User is already an attendee of the event` });
     };
 });
 
 
+// // Request to Attend an Event based on the Event's id (POST /api/events/:eventId/attendance) -- ORIG FIXED
+// router.post('/:eventId/attendance', requireAuth, async (req, res) => {
+//     const { user } = req;
+//     if (!user) {
+//         res.status(401);
+//         return res.json({ message: `Authentication Required. No user is currently logged in.` });
+//     };
 
+//     const currUserId = user.dataValues.id;
+//     const eventId = req.params.eventId;
+
+//     const event = await Event.findByPk(eventId);
+//     if (!event) {
+//         res.status(404);
+//         return res.json({ message: `Event couldn't be found` });
+//     };
+
+//     const existingAttendance = await Attendance.findOne({
+//         where: { userId: currUserId, eventId: eventId }
+//     });
+
+//     // console.log('////////////////////////////////')
+//     // console.log(`***** existingAttendance:`)
+//     // console.log(existingAttendance.status)
+//     // console.log('////////////////////////////////')
+
+//     if (!existingAttendance) {
+//         await Attendance.bulkCreate([{
+//             userId: currUserId,
+//             eventId: eventId,
+//             status: 'pending'
+//         }], { validate: true });
+
+//         const createdAttendance = await Attendance.findOne({
+//             where: {
+//                 userId: currUserId,
+//                 eventId: eventId,
+//                 status: 'pending'
+//             }
+//         });
+
+//         const newAttendanceObj = {
+//             eventId: createdAttendance.eventId,
+//             userId: createdAttendance.userId,
+//             status: createdAttendance.status
+//         };
+
+//         res.status(200);
+//         return res.json(newAttendanceObj);
+//     };
+
+//     if (existingAttendance.status === 'pending') {
+//         res.status(400);
+//         return res.json({ message: `Attendance has already been requested (pending)` });
+//     };
+
+//     if (existingAttendance.status === 'attending') {
+//         res.status(400);
+//         return res.json({ message: `User is already an attendee of the event` });
+//     };
+// });
 
 
 
