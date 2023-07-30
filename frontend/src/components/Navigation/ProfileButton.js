@@ -18,6 +18,9 @@ function ProfileButton({ user }) {
   useEffect(() => {
     if (!showMenu) return;
 
+    // change showMenu to false only if target of click event
+    // does NOT contain the HTML element of the dropdown menu
+    // (ref={ulRef} is attached to dropdown menu JSX ele)
     const closeMenu = (e) => {
       if (!ulRef.current.contains(e.target)) {
         setShowMenu(false);

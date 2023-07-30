@@ -8,16 +8,16 @@ const rootReducer = combineReducers({
 
 let enhancer;
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === "production") { // in prod: enhancer applies only thunk midware
   enhancer = applyMiddleware(thunk);
-} else {
-  const logger = require("redux-logger").default;
-  const composeEnhancers =
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+} else { // in dev: enhancer applies thunk + logger + Redux devtools compose midware
+  const logger = require("redux-logger").default; // logger var using def exp of redux-logger
+  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // Redux dev tools compose enhancer
+  // use 'or' || to keep the Redux's original compose as a fallback
   enhancer = composeEnhancers(applyMiddleware(thunk, logger));
 }
 
-const configureStore = (preloadedState) => {
+const configureStore = (preloadedState) => { // preloadedState is optional
   return createStore(rootReducer, preloadedState, enhancer);
 };
 

@@ -30,6 +30,7 @@ const removeUser = () => {
 
 // THUNK ACTION CREATORS
 
+// signup
 export const signup = (user) => async (dispatch) => {
   const { username, firstName, lastName, email, password } = user;
   const response = await csrfFetch("/api/users", {
@@ -47,6 +48,7 @@ export const signup = (user) => async (dispatch) => {
   return response;
 };
 
+// login
 export const login = (user) => async (dispatch) => {
   const { credential, password } = user;
   const response = await csrfFetch("/api/session", {
@@ -56,11 +58,12 @@ export const login = (user) => async (dispatch) => {
       password,
     }),
   });
-  const data = await response.json();
+  const data = await response.json(); // parse JSON body of res
   dispatch(setUser(data.user));
   return response;
 };
 
+// retain session user info across a refresh
 export const restoreUser = () => async (dispatch) => {
   const response = await csrfFetch("/api/session");
   const data = await response.json();
@@ -68,6 +71,7 @@ export const restoreUser = () => async (dispatch) => {
   return response;
 };
 
+// logout
 export const logout = () => async (dispatch) => {
   const response = await csrfFetch('/api/session', {
     method: 'DELETE',
