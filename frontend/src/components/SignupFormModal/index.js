@@ -43,72 +43,74 @@ function SignupFormModal() {
 
   return (
     <>
-      <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Email
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </label>
-        {errors.email && <p>{errors.email}</p>}
-        <label>
-          Username
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </label>
-        {errors.username && <p>{errors.username}</p>}
-        <label>
-          First Name
-          <input
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            required
-          />
-        </label>
-        {errors.firstName && <p>{errors.firstName}</p>}
-        <label>
-          Last Name
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            required
-          />
-        </label>
-        {errors.lastName && <p>{errors.lastName}</p>}
-        <label>
-          Password
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
-        {errors.password && <p>{errors.password}</p>}
-        <label>
-          Confirm Password
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-        </label>
-        {errors.confirmPassword && (
-          <p>{errors.confirmPassword}</p>
-        )}
-        <button type="submit">Sign Up</button>
-      </form>
+      <div id="modal-sign-up-form-box">
+        <h1 id="modal-sign-up-form-header">Sign Up</h1>
+        <form onSubmit={handleSubmit}>
+          <label className="modal-sign-up-label">
+            <br></br>Email<br></br>
+            <input
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </label>
+          {errors.email && <p>{errors.email}</p>}
+          <label className="modal-sign-up-label">
+            <br></br>Username<br></br>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </label>
+          {errors.username && <p>{errors.username}</p>}
+          <label className="modal-sign-up-label">
+            <br></br>First Name<br></br>
+            <input
+              type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              required
+            />
+          </label>
+          {errors.firstName && <p>{errors.firstName}</p>}
+          <label className="modal-sign-up-label">
+            <br></br>Last Name<br></br>
+            <input
+              type="text"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              required
+            />
+          </label>
+          {errors.lastName && <p>{errors.lastName}</p>}
+          <label className="modal-sign-up-label">
+            <br></br>Password<br></br>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </label>
+          {errors.password && <p>{errors.password}</p>}
+          <label className="modal-sign-up-label">
+            <br></br>Confirm Password<br></br>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </label>
+          {errors.confirmPassword && (
+            <p>{errors.confirmPassword}</p>
+          )}
+          <button id="modal-sign-up-button" type="submit">Sign Up</button>
+        </form>
+      </div>
     </>
   );
 }

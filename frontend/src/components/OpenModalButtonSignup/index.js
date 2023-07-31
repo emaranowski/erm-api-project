@@ -1,8 +1,8 @@
 import React from "react";
 import { useModal } from "../../context/Modal";
-import './OpenModalButton.css';
+import './OpenModalButtonSignup.css';
 
-function OpenModalButton({
+function OpenModalButtonSignup({
   modalComponent, // component to render inside the modal
   buttonText, // text of the button that opens the modal
   onButtonClick, // optional: callback function that will be called once the button that opens the modal is clicked
@@ -16,10 +16,14 @@ function OpenModalButton({
     setModalContent(modalComponent);
   };
 
-  return <button onClick={onClick}>{buttonText}</button>;
+  return (
+    <button onClick={onClick} id="nav-sign-up-button" className='nav-button'>
+      {buttonText}
+    </button>
+  );
 }
 
-export default OpenModalButton;
+export default OpenModalButtonSignup;
 
 // ORIG
 
