@@ -1,0 +1,345 @@
+/*
+// also good: "fa-solid fa-user"
+logo pink:
+// #e63a6a
+dark blue:
+// #00798a
+light blue:
+// #008fa3
+dark grey:
+// #610c24
+// #212121
+light grey:
+// #e6e6e6
+*/
+
+/* SEARCH BAR */
+
+#search-bar-container {
+    margin: 10px 10px 10px 10px;
+    padding: 9px 10px 9px 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    color: #778899;
+    font-size: 12px;
+    background-color: white;
+    border: 1px solid #d9d9d9;
+
+    border-radius: 7px;
+}
+
+/* #search-bar-container:active {
+    border: 1px solid #265f98;
+} */
+
+#search-bar-icon {
+    color: #8e939a;
+    font-size: 18px;
+    padding-right: 7px;
+}
+
+#search-bar-input {
+    color: #778899;
+    font-size: 17px;
+    background-color: white;
+    border: none;
+    margin-right: 10px;
+    border-radius: 3px;
+
+    font-family: 'Geologica', sans-serif;
+    font-weight: 200;
+}
+
+#search-bar-input:link {
+    border: none;
+}
+
+#search-bar-input:visited {
+    border: none;
+}
+
+#search-bar-input:hover {
+    border: none;
+}
+
+#search-bar-input:active {
+    border: none;
+}
+
+/* HOME BANNER */
+
+#home-banner {
+    color: white;
+    background-color: rgb(73, 61, 61);
+    font-size: 28px;
+    width: auto;
+    padding: 60px 20px 60px 80px;
+    margin: 18px 0px 8px 0px;
+}
+
+#join-button {
+    color: white;
+    font-size: 17px;
+    background-color: #e8245c;
+    border: none;
+    margin-top: 34px;
+    padding: 9px 10px 9px 10px;
+    border-radius: .4em;
+
+    font-weight: 200;
+}
+
+#join-button:hover {
+    background-color: #f4507f;
+    cursor: pointer;
+}
+
+/* GENERAL STYLES */
+
+#homepage-content-box {
+    padding: 30px 10px 0px 10px;
+}
+
+.homepage-header {
+    color: #212121;
+    font-size: 20px;
+    padding: 10px 0px 10px 0px;
+    font-size: 21px;
+    font-weight: 600;
+}
+
+.small-link-bold {
+    color: #00798A;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.small-link-bold:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.small-link-thin {
+    color: #00798A;
+    font-size: 16px;
+    font-weight: 200;
+}
+
+.small-link-thin:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* EVENTS */
+
+/* .events-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+} */
+
+.events-header-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#location-link {
+    color: #00798A;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#location-link:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.event-cards-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 30px;
+}
+
+.event-card {
+    width: 25%;
+    margin-right: 30px;
+}
+
+.event-card:hover {
+    cursor: pointer;
+}
+
+.event-img {
+    color: #b8b8b8;
+    padding: 35px;
+}
+
+.event-title {
+    color: #212121;
+    font-size: 20px;
+    padding-bottom: 8px;
+    font-weight: 600;
+}
+
+.event-hosted-by {
+    color: #707070;
+    font-size: 14px;
+    padding-bottom: 8px;
+    font-weight: 400;
+}
+
+.event-date-time {
+    color: #212121;
+    font-size: 16px;
+    padding-bottom: 8px;
+    font-weight: 200;
+}
+
+.event-attendees-price {
+    display: flex;
+    flex-direction: row;
+}
+
+.event-attendees-price {
+    color: #212121;
+    font-size: 16px;
+    font-weight: 200;
+}
+
+.event-attendees {
+    padding-right: 13px;
+}
+
+
+/* EXPLORE TOP CATEGORIES */
+
+/* #categories-box {
+    display: grid;
+    justify-items: auto;
+    column-gap: 50px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    padding: 30px 0px 30px 0px;
+} */
+
+#categories-box {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px 0px 30px 0px;
+}
+
+.category {
+    text-align: center;
+    font-size: 16px;
+}
+
+.category:hover {
+    cursor: pointer;
+}
+
+.green-icon {
+    color: #34745c;
+    font-size: 20px;
+}
+
+.maroon-icon {
+    color: #7c1c44;
+    font-size: 20px;
+}
+
+.yellow-icon {
+    color: #fcac44;
+    font-size: 20px;
+}
+
+.blue-icon {
+    color: #048494;
+    font-size: 20px;
+}
+
+/* HOW IT WORKS */
+
+#how-it-works-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 30px 0px 30px 0px;
+}
+
+.how-it-works-col-1 {
+    display: grid;
+    grid-template-columns: 1fr 7fr;
+}
+
+.how-it-works-icon {
+    font-size: 35px;
+}
+
+.how-it-works-col-2 {
+    padding-left: 15px;
+}
+
+.how-it-works-col-3 {
+    padding-left: 20px;
+}
+
+.how-it-works-col-header {
+    color: #212121;
+    font-size: 18.5px;
+    font-weight: 600;
+}
+
+.how-it-works-col-text {
+    padding: 15px 0px 15px 0px;
+    font-weight: 200;
+}
+
+.how-it-works-col-text {
+    color: #212121;
+    font-size: 16px;
+}
+
+/* FRIENDSHIPS ARE MADE */
+
+#friendships-are-made-articles-box {
+    display: flex;
+    padding-bottom: 130px;
+}
+
+.friendships-article-col {
+    width: 33.33%;
+    padding-right: 40px;
+}
+
+.friendships-article-col:hover {
+    cursor: pointer;
+}
+
+.friendships-are-made-article-img {
+    color: #b8b8b8;
+    padding: 50px;
+}
+
+.friendships-are-made-article-header {
+    color: #212121;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.friendships-are-made-text {
+    color: #707070;
+    font-size: 16px;
+    font-weight: 200;
+    padding: 10px 120px 10px 0px;
+}
+
+.friendships-card-text {
+    color: #707070;
+    font-size: 16px;
+    padding: 10px 0px 10px 0px;
+    font-weight: 200;
+}

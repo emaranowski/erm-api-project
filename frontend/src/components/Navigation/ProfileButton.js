@@ -85,14 +85,7 @@ export default ProfileButton;
 
 
 
-// also good: "fa-solid fa-user"
-// #e63a6a
-// #610c24
-// #e6e6e6
-// #212121
-// blues
-// #00798a
-// #008fa3
+
 
 /*
 <div style={{ color: "#00798a", fontSize: "18px" }}>

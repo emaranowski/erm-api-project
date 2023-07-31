@@ -1,0 +1,21 @@
+/*
+// also good: "fa-solid fa-user"
+logo pink:
+// #e63a6a
+dark blue:
+// #00798a
+light blue:
+// #008fa3
+dark red:
+// #610c24
+dark grey:
+// #212121
+light grey:
+// #e6e6e6
+*/
+
+* {
+    /* font-family: 'Figtree', sans-serif; */
+    /* font-family: 'Alata', sans-serif; */
+    font-family: 'Geologica', sans-serif;
+}
