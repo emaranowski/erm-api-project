@@ -11,6 +11,9 @@ import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
 import './Navigation.css';
 
+import OpenModalButtonLoginDemo from '../OpenModalButtonLoginDemo';
+import LoginFormModalDemo from '../LoginFormModalDemo';
+
 function Navigation({ isLoaded }) {
   const dispatch = useDispatch();
   const sessionUser = useSelector(state => state.session.user);
@@ -31,15 +34,25 @@ function Navigation({ isLoaded }) {
         </NavLink>
 
         <span id="nav-buttons-box">
-          <button id="nav-language-button" className='nav-button'>
+
+          {/* <button id="nav-language-button" className='nav-button'>
             English
-          </button>
+          </button> */}
+
+          <OpenModalButtonLoginDemo
+            buttonText="Log in as Demo User"
+            modalComponent={<LoginFormModalDemo />}
+          />
 
           {sessionUser ? (
             <>
               <button onClick={logout} id="nav-log-out-button">
-                Log Out
+                Log out
               </button>
+
+              <span>
+                {isLoaded && (<ProfileButton user={sessionUser} />)}
+              </span>
             </>
           ) : (
             <>
@@ -65,6 +78,7 @@ function Navigation({ isLoaded }) {
           {/* <span>
             {isLoaded && (<ProfileButton user={sessionUser} />)}
           </span> */}
+
         </span>
       </nav>
     </>

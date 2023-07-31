@@ -2,14 +2,12 @@ import React, { useEffect, useState } from "react";
 import * as sessionActions from "../../store/session"; // sessionActions is obj
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
-import "./LoginForm.css";
+import "./LoginFormDemo.css";
 
-function LoginFormModal() {
+function LoginFormDemo() {
   const dispatch = useDispatch();
-  const [credential, setCredential] = useState("");
-  const [password, setPassword] = useState("");
-
-  const [disabled, setDisabled] = useState(false);
+  const [credential, setCredential] = useState("DemoUser1");
+  const [password, setPassword] = useState("password1");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
@@ -19,9 +17,6 @@ function LoginFormModal() {
 
     if (credential.length < 4) errsObj.credential = "Username or email must be at least 4 characters"
     if (password.length < 6) errsObj.password = "Password must be at least 6 characters"
-
-    if (Object.keys(errsObj).length) setDisabled(true);
-    if (!Object.keys(errsObj).length) setDisabled(false);
 
     setErrors(errsObj);
   }, [credential, password])
@@ -79,18 +74,11 @@ function LoginFormModal() {
             </div>
           )}
 
-          <button
-            // id="modal-log-in-button"
-            id={disabled ? "modal-log-in-button-disabled" : "modal-log-in-button"}
-            type="submit"
-            disabled={disabled}
-          >
-            Log In
-          </button>
+          <button id="modal-log-in-button" type="submit">Log In</button>
         </form>
       </div>
     </>
   );
 }
 
-export default LoginFormModal;
+export default LoginFormDemo;
