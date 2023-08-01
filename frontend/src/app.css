@@ -1,0 +1,12 @@
+/* TODO Add site wide styles */
+
+.init {
+    border: 3px dashed cornflowerblue;
+}
+
+/* also in public/index.css -- not sure best location */
+* {
+    /* font-family: 'Figtree', sans-serif; */
+    /* font-family: 'Alata', sans-serif; */
+    font-family: 'Geologica', sans-serif;
+}

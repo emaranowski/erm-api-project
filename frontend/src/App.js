@@ -10,6 +10,8 @@ import GroupCreate from "./components/GroupCreate";
 import GroupDetails from "./components/GroupDetails";
 import Footer from "./components/Footer";
 
+import './app.css';
+
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
