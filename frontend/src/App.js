@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Switch, Route } from "react-router-dom";
 import * as sessionActions from "./store/session";
-import Navigation from "./components/Navigation";
 
+import Navigation from "./components/Navigation";
 import HomePage from "./components/HomePage";
+import GroupsAll from "./components/GroupsAll";
+import GroupCreate from "./components/GroupCreate";
+import GroupDetails from "./components/GroupDetails";
 import Footer from "./components/Footer";
 
 function App() {
@@ -23,12 +26,16 @@ function App() {
           <HomePage />
         </Route>
 
-        <Route exact path=''>
-
+        <Route exact path='/groups'>
+          <GroupsAll />
         </Route>
 
-        <Route exact path=''>
+        <Route exact path='/groups/new'>
+          <GroupCreate />
+        </Route>
 
+        <Route exact path='/groups/:groupId'>
+          <GroupDetails />
         </Route>
 
         <Route exact path=''>
@@ -43,7 +50,7 @@ function App() {
           <h1>Route does not exist</h1>
         </Route>
 
-      </Switch>}
+      </Switch >}
       <Footer />
     </>
   );

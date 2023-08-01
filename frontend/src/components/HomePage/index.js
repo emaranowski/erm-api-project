@@ -1,7 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import './HomePage.css';
 
 function HomePage({ isLoaded }) {
+
+  const sessionUser = useSelector(state => state.session.user);
 
   return (
     <>
@@ -19,6 +23,136 @@ function HomePage({ isLoaded }) {
 
       <div id="homepage-content-box">
 
+        {/* <div id="how-it-works-box">
+
+          <div className="homepage-header">
+            How MeetBuds works
+          </div>
+
+          <div id="how-it-works-cards-box">
+
+            <span className='how-it-works-col-1'>
+              <span className='how-it-works-text-col'>
+                <span className='how-it-works-icon'>
+                  🔍
+                </span>
+                <div className='how-it-works-col-header'>
+                  See all groups
+                </div>
+                <div className='how-it-works-col-text'>
+                  Join a group<br></br>
+                  locally or online
+                </div>
+                <div className='small-link-bold'>
+                  Search events and groups
+                </div>
+              </span>
+            </span>
+
+            <span className='how-it-works-col-1'>
+              <span className='how-it-works-col-2'>
+                <span className='how-it-works-icon'>
+                  🔍
+                </span>
+              </span>
+              <span className='how-it-works-col-3'>
+                <span className='how-it-works-text-col'>
+                  <div className='how-it-works-col-header'>
+                    Find an event
+                  </div>
+                  <div className='how-it-works-col-text'>
+                    See who's hosting events<br></br>
+                    for the things you love
+                  </div>
+                  <div className='small-link-bold'>
+                    Search events and groups
+                  </div>
+                </span>
+              </span>
+            </span>
+
+            <span className='how-it-works-col-1'>
+              <span className='how-it-works-icon'>
+                ➕
+              </span>
+              <span className='how-it-works-text-col'>
+                <div className='how-it-works-col-header'>
+                  Start a new group
+                </div>
+                <div className='how-it-works-col-text'>
+                  Create your own group,<br></br>
+                  and build a community
+                </div>
+                <div className='small-link-bold'>
+                  Start a group
+                </div>
+              </span>
+            </span>
+
+          </div>
+        </div> */}
+
+
+        <div id="how-it-works-box">
+
+          <div className="homepage-header">
+            How MeetBuds works
+          </div>
+
+          <div id="how-it-works-cards-box">
+            <span className='how-it-works-card'>
+              <div className="yellow-icon">✎ᝰ</div>
+              <Link to="/groups">
+                <div className='how-it-works-header-link small-link-bold'>
+                  See all groups
+                </div>
+              </Link>
+              <div className='how-it-works-col-text'>
+                Join a group<br></br>
+                locally or online
+              </div>
+            </span>
+
+            <span className='how-it-works-card'>
+              <div className="yellow-icon">✎ᝰ</div>
+              <Link to="/events">
+                <div className='how-it-works-header-link small-link-bold'>
+                  Find an event
+                </div>
+              </Link>
+              <div className='how-it-works-col-text'>
+                See who's hosting events<br></br>
+                for the things you love
+              </div>
+            </span>
+
+            <span className='how-it-works-card'>
+              <div className="yellow-icon">✎ᝰ</div>
+
+              {sessionUser ? (
+                <>
+                  <Link to="/groups/new">
+                    <div className='how-it-works-header-link small-link-bold'>
+                      Start a new group
+                    </div>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <div className='how-it-works-header-link-inactive small-link-bold-inactive'>
+                    Start a new group
+                  </div>
+                </>
+              )}
+
+              <div className='how-it-works-col-text'>
+                Create your own group,<br></br>
+                and build a community
+              </div>
+            </span>
+          </div>
+
+        </div>
 
 
         <div className="events-box">
@@ -286,56 +420,6 @@ function HomePage({ isLoaded }) {
 
         </div>
 
-        <div id="how-it-works-box">
-
-          <div className="homepage-header">
-            How MeetBuds works
-          </div>
-
-          <div id="how-it-works-grid">
-
-            <span className='how-it-works-col-1'>
-              <span className='how-it-works-col-2'>
-                <span className='how-it-works-icon'>
-                  🔍
-                </span>
-              </span>
-              <span className='how-it-works-col-3'>
-                <span className='how-it-works-text-col'>
-                  <div className='how-it-works-col-header'>
-                    Discover events and groups
-                  </div>
-                  <div className='how-it-works-col-text'>
-                    See who's hosting local events<br></br>
-                    for all the things you love
-                  </div>
-                  <div className='small-link-bold'>
-                    Search events and groups
-                  </div>
-                </span>
-              </span>
-            </span>
-
-            <span className='how-it-works-col-1'>
-              <span className='how-it-works-icon'>
-                ➕
-              </span>
-              <span className='how-it-works-text-col'>
-                <div className='how-it-works-col-header'>
-                  Start a group to host events
-                </div>
-                <div className='how-it-works-col-text'>
-                  Create your own group,<br></br>
-                  and draw from a community of millions
-                </div>
-                <div className='small-link-bold'>
-                  Start a group
-                </div>
-              </span>
-            </span>
-
-          </div>
-        </div>
 
         <div id="friendships-are-made-box">
 
@@ -359,7 +443,7 @@ function HomePage({ isLoaded }) {
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean egestas vitae sapien ac sodales. Sed nec enim vel sapien pretium congue. Duis id tortor rhoncus urna varius.
               </div>
               <div className='small-link-thin'>
-                Ream more
+                Read more
               </div>
             </span>
 
@@ -374,7 +458,7 @@ function HomePage({ isLoaded }) {
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean egestas vitae sapien ac sodales. Sed nec enim vel sapien pretium.
               </div>
               <div className='small-link-thin'>
-                Ream more
+                Read more
               </div>
             </span>
 
@@ -389,7 +473,7 @@ function HomePage({ isLoaded }) {
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean egestas vitae sapien ac sodales. Sed nec enim vel sapien pretium congue.
               </div>
               <div className='small-link-thin'>
-                Ream more
+                Read more
               </div>
             </span>
           </div>

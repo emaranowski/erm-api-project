@@ -121,6 +121,17 @@ light grey:
     cursor: pointer;
 }
 
+.small-link-bold-inactive {
+    color: #707070;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.small-link-bold-inactive:hover {
+    text-decoration: none;
+    cursor: default;
+}
+
 .small-link-thin {
     color: #00798A;
     font-size: 16px;
@@ -217,7 +228,7 @@ light grey:
 }
 
 
-/* EXPLORE TOP CATEGORIES */
+/* EXPLORE CATEGORIES */
 
 /* #categories-box {
     display: grid;
@@ -262,35 +273,21 @@ light grey:
     font-size: 20px;
 }
 
-/* HOW IT WORKS */
+/* HOW IT WORKS ACTUAL */
 
-#how-it-works-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+#how-it-works-cards-box {
+    display: flex;
+    justify-content: space-evenly;
     padding: 30px 0px 30px 0px;
 }
 
-.how-it-works-col-1 {
-    display: grid;
-    grid-template-columns: 1fr 7fr;
+.how-it-works-card {
+    text-align: center;
+    font-size: 16px;
 }
 
-.how-it-works-icon {
-    font-size: 35px;
-}
-
-.how-it-works-col-2 {
-    padding-left: 15px;
-}
-
-.how-it-works-col-3 {
-    padding-left: 20px;
-}
-
-.how-it-works-col-header {
-    color: #212121;
-    font-size: 18.5px;
-    font-weight: 600;
+.zhow-it-works-card:hover {
+    cursor: pointer;
 }
 
 .how-it-works-col-text {
@@ -298,10 +295,88 @@ light grey:
     font-weight: 200;
 }
 
-.how-it-works-col-text {
+.how-it-works-header-link {
+    padding-top: 12px;
+    text-decoration: none;
+}
+
+.how-it-works-header-link:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.how-it-works-header-link-inactive {
+    padding-top: 12px;
+    text-decoration: none;
+}
+
+.how-it-works-header-link-inactive:hover {
+    cursor: normal;
+    text-decoration: none;
+}
+
+.green-icon {
+    color: #34745c;
+    font-size: 20px;
+}
+
+.maroon-icon {
+    color: #7c1c44;
+    font-size: 20px;
+}
+
+.yellow-icon {
+    color: #fcac44;
+    font-size: 20px;
+}
+
+.blue-icon {
+    color: #048494;
+    font-size: 20px;
+}
+
+/* HOW IT WORKS ORIG */
+
+#zhow-it-works-box {
+    display: flex;
+    /* grid-template-columns: 1fr 1fr 1fr; */
+    justify-content: space-around;
+    padding: 30px 0px 60px 0px;
+}
+
+.zhow-it-works-col-1 {
+    display: grid;
+    grid-template-columns: 1fr 7fr;
+}
+
+.zhow-it-works-icon {
+    font-size: 35px;
+}
+
+.zhow-it-works-col-2 {
+    padding-left: 15px;
+}
+
+.zhow-it-works-col-3 {
+    padding-left: 20px;
+}
+
+.zhow-it-works-col-header {
+    color: #212121;
+    font-size: 18.5px;
+    font-weight: 600;
+}
+
+.zhow-it-works-col-text {
+    padding: 15px 0px 15px 0px;
+    font-weight: 200;
+}
+
+.zhow-it-works-col-text {
     color: #212121;
     font-size: 16px;
 }
+
 
 /* FRIENDSHIPS ARE MADE */
 

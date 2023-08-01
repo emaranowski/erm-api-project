@@ -1,0 +1,18 @@
+#join-group-button {
+    color: white;
+    font-size: 17px;
+    background-color: #e8245c;
+    border: none;
+
+    margin-right: 10px;
+    padding: 10px 16px;
+    border-radius: .5em;
+
+    font-size: 14.5px;
+    font-weight: 400;
+}
+
+#join-group-button:hover {
+    background-color: #f4507f;
+    cursor: pointer;
+}
