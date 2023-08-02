@@ -27,11 +27,11 @@ export default function GroupCard({ group }) {
             {group.about}
           </div>
           <div className='group-num-of-events'>
-            # events
+            # events · {group.privacy ? <span>Private</span> : <span>Public</span>}
           </div>
-          <div className='group-privacy'>
+          {/* <div className='group-privacy'>
             {group.privacy ? <span>Private</span> : <span>Public</span>}
-          </div>
+          </div> */}
         </div>
       </div>
     </Link>

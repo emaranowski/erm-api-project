@@ -6,7 +6,7 @@ import { createGroupThunk } from "../../store/groups";
 import './GroupCreate.css';
 
 // const STATESold = [
-//   "(select a state)",
+//   "STATE",
 //   "AL - Alabama",
 //   "AK - Alaska",
 //   "AZ - Arizona",
@@ -67,7 +67,7 @@ import './GroupCreate.css';
 // ];
 
 const STATES = [
-  "(select a state)",
+  "STATE",
   "AL",
   "AK",
   "AZ",
@@ -153,7 +153,7 @@ export default function GroupCreate() {
   // useEffect(() => {
   //   if (!city.length) setDisabled(true);
   //   if (!state.length) setDisabled(true);
-  //   if (state === '(select a state)') setDisabled(true);
+  //   if (state === 'STATE') setDisabled(true);
   //   if (!name.length) setDisabled(true);
   //   if (!about.length) setDisabled(true);
   //   if (!type.length) setDisabled(true);
@@ -164,7 +164,7 @@ export default function GroupCreate() {
 
   //   if (city.length &&
   //     state.length &&
-  //     (state !== '(select a state)') &&
+  //     (state !== 'STATE') &&
   //     name.length &&
   //     about.length &&
   //     type.length &&
@@ -178,7 +178,7 @@ export default function GroupCreate() {
   // const errsObj = {};
   //   if (city.length < 3) errsObj.name = "City must be 3 or more characters";
   //   // if (state.length > 2 || state.length < 2) errsObj.state = "State must be 2 characters";
-  //   if (state === '(select a state)') errsObj.state = "Please select a state or territory";
+  //   if (state === 'STATE') errsObj.state = "Please select a state or territory";
   //   if (type === 'noValue') errsObj.type = "Please select in person or online";
   //   if (privacy === 'noValue') errsObj.privacy = "Please select private or public";
 
@@ -407,14 +407,17 @@ export default function GroupCreate() {
       <form onSubmit={handleSubmit}>
 
         <div className='create-group-form-section'>
+          <div className='create-group-form-top-header'>Start a new group</div>
+        </div>
+
+        <div className='create-group-form-section'>
           <div className='create-group-form-become-organizer'>BECOME AN ORGANIZER</div>
           <div className='create-group-form-header'>We'll walk you through a few steps to build your local community</div>
         </div>
 
         <div className='create-group-form-section'>
-          <div className='create-group-form-header'>First, set your group's location.</div>
-          <div className='create-group-form-text'>MeetBuds groups meet locally, in person and online. We'll connect you with people
-            in your area, and more can join you online</div>
+          <div className='create-group-form-header'>Set your group's location.</div>
+          <div className='create-group-form-text'>MeetBuds groups meet locally, in person, and online. We'll connect you with people in your area.</div>
           <div>
             <span>
               <input
@@ -470,7 +473,7 @@ export default function GroupCreate() {
         </div>
 
         <div className='create-group-form-section'>
-          <div className='create-group-form-header'>Now describe what your group will be about</div>
+          <div className='create-group-form-header'>Describe the purpose of your group.</div>
           <div className='create-group-form-text'>People will see this when we promote your group, but you'll be able to add to it later, too.</div>
           <div className='create-group-form-text'>1. What's the purpose of the group?</div>
           <div className='create-group-form-text'>2. Who should join?</div>
@@ -492,7 +495,7 @@ export default function GroupCreate() {
         <div className='create-group-form-section'>
           <div className='create-group-form-header'>Final steps...</div>
 
-          <div className='create-group-form-text'>Is this an in person or online group?</div>
+          <div className='create-group-form-text'>Is this an in-person or online group?</div>
           <div>
             <select
               className="input-spacer input-text"
@@ -500,7 +503,7 @@ export default function GroupCreate() {
               value={type}
             >
               <option key='(select one)' value='(select one)'>(select one)</option>
-              <option key='In person' value='In person'>In person</option>
+              <option key='In person' value='In person'>In Person</option>
               <option key='Online' value='Online'>Online</option>
             </select>
           </div>
@@ -520,7 +523,7 @@ export default function GroupCreate() {
           </div>
           {errors.privacy && (<div className="group-create-error-text">{errors.privacy}</div>)}
 
-          <div className='create-group-form-text'>Please add an image url for your group below:</div>
+          <div className='create-group-form-text'>Please add an image URL for your group below:</div>
           <div>
             <input
               className="input-spacer input-text"
