@@ -133,9 +133,9 @@ export const createGroupThunk = (group) => async (dispatch) => {
     return data;
 
   } else {
-    console.log(`*** in RES NOT OK ***`)
+    console.log(`*** in thunk RES NOT OK ***`)
     const errors = await res.json();
-    console.log(`*** errors is: ***`, errors)
+    console.log(`*** in thunk RES NOT OK -- errors is: ***`, errors)
     return errors;
   };
 };
@@ -239,13 +239,13 @@ export default function groupsReducer(state = initialState, action) { // groupRe
 
     case CREATE_GROUP_IMAGE:
       // newState = { ...state };
-      console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup: ***`, newState.singleGroup) // group obj {}
-      console.log(`**************`)
-      console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup.GroupImages1: ***`, newState.singleGroup.GroupImages) // undefined
+      // console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup: ***`, newState.singleGroup) // group obj {}
+      // console.log(`**************`)
+      // console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup.GroupImages1: ***`, newState.singleGroup.GroupImages) // undefined
       newState.singleGroup.GroupImages = [];
-      console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup.GroupImages2: ***`, newState.singleGroup.GroupImages) // []
+      // console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup.GroupImages2: ***`, newState.singleGroup.GroupImages) // []
       newState.singleGroup.GroupImages.push(action.image);
-      console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup.GroupImages3: ***`, newState.singleGroup.GroupImages) // arr of image objs [{ id: 4, ...}]
+      // console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup.GroupImages3: ***`, newState.singleGroup.GroupImages) // arr of image objs [{ id: 4, ...}]
       // console.log(action.image)
       return newState;
 

@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getSingleGroupThunk } from '../../store/groups';
+// import { getAllUsersThunk } from '../../store/session';
 
 import OpenModalButtonJoinGroup from '../../components/OpenModalButtonJoinGroup';
 import JoinGroupModal from '../../components/JoinGroupModal';
@@ -103,10 +104,6 @@ export default function GroupDetails() {
 
 
 
-
-
-
-
   // let previewImageURL;
   // if (groupImages[0] !== undefined) {
   //   previewImageURL = groupImages[0].url
@@ -162,6 +159,45 @@ export default function GroupDetails() {
     dispatch(getSingleGroupThunk(groupId));
   }, [dispatch, groupId]);
 
+
+
+
+
+  // trying to add organizer name
+
+
+  const singleGroup = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
+  const organizerId = singleGroup.organizerId;
+  const organizer = singleGroup.Organizer;
+  // const organizerFirstName = singleGroup.Organizer.firstName;
+  // const organizerLastName = singleGroup.Organizer.lastName;
+
+
+  // console.log(`*** singleGroup is: ***`, singleGroup)
+  // console.log(`*** organizer is: ***`, organizer)
+
+  // if (Object.values(organizer).length) {
+  //   const organizerFirstName = singleGroup.Organizer.firstName;
+  //   const organizerLastName = singleGroup.Organizer.lastName;
+  // }
+
+  let organizerFirstName;
+  let organizerLastName;
+  if (organizer !== null && organizer !== undefined) {
+    organizerFirstName = singleGroup.Organizer.firstName;
+    organizerLastName = singleGroup.Organizer.lastName;
+  }
+
+  console.log(`*** organizerFirstName is: ***`, organizerFirstName)
+  console.log(`*** organizerLastName is: ***`, organizerLastName)
+
+  // const allGroups = useSelector(state => state.groups.allGroups ? state.groups.allGroups : {}); // {}
+  // console.log(`*** allGroups is: ***`, allGroups)
+
+  // useEffect(() => {
+  //   dispatch(getAllUsersThunk());
+  // }, [dispatch]);
+
   return (
     <>
       <div>
@@ -190,7 +226,7 @@ export default function GroupDetails() {
             # events · {group.privacy ? <span>Private</span> : <span>Public</span>}
           </div>
           <div className='group-detail-organized-by'>
-            Organized by {group.organizerId}
+            Organized by: {organizerFirstName} {organizerLastName}
           </div>
 
           <div id="join-group-button-div">
@@ -205,7 +241,7 @@ export default function GroupDetails() {
       <div className='group-info-box'>
 
         <div className='group-info-header'>Organizer</div>
-        <div className='group-organizer-name'>Organizer Name {group.organizerId}</div>
+        <div className='group-organizer-name'>{organizerFirstName} {organizerLastName}</div>
 
         <div className='group-info-header'>What we're about</div>
         <div className='group-info-text'>

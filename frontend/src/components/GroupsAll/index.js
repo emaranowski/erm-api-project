@@ -27,6 +27,9 @@ export default function GroupsAll() {
   // console.log(`*** groupsStateKeys is: ***`, groupsStateKeys)
   // console.log(`*** allGroups is: ***`, allGroups)
   // console.log(`*** allGroupsArr is: ***`, allGroupsArr)
+  // const allGroupsHere = useSelector(state => state.groups.allGroups ? state.groups.allGroups : {}); // {}
+  // console.log(`*** allGroupsHere is: ***`, allGroupsHere)
+
 
   const dispatch = useDispatch();
   useEffect(() => {

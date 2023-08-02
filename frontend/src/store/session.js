@@ -5,6 +5,7 @@ import { csrfFetch } from "./csrf";
 // const SIGNUP_USER = "session/signUpUser";
 const SET_USER = "session/setUser";
 const REMOVE_USER = "session/removeUser";
+// const GET_ALL_USERS = "groups/GET_ALL_USERS";
 
 // STANDARD ACTION CREATORS
 
@@ -27,6 +28,13 @@ const removeUser = () => {
     type: REMOVE_USER,
   };
 };
+
+// const getAllUsers = (users) => {
+//   return {
+//     type: GET_ALL_USERS,
+//     users
+//   };
+// };
 
 // THUNK ACTION CREATORS
 
@@ -80,6 +88,27 @@ export const logout = () => async (dispatch) => {
   return response;
 };
 
+// export const getAllUsersThunk = () => async (dispatch) => {
+//   const res = await csrfFetch('/api/users', {
+//     method: 'GET'
+//   });
+
+//   // console.log(`*** res is: ***`, res) // type: res?
+
+//   if (res.ok) {
+//     const users = await res.json();
+
+//     // console.log(`*** users obj is: ***`, users) // obj, w/ Users key
+//     // console.log(`*** users.Users is: ***`, users.Users) // arr of all 3 users
+
+//     return dispatch(getAllUsers(users.Users));
+
+//   } else {
+//     const errors = await res.json();
+//     return errors;
+//   }
+// };
+
 // REDUCER
 
 const initialState = { user: null };
@@ -97,6 +126,11 @@ const sessionReducer = (state = initialState, action) => {
       newState = Object.assign({}, state);
       newState.user = null;
       return newState;
+
+    // case GET_ALL_USERS:
+    //   newState = Object.assign({}, state);
+    //   newState.user = null;
+    //   return newState;
 
     default:
       return state;
