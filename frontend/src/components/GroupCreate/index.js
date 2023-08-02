@@ -486,7 +486,7 @@ export default function GroupCreate() {
               name='about'
               onChange={e => setAbout(e.target.value)}
               value={about}
-              placeholder='Please write at least 50 characters'
+              placeholder='Please write at least 30 characters'
             />
           </div>
           {errors.about && (<div className="group-create-error-text">{errors.about}</div>)}

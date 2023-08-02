@@ -47,7 +47,7 @@ const validateEvent = [
     check('type')
         .exists({ checkFalsy: true })
         .isIn(['Online', 'In person'])
-        .withMessage(`Type must be 'Online' or 'In person'`),
+        .withMessage(`Type must be 'Online' or 'In Person'`),
     check('capacity')
         .exists({ checkFalsy: true })
         .isInt()
@@ -872,11 +872,11 @@ const validateGroup = [
     check('about')
         .exists({ checkFalsy: true })
         .notEmpty()
-        .withMessage(`About is required`),
+        .withMessage(`Description is required`),
     check('about')
         .exists({ checkFalsy: true })
-        .isLength({ min: 50 })
-        .withMessage(`About must be 50 characters or more`),
+        .isLength({ min: 30 })
+        .withMessage(`Description must be 30 characters or more`),
     check('type')
         .exists({ checkFalsy: true })
         .notEmpty()
@@ -886,7 +886,7 @@ const validateGroup = [
         // .notEmpty() // find correct thing for here
         // .not() // not + isIn might work here?
         .isIn(['Online', 'In person']) // not + isIn might work here?
-        .withMessage(`Type must be 'Online' or 'In person'`),
+        .withMessage(`Type must be 'Online' or 'In Person'`),
     check('privacy')
         .exists({ checkFalsy: true })
         .notEmpty()

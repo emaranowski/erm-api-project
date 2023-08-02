@@ -503,7 +503,7 @@ const validateEvent = [
     check('type')
         .exists({ checkFalsy: true })
         .isIn(['Online', 'In person'])
-        .withMessage(`Type must be 'Online' or 'In person'`),
+        .withMessage(`Type must be 'Online' or 'In Person'`),
     check('capacity')
         .exists({ checkFalsy: true })
         .isInt()
@@ -831,7 +831,7 @@ const validatePageOrig = [
     // check('type')
     //     .exists({ checkFalsy: true })
     //     .isIn(['Online', 'In person'])
-    //     .withMessage(`Type must be 'Online' or 'In person'`),
+    //     .withMessage(`Type must be 'Online' or 'In Person'`),
     // check('startDate')
     //     .exists({ checkFalsy: true })
     //     .isDate() // try to figure out how to use .isLatLong()
