@@ -72,9 +72,9 @@
     cursor: normal;
 }
 
-.error-text {
+.group-create-error-text {
     color: rgba(255, 0, 0, 0.778);
     font-size: 14px;
     font-weight: 200;
-    margin-top: 15px;
+    margin-bottom: 7px;
 }

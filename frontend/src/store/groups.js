@@ -1,14 +1,12 @@
 import { csrfFetch } from "./csrf";
-import { useSelector } from 'react-redux';
 
-// Action Type Constants:
+////////////// Action Type Constants: //////////////
 
 const GET_ALL_GROUPS = "groups/GET_ALL_GROUPS";
 const GET_SINGLE_GROUP = "groups/GET_SINGLE_GROUP";
 const CREATE_GROUP = "groups/CREATE_GROUP";
 
-
-// Action Creators:
+////////////// Action Creators: //////////////
 
 const getAllGroups = (groups) => {
   return {
@@ -31,7 +29,7 @@ const createGroup = (group) => {
   };
 };
 
-// Thunk Action Creators:
+////////////// Thunk Action Creators: //////////////
 
 export const getAllGroupsThunk = () => async (dispatch) => {
   const res = await csrfFetch('/api/groups', {
@@ -67,29 +65,6 @@ export const getSingleGroupThunk = (groupId) => async (dispatch) => {
   }
 };
 
-// export const getOneGroupThunk = () => async (dispatch) => {
-//   const res = await csrfFetch('/api/groups', {
-//     method: 'GET'
-//   });
-
-//   // console.log(`*** res is: ***`, res) // type: res?
-
-//   if (res.ok) {
-//     const groups = await res.json();
-
-//     // console.log(`*** groups obj is: ***`, groups) // obj, w/ Groups key
-//     // console.log(`*** groups.Groups is: ***`, groups.Groups) // arr of all 3 groups
-//     // console.log(`*** dispatch is: ***`, dispatch(getAllGroups(groups.Groups)))
-//     // ^ returns obj w/ keys: type, groups: []
-
-//     return dispatch(getAllGroups(groups.Groups));
-//   } else {
-//     const errors = await res.json();
-//     return errors;
-//   }
-// };
-
-
 export const createGroupThunk = (group) => async (dispatch) => {
   // console.log(`*** group is: ***`, group) // 'group' DOES PRINT
 
@@ -113,52 +88,49 @@ export const createGroupThunk = (group) => async (dispatch) => {
   // console.log(`*** res is: ***`, res)
   // console.log(`*** res.body is: ***`, res.body)
 
-  // const groupsStateArr = Object.values(
-  //   useSelector((state) => (state.groups ? state.groups : {}))
-  // ); // ret arr
-
-  // const groupsStateKeys = Object.keys(
-  //   useSelector((state) => (state.groups ? state.groups : {}))
-  // ); // ret arr // 0: allGroups, 1: singleGroup
-
-  // // const groups = groupsState.allGroups;
-
-  // const allGroups = groupsStateArr[0];
-  // const allGroupsArr = Object.values(allGroups)
-
-  // console.log(`*** groupsStateArr is: ***`, groupsStateArr)
-  // console.log(`*** groupsStateKeys is: ***`, groupsStateKeys)
-  // console.log(`*** allGroups is: ***`, allGroups)
-  // console.log(`*** allGroupsArr is: ***`, allGroupsArr)
-
   if (res.ok) {
     // console.log(`*** in res.ok ***`)
     const data = await res.json(); // need id assigned in backend database
-    console.log(`*** in res.ok -- data is: ***`, data)
+    // console.log(`*** in res.ok -- data is: ***`, data)
     // console.log(`*** group is: ***`, group)
     dispatch(createGroup(data)); // removed .group
     return res;
 
   } else {
-    console.log(`*** in RES NOT OK ***`)
+    // console.log(`*** in RES NOT OK ***`)
     const errors = await res.json();
     // console.log(`*** errors is: ***`, errors)
     return errors;
   };
 };
 
+// export const getOneGroupThunk = () => async (dispatch) => { // -- OLD
+//   const res = await csrfFetch('/api/groups', {
+//     method: 'GET'
+//   });
 
-// Reducer:
+//   // console.log(`*** res is: ***`, res) // type: res?
 
-const initialState = {
-  allGroups: {
-    // normalized kvps
-    // loaded by all groups route
-  },
-  singleGroup: {
-    // not normalized, but flattened db info
-    // loaded by single group route
-  }
+//   if (res.ok) {
+//     const groups = await res.json();
+
+//     // console.log(`*** groups obj is: ***`, groups) // obj, w/ Groups key
+//     // console.log(`*** groups.Groups is: ***`, groups.Groups) // arr of all 3 groups
+//     // console.log(`*** dispatch is: ***`, dispatch(getAllGroups(groups.Groups)))
+//     // ^ returns obj w/ keys: type, groups: []
+
+//     return dispatch(getAllGroups(groups.Groups));
+//   } else {
+//     const errors = await res.json();
+//     return errors;
+//   }
+// };
+
+////////////// Reducer: //////////////
+
+const initialState = { // 'groups' slice holds obj with:
+  allGroups: {}, // normalized kvps (loaded by all groups route)
+  singleGroup: {} // not normalized, but flattened db info (loaded by single group route)
 }
 
 export default function groupsReducer(state = initialState, action) { // groupReducer must return groups slice of state
@@ -195,24 +167,7 @@ export default function groupsReducer(state = initialState, action) { // groupRe
   }
 }
 
-
-// groups: {
-//   allGroups: {
-//     [groupId]: {
-//       groupData,
-//       },
-//     optionalOrderedList: [],
-//     },
-//   singleGroup: {
-//     groupData,
-//       GroupImages: [imagesData],
-//         Organizer: {
-//       organizerData,
-//       },
-//     Venues: [venuesData],
-//     },
-// },
-
+////////////// NOTES: //////////////
 
 // let normalized = {
 //     1: { id: 1, ... },

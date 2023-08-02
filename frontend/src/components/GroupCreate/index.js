@@ -147,29 +147,29 @@ export default function GroupCreate() {
   const [clickedSubmit, setClickedSubmit] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
-  useEffect(() => { // to disable button
-    if (!city.length) setDisabled(true);
-    if (!state.length) setDisabled(true);
-    if (state === '(select a state)') setDisabled(true);
-    if (!name.length) setDisabled(true);
-    if (!about.length) setDisabled(true);
-    if (!type.length) setDisabled(true);
-    if (type === '(select one)') setDisabled(true);
-    if (privacy === undefined) setDisabled(true);
-    if (privacy === '(select one)') setDisabled(true);
-    // if (!url.length) setDisabled(true);
+  // disable button when fields are empty
+  // useEffect(() => {
+  //   if (!city.length) setDisabled(true);
+  //   if (!state.length) setDisabled(true);
+  //   if (state === '(select a state)') setDisabled(true);
+  //   if (!name.length) setDisabled(true);
+  //   if (!about.length) setDisabled(true);
+  //   if (!type.length) setDisabled(true);
+  //   if (type === '(select one)') setDisabled(true);
+  //   if (privacy === undefined) setDisabled(true);
+  //   if (privacy === '(select one)') setDisabled(true);
+  //   // if (!url.length) setDisabled(true);
 
-    if (city.length &&
-      state.length &&
-      (state !== '(select a state)') &&
-      name.length &&
-      about.length &&
-      type.length &&
-      (type !== '(select one)') &&
-      (privacy !== undefined) &&
-      (privacy !== '(select one)')) setDisabled(false); // removed && url.length
-
-  }, [city, state, name, about, type, privacy, url]);
+  //   if (city.length &&
+  //     state.length &&
+  //     (state !== '(select a state)') &&
+  //     name.length &&
+  //     about.length &&
+  //     type.length &&
+  //     (type !== '(select one)') &&
+  //     (privacy !== undefined) &&
+  //     (privacy !== '(select one)')) setDisabled(false); // removed && url.length
+  // }, [city, state, name, about, type, privacy, url]);
 
   // validations
   // useEffect(() => {
@@ -182,6 +182,7 @@ export default function GroupCreate() {
 
   //   setErrors(errsObj);
   // }, [city, state, type, privacy]);
+
 
   // submission
   const handleSubmit = e => {
@@ -301,10 +302,11 @@ export default function GroupCreate() {
               </select>
             </span>
           </div>
-          {errors.city && (<div className="error-text">{errors.city}</div>)}
-          {errors.state && (<div className="error-text">{errors.city}</div>)}
-          {/* {errors.city ? <div className="errors">{errors.city}</div> : null} */}
-          {/* {errors.state ? <div className="errors">{errors.state}</div> : null} */}
+          {/* {errors.city && (<div className="group-create-error-text">{errors.city}</div>)} */}
+          {/* {errors.state && (<div className="group-create-error-text">{errors.state}</div>)} */}
+          {errors.city && !errors.state ? <div className="group-create-error-text">{errors.city}</div> : null}
+          {errors.state && !errors.city ? <div className="group-create-error-text">{errors.state}</div> : null}
+          {errors.city && errors.state ? <div className="group-create-error-text">{errors.city} | {errors.state}</div> : null}
         </div>
 
         <div className='create-group-form-section'>
@@ -322,7 +324,7 @@ export default function GroupCreate() {
               placeholder='What is your group name?'
             />
           </div>
-          {errors.name && (<div className="error-text">{errors.name}</div>)}
+          {errors.name && (<div className="group-create-error-text">{errors.name}</div>)}
         </div>
 
         <div className='create-group-form-section'>
@@ -342,7 +344,7 @@ export default function GroupCreate() {
               placeholder='Please write at least 50 characters'
             />
           </div>
-          {errors.about && (<div className="error-text">{errors.about}</div>)}
+          {errors.about && (<div className="group-create-error-text">{errors.about}</div>)}
         </div>
 
         <div className='create-group-form-section'>
@@ -360,7 +362,7 @@ export default function GroupCreate() {
               <option key='Online' value='Online'>Online</option>
             </select>
           </div>
-          {errors.type && (<div className="error-text">{errors.type}</div>)}
+          {errors.type && (<div className="group-create-error-text">{errors.type}</div>)}
 
           <div className='create-group-form-text'>Is this group private or public?</div>
           <div>
@@ -374,7 +376,7 @@ export default function GroupCreate() {
               <option key='Public' value={false}>Public</option>
             </select>
           </div>
-          {errors.privacy && (<div className="error-text">{errors.privacy}</div>)}
+          {errors.privacy && (<div className="group-create-error-text">{errors.privacy}</div>)}
 
           <div className='create-group-form-text'>Please add an image url for your group below:</div>
           <div>
@@ -388,7 +390,7 @@ export default function GroupCreate() {
               placeholder='Image URL'
             />
           </div>
-          {errors.url && (<div className="error-text">{errors.url}</div>)}
+          {errors.url && (<div className="group-create-error-text">{errors.url}</div>)}
         </div>
 
         <button
