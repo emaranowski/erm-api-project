@@ -15,27 +15,25 @@ function LoginFormModal() {
 
   // disable button
   useEffect(() => {
-
     if (!credential.length) setDisabled(true);
     if (!password.length) setDisabled(true);
 
     if (credential.length &&
       password.length) setDisabled(false);
-
   }, [credential, password]);
 
   // validations
-  useEffect(() => {
-    const errsObj = {};
+  // useEffect(() => {
+  //   const errsObj = {};
 
-    if (credential.length < 4) errsObj.credential = "Username or email must be at least 4 characters"
-    if (password.length < 6) errsObj.password = "Password must be at least 6 characters"
+  //   if (credential.length < 4) errsObj.credential = "Username or email must be at least 4 characters"
+  //   if (password.length < 6) errsObj.password = "Password must be at least 6 characters"
 
-    if (Object.keys(errsObj).length) setDisabled(true);
-    if (!Object.keys(errsObj).length) setDisabled(false);
+  //   if (Object.keys(errsObj).length) setDisabled(true);
+  //   if (!Object.keys(errsObj).length) setDisabled(false);
 
-    setErrors(errsObj);
-  }, [credential, password])
+  //   setErrors(errsObj);
+  // }, [credential, password])
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -68,12 +66,6 @@ function LoginFormModal() {
             />
           </label>
 
-          {errors.credential && (
-            <div className="log-in-error-text">
-              {errors.credential}
-            </div>
-          )}
-
           <label className="modal-log-in-label">
             <br></br>Password<br></br>
             <input
@@ -84,9 +76,9 @@ function LoginFormModal() {
             />
           </label>
 
-          {errors.password && (
+          {errors.credential && (
             <div className="log-in-error-text">
-              {errors.password}
+              {errors.credential}
             </div>
           )}
 
