@@ -28,76 +28,6 @@ function HomePage({ isLoaded }) {
 
       <div id="homepage-content-box">
 
-        {/* <div id="how-it-works-box">
-
-          <div className="homepage-header">
-            How MeetBuds works
-          </div>
-
-          <div id="how-it-works-cards-box">
-
-            <span className='how-it-works-col-1'>
-              <span className='how-it-works-text-col'>
-                <span className='how-it-works-icon'>
-                  🔍
-                </span>
-                <div className='how-it-works-col-header'>
-                  See all groups
-                </div>
-                <div className='how-it-works-col-text'>
-                  Join a group<br></br>
-                  locally or online
-                </div>
-                <div className='small-link-bold'>
-                  Search events and groups
-                </div>
-              </span>
-            </span>
-
-            <span className='how-it-works-col-1'>
-              <span className='how-it-works-col-2'>
-                <span className='how-it-works-icon'>
-                  🔍
-                </span>
-              </span>
-              <span className='how-it-works-col-3'>
-                <span className='how-it-works-text-col'>
-                  <div className='how-it-works-col-header'>
-                    Find an event
-                  </div>
-                  <div className='how-it-works-col-text'>
-                    See who's hosting events<br></br>
-                    for the things you love
-                  </div>
-                  <div className='small-link-bold'>
-                    Search events and groups
-                  </div>
-                </span>
-              </span>
-            </span>
-
-            <span className='how-it-works-col-1'>
-              <span className='how-it-works-icon'>
-                ➕
-              </span>
-              <span className='how-it-works-text-col'>
-                <div className='how-it-works-col-header'>
-                  Start a new group
-                </div>
-                <div className='how-it-works-col-text'>
-                  Create your own group,<br></br>
-                  and build a community
-                </div>
-                <div className='small-link-bold'>
-                  Start a group
-                </div>
-              </span>
-            </span>
-
-          </div>
-        </div> */}
-
-
         <div className="how-it-works-box">
 
           <div className="how-it-works-header-box">
@@ -169,8 +99,6 @@ function HomePage({ isLoaded }) {
           </div>
 
         </div>
-
-
 
 
         <div className="events-box">
@@ -496,6 +424,80 @@ function HomePage({ isLoaded }) {
             </span>
           </div>
         </div>
+
+
+
+        {/* <div id="how-it-works-box">
+
+          <div className="homepage-header">
+            How MeetBuds works
+          </div>
+
+          <div id="how-it-works-cards-box">
+
+            <span className='how-it-works-col-1'>
+              <span className='how-it-works-text-col'>
+                <span className='how-it-works-icon'>
+                  🔍
+                </span>
+                <div className='how-it-works-col-header'>
+                  See all groups
+                </div>
+                <div className='how-it-works-col-text'>
+                  Join a group<br></br>
+                  locally or online
+                </div>
+                <div className='small-link-bold'>
+                  Search events and groups
+                </div>
+              </span>
+            </span>
+
+            <span className='how-it-works-col-1'>
+              <span className='how-it-works-col-2'>
+                <span className='how-it-works-icon'>
+                  🔍
+                </span>
+              </span>
+              <span className='how-it-works-col-3'>
+                <span className='how-it-works-text-col'>
+                  <div className='how-it-works-col-header'>
+                    Find an event
+                  </div>
+                  <div className='how-it-works-col-text'>
+                    See who's hosting events<br></br>
+                    for the things you love
+                  </div>
+                  <div className='small-link-bold'>
+                    Search events and groups
+                  </div>
+                </span>
+              </span>
+            </span>
+
+            <span className='how-it-works-col-1'>
+              <span className='how-it-works-icon'>
+                ➕
+              </span>
+              <span className='how-it-works-text-col'>
+                <div className='how-it-works-col-header'>
+                  Start a new group
+                </div>
+                <div className='how-it-works-col-text'>
+                  Create your own group,<br></br>
+                  and build a community
+                </div>
+                <div className='small-link-bold'>
+                  Start a group
+                </div>
+              </span>
+            </span>
+
+          </div>
+        </div> */}
+
+
+
       </div>
     </>
   );

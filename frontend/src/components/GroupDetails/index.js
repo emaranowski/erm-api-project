@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getSingleGroupThunk } from '../../store/groups';
@@ -163,9 +163,7 @@ export default function GroupDetails() {
 
 
 
-  // trying to add organizer name
-
-
+  ////////////// ORGANIZER NAME //////////////
   const singleGroup = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
   const organizerId = singleGroup.organizerId;
   const organizer = singleGroup.Organizer;
@@ -188,8 +186,8 @@ export default function GroupDetails() {
     organizerLastName = singleGroup.Organizer.lastName;
   }
 
-  console.log(`*** organizerFirstName is: ***`, organizerFirstName)
-  console.log(`*** organizerLastName is: ***`, organizerLastName)
+  // console.log(`*** organizerFirstName is: ***`, organizerFirstName)
+  // console.log(`*** organizerLastName is: ***`, organizerLastName)
 
   // const allGroups = useSelector(state => state.groups.allGroups ? state.groups.allGroups : {}); // {}
   // console.log(`*** allGroups is: ***`, allGroups)
@@ -197,6 +195,21 @@ export default function GroupDetails() {
   // useEffect(() => {
   //   dispatch(getAllUsersThunk());
   // }, [dispatch]);
+
+
+  ////////////// 'JOIN' BUTTON LOGIC //////////////
+  // if user is logged in and created group, 'JOIN' BUTTON should hide
+  const currUser = useSelector(state => state.session ? state.session : {}); // {}
+  const currUserId = useSelector(state => state.session.user.id ? state.session.user.id : {}); // {}
+  console.log(`*** currUser is: ***`, currUser)
+  console.log(`*** currUserId is: ***`, currUserId)
+
+  let hideJoinButton = true;
+  if (currUserId !== organizerId) hideJoinButton = false;
+
+  // // if not logged in, 'JOIN' BUTTON should hide
+  // const sessionUser = useSelector(state => state.session.user);
+  // if (!sessionUser) hideJoinButton = true;
 
   return (
     <>
@@ -229,12 +242,14 @@ export default function GroupDetails() {
             Organized by: {organizerFirstName} {organizerLastName}
           </div>
 
-          <div id="join-group-button-div">
-            <OpenModalButtonJoinGroup
-              buttonText="Join this group"
-              modalComponent={<JoinGroupModal />}
-            />
-          </div>
+          {hideJoinButton ? null :
+            <div id="join-group-button-div">
+              <OpenModalButtonJoinGroup
+                buttonText="Join this group"
+                modalComponent={<JoinGroupModal />} />
+            </div>
+          }
+
         </div>
       </div>
 
