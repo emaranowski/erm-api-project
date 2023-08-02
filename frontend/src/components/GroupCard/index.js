@@ -8,14 +8,14 @@ import './GroupCard.css';
 
 export default function GroupCard({ group }) {
 
-  console.log(group)
+  // console.log(`*** group is: ***`, group);
+  // console.log(`*** group.previewImage is: ***`, group.previewImage);
 
   return (
     <Link to={`/groups/${group.id}`}>
       <div className='group-card'>
-        <div className='group-img'>
-          [ image ]
-        </div>
+        {group.previewImage ? <div><img className='group-card-img' src={group.previewImage}></img></div> : ''}
+        {/* <div className='group-img'> [ image ] </div> */}
         <div className='group-info'>
           <div className='group-name'>
             {group.name}
