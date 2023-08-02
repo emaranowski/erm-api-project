@@ -60,18 +60,51 @@ export default function GroupDetails() {
   // console.log(`*** singleGroupArr is: ***`, singleGroupArr)
 
 
-  // WORKING
+  // WORKING -- V1
+  // const group = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
+  // const groupImages = useSelector(state => state.groups.singleGroup.GroupImages ? state.groups.singleGroup.GroupImages : []); // {}
+
+  // let previewImageURL;
+  // if (groupImages.length) {
+  //   previewImageURL = groupImages[0].url;
+  // }
+
+  // console.log(`*** group is: ***`, group)
+  // console.log(`*** groupImages is: ***`, groupImages)
+  // console.log(`*** previewImageURL is: ***`, previewImageURL)
+
+
+  // WORKING -- V2
   const group = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
   const groupImages = useSelector(state => state.groups.singleGroup.GroupImages ? state.groups.singleGroup.GroupImages : []); // {}
 
   let previewImageURL;
   if (groupImages.length) {
-    previewImageURL = groupImages[0].url;
+    const previewImages = groupImages.filter(image => {
+      return image.preview === true;
+    })
+    previewImageURL = previewImages[0].url;
   }
 
-  console.log(`*** group is: ***`, group)
-  console.log(`*** groupImages is: ***`, groupImages)
-  console.log(`*** previewImageURL is: ***`, previewImageURL)
+  // console.log(`*** group is: ***`, group)
+  // console.log(`*** groupImages is: ***`, groupImages)
+  // console.log(`*** previewImageURL is: ***`, previewImageURL)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   // let previewImageURL;
