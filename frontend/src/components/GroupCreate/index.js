@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { createGroupThunk } from "../../store/groups";
 import './GroupCreate.css';
 
@@ -128,6 +129,7 @@ const STATES = [
 
 export default function GroupCreate() {
   const dispatch = useDispatch();
+  const history = useHistory();
   // const sessionUser = useSelector(state => state.session.user);
   // const organizerId = sessionUser.id;
   // console.log(`*** sessionUser is: ***`, sessionUser)
@@ -185,10 +187,10 @@ export default function GroupCreate() {
 
 
   // submission
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => { // added async
     e.preventDefault();
 
-    const group = {
+    let group = {
       city,
       state,
       name,
@@ -197,31 +199,188 @@ export default function GroupCreate() {
       privacy,
     }
 
-    const groupImage = {
+    let groupImage = {
       url
     }
 
-    setErrors({});
-    return dispatch(createGroupThunk(group))
-      .catch(async (res) => { // if exception in above code, run .catch()
-        console.log(`*** in catch, res: ***`, res)
-        const data = await res.json(); // get data from db
-        if (data && data.errors) { // if errors from db
-          setErrors(data.errors); // setErrors
-        }
-      });
+
+    ////// SEEMS FULLY WORKING
+    ////// redirects if no errors; otherwise, displays errors
+    try {
+      const res = await dispatch(createGroupThunk(group)); // VS Code gives note about not needing 'await', but it IS needed here
+      console.log(`*** in form try, res is: ***`, res)
+      if (res.id) {
+        setErrors({});
+        history.push(`/groups/${res.id}`);
+      } else {
+        return res;
+      }
+    } catch (res) { // if exception in above code, run .catch()
+      console.log(`*** in form catch, res: ***`, res)
+      const data = await res.json(); // get data from db
+      if (data && data.errors) { // if errors from db
+        setErrors(data.errors); // setErrors
+      }
+    };
 
 
-    // e.preventDefault();
+    ////// this displays errors if there are any -- but does not redirect
+    // setErrors({});
+    // return dispatch(createGroupThunk(group))
+    //   .catch(async (res) => { // if exception in above code, run .catch()
+    //     // console.log(`*** in catch, res: ***`, res)
+    //     const data = await res.json(); // get data from db
+    //     if (data && data.errors) { // if errors from db
+    //       setErrors(data.errors); // setErrors
+    //     }
+    //   });
 
-    // const errsObj = {};
-    // if (city.length < 3) errsObj.name = "City must be 3 or more characters";
-    // // if (state.length > 2 || state.length < 2) errsObj.state = "State must be 2 characters";
-    // if (state === '(select a state)') errsObj.state = "Please select a state or territory";
-    // if (type === 'noValue') errsObj.type = "Please select in person or online";
-    // if (privacy === 'noValue') errsObj.privacy = "Please select private or public";
 
-    // setErrors(errsObj);
+
+    ////// this redirects when no errors -- but fails to display errors if there are any
+    // const res = await dispatch(createGroupThunk(group));
+    // // group = createdGroup;
+    // console.log(`*** res is: ***`, res)
+    // // console.log(`*** res.id is: ***`, res.id)
+
+    // if (res.errors) {
+    //   setErrors(res.errors);
+    // }
+
+    // if (res.id) {
+    //   setErrors({});
+    //   history.push(`/groups/${res.id}`);
+    // }
+
+
+
+    // let createdGroup;
+    // try {
+    //   createdGroup = dispatch(createGroupThunk(group));
+    //   console.log(`*** form's createdGroup is: ***`, createdGroup)
+    // } catch (res) {
+    //   const data = await res.json(); // get data from db
+    //   if (data && data.errors) { // if errors from db
+    //     setErrors(data.errors); // setErrors
+    //   }
+    // }
+    // if (createdGroup) {
+    //   setErrors({});
+    //   history.push(`/groups/${createdGroup.id}`);
+    // }
+
+
+
+
+    // if (createdGroup.errors) {
+    //   setErrors(createdGroup.errors);
+    // } else {
+    //   history.push(`/groups/${createdGroup.id}`);
+    // }
+
+    // WORKING
+    // setErrors({});
+    // return dispatch(createGroupThunk(group))
+    //   .catch(async (res) => { // if exception in above code, run .catch()
+    //     // console.log(`*** in catch, res: ***`, res)
+    //     const data = await res.json(); // get data from db
+    //     if (data && data.errors) { // if errors from db
+    //       setErrors(data.errors); // setErrors
+    //     }
+    //   });
+
+    // setErrors({});
+    // group = { ...group, understanding, improvement };
+    // if (formType === 'Update Group') {
+    //   const updatedGroup = await dispatch(updateGroupThunk(group));
+    //   group = updatedGroup;
+    // } else if (formType === 'Create Group') {
+    //   const createdGroup = await dispatch(createGroupThunk(group));
+    //   group = createdGroup;
+    // }
+
+    // if (group.errors) {
+    //   setErrors(group.errors);
+    // } else {
+    //   history.push(`/groups/${group.id}`);
+    // }
+
+
+    // setErrors({});
+    // return dispatch(createGroupThunk(group))
+    //   .catch(async (res) => { // if exception in above code, run .catch()
+    //     // console.log(`*** in catch, res: ***`, res)
+    //     const data = await res.json(); // get data from db
+    //     if (data && data.errors) { // if errors from db
+    //       setErrors(data.errors); // setErrors
+    //     }
+    //   })
+    //   .finally((res) => {
+    //     history.push(`/groups/${createdGroup.id}`);
+    //   });
+
+    // setErrors({});
+    // let createdGroup;
+    // createdGroup = await dispatch(createGroupThunk(group))
+    //   .then(
+    //     console.log(`*** in catch, createdGroup: ***`, createdGroup)
+    //   )
+    //   .catch(async (res) => { // if exception in above code, run .catch()
+    //     // console.log(`*** in catch, res: ***`, res)
+    //     const data = await res.json(); // get data from db
+    //     if (data && data.errors) { // if errors from db
+    //       setErrors(data.errors); // setErrors
+    //     }
+    //   });
+
+
+    // let createdGroup;
+    // try {
+    //   createdGroup = dispatch(createGroupThunk(group));
+    //   console.log(`*** form's createdGroup is: ***`, createdGroup)
+    // } catch (res) {
+    //   const data = await res.json(); // get data from db
+    //   if (data && data.errors) { // if errors from db
+    //     setErrors(data.errors); // setErrors
+    //   }
+    // }
+    // if (createdGroup) {
+    //   setErrors({});
+    //   history.push(`/groups/${createdGroup.id}`);
+    // }
+
+
+
+
+    // WORKING
+    // setErrors({});
+    // return dispatch(createGroupThunk(group))
+    //   .catch(async (res) => { // if exception in above code, run .catch()
+    //     // console.log(`*** in catch, res: ***`, res)
+    //     const data = await res.json(); // get data from db
+    //     if (data && data.errors) { // if errors from db
+    //       setErrors(data.errors); // setErrors
+    //     }
+    //   });
+
+
+
+    // setErrors({});
+    // return dispatch(createGroupThunk(group))
+    //   .catch(async (res) => { // if exception in above code, run .catch()
+    //     console.log(`*** in GroupCreate form catch -- res is: ***`, res)
+    //     const data = await res.json();
+    //     console.log(`*** in GroupCreate form catch -- data is: ***`, data);
+    //     if (data && !data.errors) {
+    //     } else if (data && data.errors) {
+    //       setErrors(data.errors);
+    //       // history.push(`/groups/${}`);
+    //     }
+    //   });
+
+
+
+
 
     // setClickedSubmit(true);
 
@@ -229,22 +388,6 @@ export default function GroupCreate() {
     // if (Object.values(errors).length) {
     //   return;
     // }
-
-    // // Create a new object for the group info.
-    // const group = {
-    //   organizerId,
-    //   city,
-    //   state,
-    //   name,
-    //   about,
-    //   type,
-    //   privacy,
-    //   url,
-    // };
-
-    // // Ideally, we'd persist this information to a database using a RESTful API.
-    // // For now, though, just log the group info to the console.
-    // // console.log(group);
 
     // Reset form state.
     // setCity('');
@@ -255,7 +398,6 @@ export default function GroupCreate() {
     // setPrivacy('');
     // setURL('');
 
-    // setErrors({});
     // setClickedSubmit(false);
     // setHasSubmitted(false);
   };

@@ -28,12 +28,12 @@ export default function GroupDetails() {
   const singleGroup = groupsStateArr[1]; // obj
   // const singleGroupArr = Object.values(singleGroup)
 
-  console.log(`*** singleGroup is: ***`, singleGroup)
+  // console.log(`*** singleGroup is: ***`, singleGroup)
   // console.log(`*** singleGroupArr is: ***`, singleGroupArr)
 
   const group = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {});
 
-  console.log(`*** group is: ***`, group)
+  // console.log(`*** group is: ***`, group)
 
   const dispatch = useDispatch();
   useEffect(() => {

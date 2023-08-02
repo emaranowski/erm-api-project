@@ -94,12 +94,12 @@ export const createGroupThunk = (group) => async (dispatch) => {
     // console.log(`*** in res.ok -- data is: ***`, data)
     // console.log(`*** group is: ***`, group)
     dispatch(createGroup(data)); // removed .group
-    return res;
+    return data; // changed from res to data
 
   } else {
-    // console.log(`*** in RES NOT OK ***`)
+    console.log(`*** in RES NOT OK ***`)
     const errors = await res.json();
-    // console.log(`*** errors is: ***`, errors)
+    console.log(`*** errors is: ***`, errors)
     return errors;
   };
 };
