@@ -25,17 +25,30 @@ export default function GroupDetails() {
   // console.log(`*** allGroups is: ***`, allGroups)
   // console.log(`*** allGroupsArr is: ***`, allGroupsArr)
 
-  const singleGroup = groupsStateArr[1]; // obj
-  // const singleGroupArr = Object.values(singleGroup)
 
 
-  const singleGroupImagesArr = groupsStateArr[1].GroupImages; // [ {imageObj} ]
-  // console.log(`*** singleGroupImagesArr is: ***`, singleGroupImagesArr)
 
-  const previewImagesArr = singleGroupImagesArr.filter(imageObj => {
-    return imageObj.preview === true;
-  });
-  const previewImageURL = previewImagesArr[0].url;
+
+  // const singleGroup = groupsStateArr[1]; // obj
+  // // const singleGroupArr = Object.values(singleGroup)
+
+  // const group = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {});
+
+  // console.log(`*** group is: ***`, group)
+
+  // console.log(`*** singleGroup is: ***`, singleGroup) //
+
+  // const singleGroupImagesArr = groupsStateArr[1].GroupImages; // [ {imageObj} ]
+  // // console.log(`*** singleGroupImagesArr is: ***`, singleGroupImagesArr)
+
+  // const previewImagesArr = singleGroupImagesArr.filter(imageObj => {
+  //   return imageObj.preview === true;
+  // });
+  // const previewImageURL = previewImagesArr[0].url;
+
+
+
+
 
   // console.log(`*** previewImagesArr is: ***`, previewImagesArr) //
   // console.log(`*** previewImageURL is: ***`, previewImageURL) //
@@ -46,9 +59,70 @@ export default function GroupDetails() {
   // console.log(`*** singleGroup is: ***`, singleGroup)
   // console.log(`*** singleGroupArr is: ***`, singleGroupArr)
 
-  const group = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {});
+
+  // WORKING
+  const group = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
+  const groupImages = useSelector(state => state.groups.singleGroup.GroupImages ? state.groups.singleGroup.GroupImages : []); // {}
+
+  let previewImageURL;
+  if (groupImages.length) {
+    previewImageURL = groupImages[0].url;
+  }
+
+  console.log(`*** group is: ***`, group)
+  console.log(`*** groupImages is: ***`, groupImages)
+  console.log(`*** previewImageURL is: ***`, previewImageURL)
+
+
+  // let previewImageURL;
+  // if (groupImages[0] !== undefined) {
+  //   previewImageURL = groupImages[0].url
+  // }
+
+  // WORKING V2
+  // const group = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
+  // const groupImages = group.GroupImages; // [{}]
+
+  // let previewImage;
+  // if (groupImages !== undefined) {
+  //   const groupPreviewImages = groupImages.filter(image => { // [{}]
+  //     return image.preview === true;
+  //   })
+  //   previewImage = groupPreviewImages[0];
+  // }
+
+
+
+
+
+
+  // const previewImage = groupImages[0];
+  // const groupPreviewImages = groupImages.filter(image => { // [{}]
+  //   return image.preview === true;
+  // })
 
   // console.log(`*** group is: ***`, group)
+  // console.log(`*** groupImages is: ***`, groupImages)
+  // console.log(`*** groupPreviewImages is: ***`, groupPreviewImages)
+  // console.log(`*** previewImage is: ***`, previewImage)
+
+
+
+
+  // // Current user must be "host" or "co-host" of Group that Event belongs to
+  // const memberships = await Membership.findAll();
+  // const userId = user.dataValues.id;
+  // const groupId = event.Group.id;
+
+  // const hostOrCoHost = memberships.filter(member => {
+  //     return member.userId === userId &&
+  //         member.groupId === groupId &&
+  //         (member.status === 'host' ||
+  //             member.status === 'co-host');
+  // });
+
+
+
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -62,10 +136,16 @@ export default function GroupDetails() {
       </div>
 
       <div className='group-detail-card'>
-        <img className='group-detail-img' src={previewImageURL}></img>
-        {/* <div className='group-detail-img'> */}
-        {/* {previewImageURL} */}
-        {/* </div> */}
+        <div>
+          {/* <div className='group-detail-img'>[ image ]</div> */}
+
+          {previewImageURL ? <img className='group-detail-img' src={previewImageURL}></img> : ''}
+
+          {/* <img className='group-detail-img' src={previewImageURL}></img> */}
+          {/* <div className='group-detail-img'> */}
+          {/* {previewImageURL} */}
+          {/* </div> */}
+        </div>
         <div className='group-detail-info'>
           <div className='group-info-header'>
             {group.name}
