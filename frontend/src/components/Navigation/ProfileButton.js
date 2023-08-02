@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch } from 'react-redux';
+import { useHistory } from "react-router-dom";
 import * as sessionActions from '../../store/session';
 import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
 
 function ProfileButton({ user }) {
+  const history = useHistory();
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
@@ -34,6 +36,12 @@ function ProfileButton({ user }) {
 
   const closeMenu = () => setShowMenu(false);
 
+  const viewGroups = (e) => {
+    e.preventDefault();
+    closeMenu();
+    history.push(`/groups`);
+  };
+
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
@@ -59,8 +67,13 @@ function ProfileButton({ user }) {
             <li className="dropdown-user-info">{user.firstName} {user.lastName}</li>
             <li className="dropdown-user-info">{user.email}</li>
             <li>
-              <button onClick={logout} id="dropdown-log-out-button">
-                Log Out
+              <button onClick={viewGroups} id="dropdown-button">
+                View groups
+              </button>
+            </li>
+            <li>
+              <button onClick={logout} id="dropdown-button">
+                Log out
               </button>
             </li>
           </>
