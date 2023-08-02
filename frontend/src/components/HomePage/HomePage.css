@@ -275,15 +275,35 @@ light grey:
 
 /* HOW IT WORKS ACTUAL */
 
-#how-it-works-cards-box {
+.how-it-works-box {
+    margin-bottom: 50px;
+}
+
+.how-it-works-header-box {
     display: flex;
     justify-content: space-evenly;
-    padding: 30px 0px 30px 0px;
+}
+
+.how-it-works-subhead-box {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.how-it-works-section-box {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 10px 0px 0px 0px;
+}
+
+.how-it-works-join-button-box {
+    display: flex;
+    justify-content: space-evenly;
 }
 
 .how-it-works-card {
     text-align: center;
     font-size: 16px;
+    width: 20%;
 }
 
 .zhow-it-works-card:hover {
@@ -291,7 +311,7 @@ light grey:
 }
 
 .how-it-works-col-text {
-    padding: 15px 0px 15px 0px;
+    padding: 15px 20px 15px 20px;
     font-weight: 200;
 }
 

@@ -1,0 +1,15 @@
+#join-button-home {
+    color: white;
+    font-size: 17px;
+    background-color: #e8245c;
+    border: none;
+    margin-top: 34px;
+    padding: 9px 12px 9px 12px;
+    border-radius: .4em;
+    font-weight: 200;
+}
+
+#join-button-home:hover {
+    background-color: #f4507f;
+    cursor: pointer;
+}

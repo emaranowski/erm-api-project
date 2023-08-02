@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import * as sessionActions from '../../store/session';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import OpenModalButton from '../OpenModalButton';
@@ -16,13 +16,23 @@ import LoginFormModalDemo from '../LoginFormModalDemo';
 
 function Navigation({ isLoaded }) {
   const dispatch = useDispatch();
-  const sessionUser = useSelector(state => state.session.user);
+  const history = useHistory();
 
+  const sessionUser = useSelector(state => state.session.user);
 
   const logout = (e) => {
     e.preventDefault();
+
     dispatch(sessionActions.logout());
+
+    history.push(`/`);
   };
+
+  // ORIG WORKING
+  // const logout = (e) => {
+  //   e.preventDefault();
+  //   dispatch(sessionActions.logout());
+  // };
 
   return (
     <>
@@ -38,6 +48,23 @@ function Navigation({ isLoaded }) {
           {/* <button id="nav-language-button" className='nav-button'>
             English
           </button> */}
+
+
+          {sessionUser ? (
+            <>
+              <NavLink exact to="/groups/new">
+                <span className='nav-grey-link'>
+                  Start a new group
+                </span>
+              </NavLink>
+            </>
+          ) : (
+            <>
+              {/* <span className='nav-grey-link-inactive'>
+                Start a new group
+              </span> */}
+            </>
+          )}
 
           <OpenModalButtonLoginDemo
             buttonText="Log in as Demo User"

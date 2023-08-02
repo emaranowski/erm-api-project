@@ -13,6 +13,17 @@ function LoginFormModal() {
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
+  // disable button
+  useEffect(() => {
+
+    if (!credential.length) setDisabled(true);
+    if (!password.length) setDisabled(true);
+
+    if (credential.length &&
+      password.length) setDisabled(false);
+
+  }, [credential, password]);
+
   // validations
   useEffect(() => {
     const errsObj = {};

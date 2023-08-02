@@ -1,6 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import OpenModalButtonSignupHome from '../OpenModalButtonSignupHome';
+import SignupFormModal from '../SignupFormModal';
 import './HomePage.css';
 
 function HomePage({ isLoaded }) {
@@ -10,14 +12,17 @@ function HomePage({ isLoaded }) {
   return (
     <>
 
-      <div id="search-bar-container">
+      {/* <div id="search-bar-container">
         <i id="search-bar-icon" className="fas fa-search"></i>
         <input id="search-bar-input" placeholder="Search events"></input>
-      </div>
+      </div> */}
 
       <div id="home-banner">
         <div>The people platform—<br></br>Where interests become<br></br>friendships</div>
-        <button id="join-button">Join MeetBuds</button>
+        <OpenModalButtonSignupHome
+          buttonText="Join MeetBuds"
+          modalComponent={<SignupFormModal />}
+        />
       </div>
 
 
@@ -93,36 +98,41 @@ function HomePage({ isLoaded }) {
         </div> */}
 
 
-        <div id="how-it-works-box">
+        <div className="how-it-works-box">
 
-          <div className="homepage-header">
-            How MeetBuds works
+          <div className="how-it-works-header-box">
+            <div className="homepage-header">
+              How MeetBuds works
+            </div>
+          </div>
+          <div className="how-it-works-subhead-box">
+            <div className='how-it-works-col-text'>
+              Have fun doing your favorite activities
+            </div>
           </div>
 
-          <div id="how-it-works-cards-box">
+          <div className="how-it-works-section-box">
             <span className='how-it-works-card'>
-              <div className="yellow-icon">✎ᝰ</div>
+              <div className="yellow-icon">𖠋𖠋𖠋</div>
               <Link to="/groups">
                 <div className='how-it-works-header-link small-link-bold'>
                   See all groups
                 </div>
               </Link>
               <div className='how-it-works-col-text'>
-                Join a group<br></br>
-                locally or online
+                Join a group online or in your local area
               </div>
             </span>
 
             <span className='how-it-works-card'>
-              <div className="yellow-icon">✎ᝰ</div>
+              <div className="yellow-icon">⛷ ♪</div>
               <Link to="/events">
                 <div className='how-it-works-header-link small-link-bold'>
                   Find an event
                 </div>
               </Link>
               <div className='how-it-works-col-text'>
-                See who's hosting events<br></br>
-                for the things you love
+                See who's hosting events for the things you love
               </div>
             </span>
 
@@ -146,13 +156,21 @@ function HomePage({ isLoaded }) {
               )}
 
               <div className='how-it-works-col-text'>
-                Create your own group,<br></br>
-                and build a community
+                Create your own group and build a community
               </div>
             </span>
           </div>
 
+          <div className="how-it-works-join-button-box">
+            <OpenModalButtonSignupHome
+              buttonText="Join MeetBuds"
+              modalComponent={<SignupFormModal />}
+            />
+          </div>
+
         </div>
+
+
 
 
         <div className="events-box">
