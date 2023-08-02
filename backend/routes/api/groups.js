@@ -860,15 +860,20 @@ router.delete('/:groupId', requireAuth, async (req, res) => {
 
 
 
+// for each variable (e.g. name):
+// if the conditions are met to display a later message,
+// then the later message will overwite any earlier messages
+// the later messages will overwrite the earlier messages
+// as long as the conditions for the later
 const validateGroup = [
+    check('name')
+        .exists({ checkFalsy: true })
+        .isLength({ max: 60 })
+        .withMessage(`Name must be 60 characters or fewer`),
     check('name')
         .exists({ checkFalsy: true })
         .notEmpty()
         .withMessage(`Name is required`),
-    check('name')
-        .exists({ checkFalsy: true })
-        .isLength({ max: 60 })
-        .withMessage(`Name must be 60 characters or less`),
     check('about')
         .exists({ checkFalsy: true })
         .notEmpty()
