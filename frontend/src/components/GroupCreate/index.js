@@ -144,6 +144,7 @@ export default function GroupCreate() {
   const [privacy, setPrivacy] = useState(undefined);
   const [url, setURL] = useState('');
 
+  // const [urlError, setURLError] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState({});
   const [clickedSubmit, setClickedSubmit] = useState(false);
@@ -190,6 +191,10 @@ export default function GroupCreate() {
   const handleSubmit = async (e) => { // added async
     e.preventDefault();
 
+    // if (url === '' || url === ' ' || url === '   ') {
+    //   setURLError(true)
+    // };
+
     let group = {
       city,
       state,
@@ -199,6 +204,7 @@ export default function GroupCreate() {
       privacy,
       url,
     }
+
 
     ////// SEEMS FULLY WORKING
     ////// redirects if no errors; otherwise, displays errors
@@ -525,14 +531,18 @@ export default function GroupCreate() {
             <input
               className="input-spacer input-text"
               size="57"
-              type="text"
+              type="url"
               name="url"
               onChange={(e) => setURL(e.target.value)}
               value={url}
               placeholder='Image URL'
+              required
             />
           </div>
-          {errors.url && (<div className="group-create-error-text">{errors.url}</div>)}
+          {/* {urlError ? <div className="group-create-error-text">Image URL must be valid (must end in .png, .jpg, or .jpeg)</div> : null} */}
+          {/* {url === '' ? <div className="group-create-error-text">Image URL must be valid (must end in .png, .jpg, or .jpeg)</div> : null} */}
+          {/* {errors.url && (<div className="group-create-error-text">{errors.url}</div>)} */}
+          {/* {errors.url && (<div className="group-create-error-text">Image URL must be valid (must end in .png, .jpg, or .jpeg)</div>)} */}
         </div>
 
         <button

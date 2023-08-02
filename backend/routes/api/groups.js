@@ -783,9 +783,20 @@ router.post('/:groupId/membership', requireAuth, async (req, res) => {
 
 
 
+const validateURL = [ // or use: type="url"
+    // check('url')
+    //     .exists({ checkFalsy: true })
+    //     .notEmpty()
+    //     .withMessage(`Image URL must be valid (must end in .png, .jpg, or .jpeg)`),
+    check('url')
+        .exists({ checkFalsy: true })
+        .isURL()
+        .withMessage(`Image URL must be valid (must end in .png, .jpg, or .jpeg)`),
+    handleValidationErrors
+]; // if any one is empty or incorrect, err is ret as res
 // maybe add validator here?
 // Add an Image to a Group based on the Group's id (POST /api/groups/:groupId/images)
-router.post('/:groupId/images', requireAuth, async (req, res) => {
+router.post('/:groupId/images', requireAuth, validateURL, async (req, res) => {
     const { user } = req; // pull user from req
     // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
     // but if 'requireAuth' didn't work, this would be a failsafe/backup
@@ -825,6 +836,57 @@ router.post('/:groupId/images', requireAuth, async (req, res) => {
     res.status(200);
     return res.json(addedImageObj);
 });
+
+
+// ORIG W/O URL VALIDATOR -- DO NOT EDIT -- USED UNTIL 2023-08-02
+// // maybe add validator here?
+// // Add an Image to a Group based on the Group's id (POST /api/groups/:groupId/images)
+// router.post('/:groupId/images', requireAuth, async (req, res) => {
+//     const { user } = req; // pull user from req
+//     // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
+//     // but if 'requireAuth' didn't work, this would be a failsafe/backup
+//     if (!user) {
+//         res.status(401); // Unauthorized/Unauthenticated
+//         return res.json({ message: `Authentication Required. No user is currently logged in.` });
+//     };
+
+//     const currUserId = user.dataValues.id;
+//     const { url, preview } = req.body;
+//     const groupId = req.params.groupId;
+
+//     const groupToAddImage = await Group.findByPk(groupId);
+//     if (!groupToAddImage) {
+//         res.status(404); // Not Found
+//         return res.json({ message: `Group couldn't be found` });
+//     };
+
+//     // If logged in, but trying to add image to group organized by another user....
+//     if (!(currUserId === groupToAddImage.organizerId)) {
+//         res.status(403); // Forbidden -- or is this 401 Unauthorized/Unauthenticated ?????
+//         return res.json({ message: `Forbidden: User must be the group organizer to add an image.` });
+//     };
+
+//     await GroupImage.bulkCreate([{ groupId, url, preview },],
+//         { validate: true });
+
+//     const createdGroupImage = await GroupImage.findOne({
+//         where: { groupId, url, preview }
+//     });
+
+//     const addedImageObj = {
+//         id: createdGroupImage.id,
+//         url: createdGroupImage.url,
+//         preview: createdGroupImage.preview
+//     };
+//     res.status(200);
+//     return res.json(addedImageObj);
+// });
+
+
+
+
+
+
 
 
 
@@ -891,7 +953,7 @@ const validateGroup = [
         // .notEmpty() // find correct thing for here
         // .not() // not + isIn might work here?
         .isIn(['Online', 'In person']) // not + isIn might work here?
-        .withMessage(`Type must be 'Online' or 'In Person'`),
+        .withMessage(`Type must be 'In Person' or 'Online'`),
     check('privacy')
         .exists({ checkFalsy: true })
         .notEmpty()
@@ -902,7 +964,7 @@ const validateGroup = [
         // .not() // not + isIn might work here?
         // .isIn([true, false]) // not + isIn might work here?
         .isBoolean()
-        .withMessage(`Privacy must be a boolean ('true' or 'false')`),
+        .withMessage(`Visibility must be 'Private' or 'Public'`), // ORIG: Privacy must be a boolean ('true' or 'false')
     check('city')
         .exists({ checkFalsy: true })
         .notEmpty()
