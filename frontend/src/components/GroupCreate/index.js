@@ -407,7 +407,7 @@ export default function GroupCreate() {
       <form onSubmit={handleSubmit}>
 
         <div className='create-group-form-section'>
-          <div className='create-group-form-top-header'>Start a new group</div>
+          <div className='form-top-header'>Start a new group</div>
         </div>
 
         <div className='create-group-form-section'>

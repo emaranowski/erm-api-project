@@ -11,6 +11,7 @@ import GroupDetails from "./components/GroupDetails";
 import Footer from "./components/Footer";
 
 import './app.css';
+import './group-or-event-form.css';
 
 function App() {
   const dispatch = useDispatch();
