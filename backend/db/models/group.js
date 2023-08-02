@@ -93,7 +93,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('Online', 'In person'), // updated vals
       allowNull: false,
     },
-    private: {
+    privacy: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
@@ -212,7 +212,7 @@ module.exports = (sequelize, DataTypes) => {
 //       type: DataTypes.ENUM('outdoors', 'food', 'board games'),
 //       allowNull: false,
 //     },
-//     private: {
+//     privacy: {
 //       type: DataTypes.BOOLEAN,
 //       allowNull: false,
 //     },

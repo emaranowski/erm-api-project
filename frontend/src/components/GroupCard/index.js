@@ -30,7 +30,7 @@ export default function GroupCard({ group }) {
             # events
           </div>
           <div className='group-privacy'>
-            {group.private ? <span>private</span> : <span>public</span>}
+            {group.privacy ? <span>Private</span> : <span>Public</span>}
           </div>
         </div>
       </div>

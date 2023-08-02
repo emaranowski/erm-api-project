@@ -20,7 +20,7 @@ module.exports = {
         name: 'Hikers',
         about: 'A group of hikers who love getting outdoors.',
         type: 'In person', // may not be correct ENUM syntax
-        private: false,
+        privacy: false,
         city: 'Portland',
         state: 'OR'
       },
@@ -29,7 +29,7 @@ module.exports = {
         name: 'Hobby Chefs',
         about: 'Culinary creatives who want to share and try new recipes together.',
         type: 'In person', // may not be correct ENUM syntax
-        private: true,
+        privacy: true,
         city: 'Portland',
         state: 'OR'
       },
@@ -38,7 +38,7 @@ module.exports = {
         name: 'Board Game Fans',
         about: 'Folks who love playing and making board games.',
         type: 'Online', // may not be correct ENUM syntax
-        private: false,
+        privacy: false,
         city: 'Portland',
         state: 'OR'
       },
@@ -51,9 +51,12 @@ module.exports = {
     options.tableName = 'Groups';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      name: {
-        [Op.in]: ['Hikers', 'Hobby Chefs', 'Board Game Fans', 'Evening Tennis on the Water', 'Evening Tennis on the Water1', 'Evening Tennis on the Water2', 'Evening Tennis on the Water3']
+      type: {
+        [Op.in]: ['In person', 'Online']
       }
+      // name: {
+      //   [Op.in]: ['Hikers', 'Hobby Chefs', 'Board Game Fans', 'Evening Tennis on the Water', 'Evening Tennis on the Water1', 'Evening Tennis on the Water2', 'Evening Tennis on the Water3', 'test', 'test1', 'tester5000', 'tester5001', 'tester5002', 'tester5003', 'tester5004']
+      // }
     }, {});
 
   }
@@ -82,7 +85,7 @@ module.exports = {
 //         name: 'Hikers',
 //         about: 'A group of hikers who love getting outdoors.',
 //         type: 'outdoors', // may not be correct ENUM syntax
-//         private: false,
+//         privacy: false,
 //         city: 'Portland',
 //         state: 'OR'
 //       },
@@ -91,7 +94,7 @@ module.exports = {
 //         name: 'Hobby Chefs',
 //         about: 'Culinary creatives who want to share and try new recipes together.',
 //         type: 'food', // may not be correct ENUM syntax
-//         private: true,
+//         privacy: true,
 //         city: 'Portland',
 //         state: 'OR'
 //       },
@@ -100,7 +103,7 @@ module.exports = {
 //         name: 'Board Game Fans',
 //         about: 'Folks who love playing and making board games.',
 //         type: 'board games', // may not be correct ENUM syntax
-//         private: false,
+//         privacy: false,
 //         city: 'Portland',
 //         state: 'OR'
 //       },

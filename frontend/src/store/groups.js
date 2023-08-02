@@ -1,9 +1,12 @@
 import { csrfFetch } from "./csrf";
+import { useSelector } from 'react-redux';
 
 // Action Type Constants:
 
 const GET_ALL_GROUPS = "groups/GET_ALL_GROUPS";
 const GET_SINGLE_GROUP = "groups/GET_SINGLE_GROUP";
+const CREATE_GROUP = "groups/CREATE_GROUP";
+
 
 // Action Creators:
 
@@ -17,6 +20,13 @@ const getAllGroups = (groups) => {
 const getSingleGroup = (group) => {
   return {
     type: GET_SINGLE_GROUP,
+    group
+  };
+};
+
+const createGroup = (group) => {
+  return {
+    type: CREATE_GROUP,
     group
   };
 };
@@ -45,6 +55,18 @@ export const getAllGroupsThunk = () => async (dispatch) => {
   }
 };
 
+export const getSingleGroupThunk = (groupId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/groups/${groupId}`);
+
+  if (res.ok) {
+    const groupDetails = await res.json();
+    dispatch(getSingleGroup(groupDetails));
+  } else {
+    const errors = await res.json();
+    return errors;
+  }
+};
+
 // export const getOneGroupThunk = () => async (dispatch) => {
 //   const res = await csrfFetch('/api/groups', {
 //     method: 'GET'
@@ -67,17 +89,64 @@ export const getAllGroupsThunk = () => async (dispatch) => {
 //   }
 // };
 
-export const getSingleGroupThunk = (groupId) => async (dispatch) => {
-  const res = await csrfFetch(`/api/groups/${groupId}`);
+
+export const createGroupThunk = (group) => async (dispatch) => {
+  // console.log(`*** group is: ***`, group) // 'group' DOES PRINT
+
+  // 'privacy' does not match 'private' key in db ????
+  // const private = privacy; // gives err: private is a reserved word in strict mode
+  const { city, state, name, about, type, privacy } = group;
+  const res = await csrfFetch("/api/groups", {
+    method: "POST",
+    headers: { 'Content-Type': 'application/json' },
+    // body: JSON.stringify(group),
+    body: JSON.stringify({
+      city,
+      state,
+      name,
+      about,
+      type,
+      privacy, // commented back in after changing from 'private' to 'privacy'
+    }),
+  });
+
+  // console.log(`*** res is: ***`, res)
+  // console.log(`*** res.body is: ***`, res.body)
+
+  // const groupsStateArr = Object.values(
+  //   useSelector((state) => (state.groups ? state.groups : {}))
+  // ); // ret arr
+
+  // const groupsStateKeys = Object.keys(
+  //   useSelector((state) => (state.groups ? state.groups : {}))
+  // ); // ret arr // 0: allGroups, 1: singleGroup
+
+  // // const groups = groupsState.allGroups;
+
+  // const allGroups = groupsStateArr[0];
+  // const allGroupsArr = Object.values(allGroups)
+
+  // console.log(`*** groupsStateArr is: ***`, groupsStateArr)
+  // console.log(`*** groupsStateKeys is: ***`, groupsStateKeys)
+  // console.log(`*** allGroups is: ***`, allGroups)
+  // console.log(`*** allGroupsArr is: ***`, allGroupsArr)
 
   if (res.ok) {
-    const groupDetails = await res.json();
-    dispatch(getSingleGroup(groupDetails));
+    // console.log(`*** in res.ok ***`)
+    const data = await res.json(); // need id assigned in backend database
+    console.log(`*** in res.ok -- data is: ***`, data)
+    // console.log(`*** group is: ***`, group)
+    dispatch(createGroup(data)); // removed .group
+    return res;
+
   } else {
+    console.log(`*** in RES NOT OK ***`)
     const errors = await res.json();
+    // console.log(`*** errors is: ***`, errors)
     return errors;
-  }
+  };
 };
+
 
 // Reducer:
 
@@ -110,6 +179,14 @@ export default function groupsReducer(state = initialState, action) { // groupRe
 
       newState.singleGroup = action.group;
       // console.log(action.group)
+
+      return newState;
+
+    case CREATE_GROUP:
+      newState = { ...state };
+
+      newState.allGroups[action.group.id] = action.group;
+      // console.log(action.group.id)
 
       return newState;
 

@@ -887,17 +887,17 @@ const validateGroup = [
         // .not() // not + isIn might work here?
         .isIn(['Online', 'In person']) // not + isIn might work here?
         .withMessage(`Type must be 'Online' or 'In person'`),
-    check('private')
+    check('privacy')
         .exists({ checkFalsy: true })
         .notEmpty()
         .withMessage(`Privacy setting is required`),
-    check('private')
+    check('privacy')
         .exists({ checkFalsy: true })
         // .notEmpty() // find correct thing for here
         // .not() // not + isIn might work here?
         // .isIn([true, false]) // not + isIn might work here?
         .isBoolean()
-        .withMessage(`Private must be a boolean ('true' or 'false')`),
+        .withMessage(`Privacy must be a boolean ('true' or 'false')`),
     check('city')
         .exists({ checkFalsy: true })
         .notEmpty()
@@ -1068,7 +1068,7 @@ router.put('/:groupId', requireAuth, validateGroup, async (req, res) => {
 
     const currUserId = user.dataValues.id;
     const groupId = req.params.groupId; // params, not query
-    const { name, about, type, private, city, state } = req.body;
+    const { name, about, type, privacy, city, state } = req.body;
 
     const groupToUpdate = await Group.findByPk(groupId);
     if (!groupToUpdate) {
@@ -1086,7 +1086,7 @@ router.put('/:groupId', requireAuth, validateGroup, async (req, res) => {
     groupToUpdate.name = name;
     groupToUpdate.about = about;
     groupToUpdate.type = type;
-    groupToUpdate.private = private;
+    groupToUpdate.privacy = privacy;
     groupToUpdate.city = city;
     groupToUpdate.state = state;
     await groupToUpdate.save();
@@ -1099,8 +1099,15 @@ router.put('/:groupId', requireAuth, validateGroup, async (req, res) => {
 
 
 
+///////////////////////////////////
+///////////////////////////////////
+///////////////////////////////////
+///////////////////////////////////
+///////////////////////////////////
 
-// Create a Group (POST /api/groups) -- V1
+
+
+// Create a Group (POST /api/groups) -- V2 -- WITH EDITS MADE ON 2023-08-01
 router.post('/', requireAuth, validateGroup, async (req, res) => {
     const { user } = req; // pull user from req
     // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
@@ -1111,7 +1118,18 @@ router.post('/', requireAuth, validateGroup, async (req, res) => {
     };
 
     const userId = user.dataValues.id;
-    const { name, about, type, private, city, state } = req.body;
+    const { name, about, type, privacy, city, state } = req.body;
+
+    const refGroup = await Group.findOne({
+        order: [['id', 'DESC']],
+    });
+
+    // const refGroupId = refGroup.dataValues.id;
+    const refGroupIdPlusOne = 1 + refGroup.dataValues.id;
+
+    // console.log(`*** refGroup is: ***`, refGroup)
+    // console.log(`*** refGroupId is: ***`, refGroupId)
+    // console.log(`*** refGroupIdPlusOne is: ***`, refGroupIdPlusOne)
 
     await Group.bulkCreate([
         {
@@ -1119,25 +1137,74 @@ router.post('/', requireAuth, validateGroup, async (req, res) => {
             name,
             about,
             type,
-            private,
+            privacy,
             city,
             state
         },
     ], { validate: true });
 
+    // await Group.bulkCreate([
+    //     {
+    //         organizerId: userId,
+    //         name,
+    //         about,
+    //         type,
+    //         privacy,
+    //         city,
+    //         state
+    //     },
+    // ], { validate: true, individualHooks: true });
+
+    // await Group.create(
+    //     {
+    //         organizerId: userId,
+    //         name,
+    //         about,
+    //         type,
+    //         privacy,
+    //         city,
+    //         state
+    //     },
+    //     { validate: true, returning: true } // returning: true
+    // );
+
+    // const groupToBuild = Group.build({
+    //     organizerId: userId,
+    //     name,
+    //     about,
+    //     type,
+    //     privacy,
+    //     city,
+    //     state
+    // })
+    // await groupToBuild.save();
+
     const createdGroup = await Group.findOne({ // must query for the group to get: id, createdAt, updatedAt
         where: { // include all as failsafe against any w/ duplicate attributes (v low statistical prob, but why not)
-            organizerId: userId,
-            name: name,
-            about: about,
-            type: type,
-            private: private,
-            city: city,
-            state: state
+            id: refGroupIdPlusOne,
         }
     });
 
-    const createdGroupId = createdGroup.id;
+    // const createdGroup = await Group.findOne({ // must query for the group to get: id, createdAt, updatedAt
+    //     where: { // include all as failsafe against any w/ duplicate attributes (v low statistical prob, but why not)
+    //         organizerId: userId,
+    //         name: name,
+    //         about: about,
+    //         type: type,
+    //         privacy: privacy,
+    //         city: city,
+    //         state: state
+    //     }
+    // });
+
+    // console.log(`*** createdGroup is: ***`, createdGroup) // Group { dataValues: {id: 4, organizerId: 1, etc..} }
+    // console.log(`*** createdGroup.dataValues is: ***`, createdGroup.dataValues) // {id: 4, organizerId: 1, etc..}
+    // console.log(`*** createdGroup.dataValues.id is: ***`, createdGroup.dataValues.id) // 4
+
+    const createdGroupObj = createdGroup.dataValues;
+    // console.log(`*** createdGroupObj is: ***`, createdGroupObj) // {id: 4, organizerId: 1, etc..}
+
+    const createdGroupId = createdGroup.dataValues.id; // added '.dataValues' on 2023-08-01
     await Membership.bulkCreate([
         {
             userId: userId,
@@ -1147,8 +1214,74 @@ router.post('/', requireAuth, validateGroup, async (req, res) => {
     ], { validate: true });
 
     res.status(201);
-    return res.json(createdGroup);
+    return res.json(createdGroupObj); // changed from createdGroup on 2023-08-01
 });
+
+
+///////////////////////////////////
+///////////////////////////////////
+///////////////////////////////////
+
+
+// // Create a Group (POST /api/groups) -- V1
+// router.post('/', requireAuth, validateGroup, async (req, res) => {
+//     const { user } = req; // pull user from req
+//     // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
+//     // but if 'requireAuth' didn't work, this would be a failsafe/backup
+//     if (!user) {
+//         res.status(401);
+//         return res.json({ message: `Authentication Required. No user is currently logged in.` });
+//     };
+
+//     const userId = user.dataValues.id;
+//     const { name, about, type, privacy, city, state } = req.body;
+
+//     await Group.bulkCreate([
+//         {
+//             organizerId: userId,
+//             name,
+//             about,
+//             type,
+//             privacy,
+//             city,
+//             state
+//         },
+//     ], { validate: true });
+
+//     const createdGroup = await Group.findOne({ // must query for the group to get: id, createdAt, updatedAt
+//         where: { // include all as failsafe against any w/ duplicate attributes (v low statistical prob, but why not)
+//             organizerId: userId,
+//             name: name,
+//             about: about,
+//             type: type,
+//             privacy: privacy,
+//             city: city,
+//             state: state
+//         }
+//     });
+
+//     const createdGroupId = createdGroup.id;
+//     await Membership.bulkCreate([
+//         {
+//             userId: userId,
+//             groupId: createdGroupId,
+//             status: 'host'
+//         },
+//     ], { validate: true });
+
+//     res.status(201);
+//     return res.json(createdGroup);
+// });
+
+
+
+///////////////////////////////////
+///////////////////////////////////
+///////////////////////////////////
+///////////////////////////////////
+///////////////////////////////////
+
+
 
 // // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- V3
 // Return all groups created by current user, or where current user has a membership.
@@ -1333,7 +1466,7 @@ router.get('/:groupId', async (req, res) => {
         name: group.name,
         about: group.about,
         type: group.type,
-        private: group.private,
+        privacy: group.privacy,
         city: group.city,
         state: group.state,
         createdAt: group.createdAt,
@@ -1501,7 +1634,7 @@ module.exports = router;
 //         name: group.name,
 //         about: group.about,
 //         type: group.type,
-//         private: group.private,
+//         privacy: group.privacy,
 //         city: group.city,
 //         state: group.state,
 //         createdAt: group.createdAt,
@@ -1592,7 +1725,7 @@ module.exports = router;
 //             name: group.name,
 //             about: group.about,
 //             type: group.type,
-//             private: group.private,
+//             privacy: group.privacy,
 //             city: group.city,
 //             state: group.state,
 //             createdAt: group.createdAt,
@@ -1949,7 +2082,7 @@ module.exports = router;
 //         name: group.name,
 //         about: group.about,
 //         type: group.type,
-//         private: group.private,
+//         privacy: group.privacy,
 //         city: group.city,
 //         state: group.state,
 //         createdAt: group.createdAt,
@@ -1989,7 +2122,7 @@ module.exports = router;
 //             name: group.name,
 //             about: group.about,
 //             type: group.type,
-//             private: group.private,
+//             privacy: group.privacy,
 //             city: group.city,
 //             state: group.state,
 //             createdAt: group.createdAt,
@@ -2161,7 +2294,7 @@ module.exports = router;
 //             name: group.name,
 //             about: group.about,
 //             type: group.type,
-//             private: group.private,
+//             privacy: group.privacy,
 //             city: group.city,
 //             state: group.state,
 //             createdAt: group.createdAt,
@@ -2256,7 +2389,7 @@ module.exports = router;
 //             name: group.name,
 //             about: group.about,
 //             type: group.type,
-//             private: group.private,
+//             privacy: group.privacy,
 //             city: group.city,
 //             state: group.state,
 //             createdAt: group.createdAt,
@@ -2327,7 +2460,7 @@ module.exports = router;
 //             name: group.name,
 //             about: group.about,
 //             type: group.type,
-//             private: group.private,
+//             privacy: group.privacy,
 //             city: group.city,
 //             state: group.state,
 //             createdAt: group.createdAt,

@@ -17,7 +17,7 @@ function SignupFormModal() {
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
-  useEffect(() => {
+  useEffect(() => { // to disable button
     // const errsObj = {};
 
     if (!email.length) setDisabled(true);
@@ -46,7 +46,7 @@ function SignupFormModal() {
       confirmPassword.length) setDisabled(false);
 
     // setErrors(errsObj);
-  }, [email, username, firstName, lastName, password, confirmPassword])
+  }, [email, username, firstName, lastName, password, confirmPassword]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

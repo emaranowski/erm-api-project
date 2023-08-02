@@ -41,7 +41,7 @@ module.exports = {
         type: Sequelize.ENUM('Online', 'In person'), // updated vals
         allowNull: false,
       },
-      private: {
+      privacy: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
       },
@@ -117,7 +117,7 @@ module.exports = {
 //         type: Sequelize.ENUM('outdoors', 'food', 'board games'),
 //         allowNull: false,
 //       },
-//       private: {
+//       privacy: {
 //         type: Sequelize.BOOLEAN,
 //         allowNull: false,
 //       },

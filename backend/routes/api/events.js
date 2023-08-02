@@ -723,7 +723,7 @@ router.get('/:eventId', async (req, res) => {
     const groupObj = {
         id: group.id,
         name: group.name,
-        private: group.private,
+        privacy: group.privacy,
         city: group.city,
         state: group.state
     }
