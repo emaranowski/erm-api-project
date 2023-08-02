@@ -17,9 +17,10 @@
 
 .group-detail-img {
     background-color: bisque;
-    width: 320px;
+    width: 250px;
     height: 220px;
     margin-right: 15px;
+    border-radius: 10px;
 }
 
 .group-info-header {

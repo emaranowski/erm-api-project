@@ -5,6 +5,7 @@ import { csrfFetch } from "./csrf";
 const GET_ALL_GROUPS = "groups/GET_ALL_GROUPS";
 const GET_SINGLE_GROUP = "groups/GET_SINGLE_GROUP";
 const CREATE_GROUP = "groups/CREATE_GROUP";
+const CREATE_GROUP_IMAGE = "groups/CREATE_GROUP_IMAGE";
 
 ////////////// Action Creators: //////////////
 
@@ -26,6 +27,13 @@ const createGroup = (group) => {
   return {
     type: CREATE_GROUP,
     group
+  };
+};
+
+const createGroupImage = (image) => {
+  return {
+    type: CREATE_GROUP_IMAGE,
+    image
   };
 };
 
@@ -66,35 +74,63 @@ export const getSingleGroupThunk = (groupId) => async (dispatch) => {
 };
 
 export const createGroupThunk = (group) => async (dispatch) => {
-  // console.log(`*** group is: ***`, group) // 'group' DOES PRINT
+  const { city, state, name, about, type, privacy, url } = group;
+  const preview = true;
 
-  // 'privacy' does not match 'private' key in db ????
-  // const private = privacy; // gives err: private is a reserved word in strict mode
-  const { city, state, name, about, type, privacy } = group;
   const res = await csrfFetch("/api/groups", {
     method: "POST",
     headers: { 'Content-Type': 'application/json' },
-    // body: JSON.stringify(group),
     body: JSON.stringify({
       city,
       state,
       name,
       about,
       type,
-      privacy, // commented back in after changing from 'private' to 'privacy'
+      privacy,
     }),
   });
 
-  // console.log(`*** res is: ***`, res)
-  // console.log(`*** res.body is: ***`, res.body)
-
   if (res.ok) {
     // console.log(`*** in res.ok ***`)
-    const data = await res.json(); // need id assigned in backend database
-    // console.log(`*** in res.ok -- data is: ***`, data)
-    // console.log(`*** group is: ***`, group)
-    dispatch(createGroup(data)); // removed .group
-    return data; // changed from res to data
+
+    const data = await res.json(); // data is group's obj { id: 4, ... } // need groupId (assigned by db)
+    const groupId = data.id;
+
+    // console.log(`*** in res.ok -- data is: ***`, data) // group's obj { id: 4, ... }
+    // console.log(`*** in res.ok -- groupId is: ***`, groupId) // 4
+
+    dispatch(createGroup(data));
+
+    const imageRes = await csrfFetch(`/api/groups/${groupId}/images`, { // router.post('/:groupId/images'
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        groupId,
+        url,
+        preview,
+      }),
+    });
+    // console.log(`*** in thunk res.ok -- imageRes is: ***`, imageRes) // Response obj {}
+
+    if (imageRes.ok) {
+      // console.log(`*** in imageRes.ok -- imageRes is: ***`, imageRes) // Response obj {}
+      const image = await imageRes.json(); // image is groupImage obj
+      // const imageId = image.id;
+      // console.log(`*** in imageRes.ok -- image is: ***`, image) //
+      // console.log(`*** in imageRes.ok -- imageId is: ***`, imageId) //
+
+      const imageForStore = {
+        id: image.id,
+        groupId: groupId,
+        url: image.url,
+        preview: image.preview
+      }
+      // console.log(`*** in imageRes.ok -- imageForStore is: ***`, imageForStore) //
+
+      dispatch(createGroupImage(imageForStore));
+    }
+
+    return data;
 
   } else {
     console.log(`*** in RES NOT OK ***`)
@@ -104,7 +140,49 @@ export const createGroupThunk = (group) => async (dispatch) => {
   };
 };
 
-// export const getOneGroupThunk = () => async (dispatch) => { // -- OLD
+// ORIG WORKING COPY -- DO NOT EDIT
+// export const createGroupThunk = (group) => async (dispatch) => {
+//   // console.log(`*** group is: ***`, group) // 'group' DOES PRINT
+
+//   // 'privacy' does not match 'private' key in db ????
+//   // const private = privacy; // gives err: private is a reserved word in strict mode
+//   const { city, state, name, about, type, privacy } = group;
+//   const res = await csrfFetch("/api/groups", {
+//     method: "POST",
+//     headers: { 'Content-Type': 'application/json' },
+//     // body: JSON.stringify(group),
+//     body: JSON.stringify({
+//       city,
+//       state,
+//       name,
+//       about,
+//       type,
+//       privacy, // commented back in after changing from 'private' to 'privacy'
+//     }),
+//   });
+
+//   // console.log(`*** res is: ***`, res)
+//   // console.log(`*** res.body is: ***`, res.body)
+
+//   if (res.ok) {
+//     // console.log(`*** in res.ok ***`)
+//     const data = await res.json(); // need id assigned in backend database
+//     // console.log(`*** in res.ok -- data is: ***`, data)
+//     // console.log(`*** group is: ***`, group)
+//     dispatch(createGroup(data)); // removed .group
+//     return data; // changed from res to data
+
+//   } else {
+//     console.log(`*** in RES NOT OK ***`)
+//     const errors = await res.json();
+//     console.log(`*** errors is: ***`, errors)
+//     return errors;
+//   };
+// };
+
+
+// OLD -- can prob delete
+// export const getOneGroupThunk = () => async (dispatch) => {
 //   const res = await csrfFetch('/api/groups', {
 //     method: 'GET'
 //   });
@@ -126,6 +204,7 @@ export const createGroupThunk = (group) => async (dispatch) => {
 //   }
 // };
 
+
 ////////////// Reducer: //////////////
 
 const initialState = { // 'groups' slice holds obj with:
@@ -134,12 +213,12 @@ const initialState = { // 'groups' slice holds obj with:
 }
 
 export default function groupsReducer(state = initialState, action) { // groupReducer must return groups slice of state
-  let newState;
+  let newState = { ...state };
 
   switch (action.type) {
 
     case GET_ALL_GROUPS:
-      newState = { ...state };
+      // newState = { ...state };
       // console.log(action.groups)
       action.groups.forEach(group => {
         newState.allGroups[group.id] = group;
@@ -147,19 +226,27 @@ export default function groupsReducer(state = initialState, action) { // groupRe
       return newState;
 
     case GET_SINGLE_GROUP:
-      newState = { ...state };
-
+      // newState = { ...state };
       newState.singleGroup = action.group;
       // console.log(action.group)
-
       return newState;
 
     case CREATE_GROUP:
-      newState = { ...state };
-
+      // newState = { ...state };
       newState.allGroups[action.group.id] = action.group;
       // console.log(action.group.id)
+      return newState;
 
+    case CREATE_GROUP_IMAGE:
+      // newState = { ...state };
+      console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup: ***`, newState.singleGroup) // group obj {}
+      console.log(`**************`)
+      console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup.GroupImages1: ***`, newState.singleGroup.GroupImages) // undefined
+      newState.singleGroup.GroupImages = [];
+      console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup.GroupImages2: ***`, newState.singleGroup.GroupImages) // []
+      newState.singleGroup.GroupImages.push(action.image);
+      console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup.GroupImages3: ***`, newState.singleGroup.GroupImages) // arr of image objs [{ id: 4, ...}]
+      // console.log(action.image)
       return newState;
 
     default:
@@ -168,6 +255,26 @@ export default function groupsReducer(state = initialState, action) { // groupRe
 }
 
 ////////////// NOTES: //////////////
+
+// groups: {
+
+//   allGroups: {
+//     [groupId]: {
+//       groupData,
+//     },
+//     optionalOrderedList: [],
+//   },
+
+//   singleGroup: {
+//     groupData,
+//     GroupImages: [imagesData],
+//     Organizer: {
+//       organizerData,
+//     },
+//     Venues: [venuesData],
+//   },
+
+// },
 
 // let normalized = {
 //     1: { id: 1, ... },

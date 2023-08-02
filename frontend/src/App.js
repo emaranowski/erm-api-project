@@ -41,9 +41,9 @@ function App() {
           <GroupDetails />
         </Route>
 
-        <Route exact path=''>
+        {/* <Route exact path='/:groupId/images'>
 
-        </Route>
+        </Route> */}
 
         <Route exact path=''>
 

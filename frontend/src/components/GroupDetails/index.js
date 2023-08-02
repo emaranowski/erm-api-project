@@ -28,6 +28,21 @@ export default function GroupDetails() {
   const singleGroup = groupsStateArr[1]; // obj
   // const singleGroupArr = Object.values(singleGroup)
 
+
+  const singleGroupImagesArr = groupsStateArr[1].GroupImages; // [ {imageObj} ]
+  // console.log(`*** singleGroupImagesArr is: ***`, singleGroupImagesArr)
+
+  const previewImagesArr = singleGroupImagesArr.filter(imageObj => {
+    return imageObj.preview === true;
+  });
+  const previewImageURL = previewImagesArr[0].url;
+
+  // console.log(`*** previewImagesArr is: ***`, previewImagesArr) //
+  // console.log(`*** previewImageURL is: ***`, previewImageURL) //
+
+
+
+
   // console.log(`*** singleGroup is: ***`, singleGroup)
   // console.log(`*** singleGroupArr is: ***`, singleGroupArr)
 
@@ -47,9 +62,10 @@ export default function GroupDetails() {
       </div>
 
       <div className='group-detail-card'>
-        <div className='group-detail-img'>
-          [ image ]
-        </div>
+        <img className='group-detail-img' src={previewImageURL}></img>
+        {/* <div className='group-detail-img'> */}
+        {/* {previewImageURL} */}
+        {/* </div> */}
         <div className='group-detail-info'>
           <div className='group-info-header'>
             {group.name}
@@ -80,7 +96,7 @@ export default function GroupDetails() {
 
         <div className='group-info-header'>What we're about</div>
         <div className='group-info-text'>
-          Donec venenatis elit a pretium vehicula. Sed et nunc a urna pulvinar pretium. Aenean iaculis sapien aliquam ligula consectetur, vel lobortis lacus egestas. Cras eleifend non quam et rutrum. Duis sed bibendum erat, ac semper turpis. In hac habitasse platea dictumst. Donec feugiat arcu vel nibh fermentum feugiat. Integer tristique ligula vel mattis interdum. Morbi tempus velit at lacinia dictum. Etiam vitae varius libero.
+          {group.about}
         </div>
 
         <div className='group-info-header'>Upcoming Events (#)</div>

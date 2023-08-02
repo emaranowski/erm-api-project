@@ -197,12 +197,8 @@ export default function GroupCreate() {
       about,
       type,
       privacy,
+      url,
     }
-
-    let groupImage = {
-      url
-    }
-
 
     ////// SEEMS FULLY WORKING
     ////// redirects if no errors; otherwise, displays errors
@@ -216,8 +212,9 @@ export default function GroupCreate() {
         return res;
       }
     } catch (res) { // if exception in above code, run .catch()
-      console.log(`*** in form catch, res: ***`, res)
+      console.log(`*** in form catch, res is: ***`, res) // TypeError: Failed to execute 'json' on 'Response': body stream already read
       const data = await res.json(); // get data from db
+      console.log(`*** in form catch, data is: ***`, data) // TypeError: Failed to execute 'json' on 'Response': body stream already read
       if (data && data.errors) { // if errors from db
         setErrors(data.errors); // setErrors
       }
