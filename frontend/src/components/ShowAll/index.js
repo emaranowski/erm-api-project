@@ -58,8 +58,7 @@ export default function ShowAll({ displayType }) {
                 Groups on MeetBuds
               </div>
             </div>
-            :
-            null
+            : null
           }
 
           {displayType === 'Events' ?
@@ -78,8 +77,7 @@ export default function ShowAll({ displayType }) {
                 Events on MeetBuds
               </div>
             </div>
-            :
-            null
+            : null
           }
 
           {allGroupsArr.map((group) => (

@@ -47,7 +47,7 @@
     font-weight: 600;
 }
 
-#dropdown-button:hover {
+.dropdown-button:hover {
     color: #FFFFFF;
     background-color: #098b9d;
     cursor: pointer;
