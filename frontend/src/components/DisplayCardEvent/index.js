@@ -14,8 +14,8 @@ export default function DisplayCardEvent({ event }) {
   const startDateTime = event.startDate; // startDateTime is string
   const startDateTimeArr = startDateTime.split('');
 
-  console.log(`*** startDateTime is: ***`, startDateTime) // str
-  console.log(`*** startDateTimeArr is: ***`, startDateTimeArr) // arr
+  // console.log(`*** startDateTime is: ***`, startDateTime) // str
+  // console.log(`*** startDateTimeArr is: ***`, startDateTimeArr) // arr
 
   let dateArr = [];
   let timeArr = [];
@@ -31,8 +31,8 @@ export default function DisplayCardEvent({ event }) {
   let dateStr = dateArr.join('');
   let timeStr = timeArr.join('');
 
-  console.log(`*** dateStr is: ***`, dateStr) // str
-  console.log(`*** timeStr is: ***`, timeStr) // arr
+  // console.log(`*** dateStr is: ***`, dateStr) // str
+  // console.log(`*** timeStr is: ***`, timeStr) // arr
 
   return (
     <>
@@ -49,7 +49,7 @@ export default function DisplayCardEvent({ event }) {
               {dateStr} · {timeStr}
             </div>
 
-            <div className='group-name'>
+            <div className='event-name'>
               {event.name}
             </div>
 

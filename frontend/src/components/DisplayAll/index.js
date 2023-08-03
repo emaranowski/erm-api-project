@@ -63,7 +63,7 @@ export default function DisplayAll({ displayType }) {
             <div className="events-groups-header-box">
               <div className="events-groups-header">
                 <Link to='/events'>
-                  <span className='non-active-event-group-header event-group-header-events'>
+                  <span className='events-groups-header-spacer non-active-event-group-header'>
                     Events
                   </span>
                 </Link>
@@ -91,14 +91,14 @@ export default function DisplayAll({ displayType }) {
           {displayType === 'Events' ?
             <div className="events-groups-header-box">
               <div className="events-groups-header">
+                <span className='events-groups-header-spacer active-event-group-header'>
+                  Events
+                </span>
                 <Link to='/groups'>
-                  <span className='non-active-event-group-header event-group-header-events'>
+                  <span className='non-active-event-group-header'>
                     Groups
                   </span>
                 </Link>
-                <span className='active-event-group-header'>
-                  Events
-                </span>
               </div>
               <div className='events-groups-subhead'>
                 Events on MeetBuds

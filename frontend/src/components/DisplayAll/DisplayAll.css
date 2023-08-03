@@ -7,6 +7,7 @@
 .centering-box {
   /* display: flex; */
   /* justify-content: space-around; */
+  width: 750px;
 }
 
 .events-groups-header-box {
@@ -21,7 +22,7 @@
   justify-content: flex-start;
 }
 
-.event-group-header-events {
+.events-groups-header-spacer {
   margin-right: 15px;
 }
 
