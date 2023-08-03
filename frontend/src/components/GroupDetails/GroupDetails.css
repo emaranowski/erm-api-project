@@ -59,6 +59,28 @@
     margin-top: 86px;
 }
 
+#admin-buttons-div {
+    margin-top: 78px;
+}
+
+.admin-button {
+    color: #FFFFFF;
+    background-color: #212121;
+    border: none;
+    border-radius: 5px;
+    margin-right: 13px;
+    margin-top: 13px;
+    padding: 8px 11px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.admin-button:hover {
+    color: #FFFFFF;
+    background-color: #707070;
+    cursor: pointer;
+}
+
 .group-info-header {
     color: black;
     font-size: 22px;

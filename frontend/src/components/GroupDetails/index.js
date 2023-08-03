@@ -195,6 +195,10 @@ export default function GroupDetails() {
 
 
 
+  ////////////// 'JOIN' BUTTON LOGIC //////////////
+  // if not logged in, 'JOIN' BUTTON should hide
+  // if logged in and created group, 'JOIN' BUTTON should hide
+  // if logged in and did not create group, 'JOIN' BUTTON should display
 
   // const sessionUser = useSelector(state => state.session.user);
   // console.log(`*** sessionUser is: ***`, sessionUser)
@@ -202,12 +206,26 @@ export default function GroupDetails() {
   // logged in: sessionUser === {id: 1, firstName: 'FirstNameOne', lastName: 'LastNameOne', email: 'demo1@demo.com', username: 'DemoUser1'}
 
   let hideJoinButton = true;
-  if (sessionUser === null) {
+  if (sessionUser === null) { // logged out
     hideJoinButton = true;
-  } else if (sessionUser !== null && sessionUser !== undefined) {
-    const sessionUserId = sessionUser.id;
-    if (sessionUserId !== organizerId) hideJoinButton = false;
+  } else if (sessionUser !== null && sessionUser !== undefined) { // logged in
+    const sessionUserId = sessionUser.id; // must create in block, after confirming !null && !undefined
+    if (sessionUserId !== organizerId) hideJoinButton = false; // logged in + did not create group: so display 'join' btn
   }
+
+
+  ////////////// 'Create Event', 'Update', 'Delete' ADMIN BUTTONS LOGIC //////////////
+  // if logged in and created group, ADMIN BUTTONS should display
+  let hideAdminButtons = true;
+  if (sessionUser === null) { // logged out
+    hideAdminButtons = true;
+  } else if (sessionUser !== null && sessionUser !== undefined) { // logged in
+    const sessionUserId = sessionUser.id; // must create in block, after confirming !null && !undefined
+    if (sessionUserId === organizerId) hideAdminButtons = false; // logged in + created group: so display admin btns
+  }
+
+
+
 
 
 
@@ -302,6 +320,14 @@ export default function GroupDetails() {
             </div>
           }
 
+
+          {hideAdminButtons ? null :
+            <div id="admin-buttons-div">
+              <button className='admin-button'>Create event</button>
+              <button className='admin-button'>Update</button>
+              <button className='admin-button'>Delete</button>
+            </div>
+          }
 
 
           {/* {sessionUser ? (
