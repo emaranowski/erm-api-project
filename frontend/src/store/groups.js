@@ -6,6 +6,8 @@ const GET_ALL_GROUPS = "groups/GET_ALL_GROUPS";
 const GET_SINGLE_GROUP = "groups/GET_SINGLE_GROUP";
 const CREATE_GROUP = "groups/CREATE_GROUP";
 const CREATE_GROUP_IMAGE = "groups/CREATE_GROUP_IMAGE";
+const UPDATE_GROUP = "groups/UPDATE_GROUP";
+const UPDATE_GROUP_IMAGE = "groups/UPDATE_GROUP_IMAGE";
 
 ////////////// Action Creators: //////////////
 
@@ -33,6 +35,20 @@ const createGroup = (group) => {
 const createGroupImage = (image) => {
   return {
     type: CREATE_GROUP_IMAGE,
+    image
+  };
+};
+
+const updateGroup = (group) => {
+  return {
+    type: UPDATE_GROUP,
+    group
+  };
+};
+
+const updateGroupImage = (image) => {
+  return {
+    type: UPDATE_GROUP_IMAGE,
     image
   };
 };
@@ -140,6 +156,74 @@ export const createGroupThunk = (group) => async (dispatch) => {
   };
 };
 
+export const updateGroupThunk = (group) => async (dispatch) => {
+  const { city, state, name, about, type, privacy, url, groupId } = group;
+  const preview = true;
+
+  const res = await csrfFetch(`/api/groups/${groupId}`, {
+    method: "PUT",
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      city,
+      state,
+      name,
+      about,
+      type,
+      privacy,
+    }),
+  });
+
+  if (res.ok) {
+    // console.log(`*** in res.ok ***`)
+
+    const data = await res.json(); // data is group's obj { id: 4, ... } // need groupId (assigned by db)
+    const groupId = data.id;
+
+    // console.log(`*** in res.ok -- data is: ***`, data) // group's obj { id: 4, ... }
+    // console.log(`*** in res.ok -- groupId is: ***`, groupId) // 4
+
+    dispatch(updateGroup(data));
+
+    const imageRes = await csrfFetch(`/api/groups/${groupId}/images`, { // router.post('/:groupId/images'
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        groupId,
+        url,
+        preview,
+      }),
+    });
+    // console.log(`*** in thunk res.ok -- imageRes is: ***`, imageRes) // Response obj {}
+
+    if (imageRes.ok) {
+      // console.log(`*** in imageRes.ok -- imageRes is: ***`, imageRes) // Response obj {}
+      const image = await imageRes.json(); // image is groupImage obj
+      // const imageId = image.id;
+      // console.log(`*** in imageRes.ok -- image is: ***`, image) //
+      // console.log(`*** in imageRes.ok -- imageId is: ***`, imageId) //
+
+      const imageForStore = {
+        id: image.id,
+        groupId: groupId,
+        url: image.url,
+        preview: image.preview
+      }
+      // console.log(`*** in imageRes.ok -- imageForStore is: ***`, imageForStore) //
+
+      dispatch(updateGroupImage(imageForStore));
+    }
+
+    return data;
+
+  } else {
+    console.log(`*** in thunk RES NOT OK ***`)
+    const errors = await res.json();
+    console.log(`*** in thunk RES NOT OK -- errors is: ***`, errors)
+    return errors;
+  };
+};
+
+
 // ORIG WORKING COPY -- DO NOT EDIT
 // export const createGroupThunk = (group) => async (dispatch) => {
 //   // console.log(`*** group is: ***`, group) // 'group' DOES PRINT
@@ -218,27 +302,20 @@ export default function groupsReducer(state = initialState, action) { // groupRe
   switch (action.type) {
 
     case GET_ALL_GROUPS:
-      // newState = { ...state };
-      // console.log(action.groups)
       action.groups.forEach(group => {
         newState.allGroups[group.id] = group;
       });
       return newState;
 
     case GET_SINGLE_GROUP:
-      // newState = { ...state };
       newState.singleGroup = action.group;
-      // console.log(action.group)
       return newState;
 
     case CREATE_GROUP:
-      // newState = { ...state };
       newState.allGroups[action.group.id] = action.group;
-      // console.log(action.group.id)
       return newState;
 
     case CREATE_GROUP_IMAGE:
-      // newState = { ...state };
       // console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup: ***`, newState.singleGroup) // group obj {}
       // console.log(`**************`)
       // console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup.GroupImages1: ***`, newState.singleGroup.GroupImages) // undefined
@@ -247,6 +324,15 @@ export default function groupsReducer(state = initialState, action) { // groupRe
       newState.singleGroup.GroupImages.push(action.image);
       // console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup.GroupImages3: ***`, newState.singleGroup.GroupImages) // arr of image objs [{ id: 4, ...}]
       // console.log(action.image)
+      return newState;
+
+    case UPDATE_GROUP:
+      newState.allGroups[action.group.id] = action.group;
+      return newState;
+
+    case UPDATE_GROUP_IMAGE:
+      newState.singleGroup.GroupImages = [];
+      newState.singleGroup.GroupImages.push(action.image);
       return newState;
 
     default:

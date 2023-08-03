@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { createGroupThunk } from "../../store/groups";
+import { updateGroupThunk } from "../../store/groups";
 import './GroupForm.css';
+
+// test update image url:
+// https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Two_small_test_tubes_held_in_spring_clamps.jpg/440px-Two_small_test_tubes_held_in_spring_clamps.jpg
 
 const STATES = [
   "STATE",
@@ -66,75 +70,31 @@ const STATES = [
   "WY",
 ];
 
-export default function GroupForm() {
+export default function GroupForm({ group, formType }) {
   const dispatch = useDispatch();
   const history = useHistory();
-  // const sessionUser = useSelector(state => state.session.user);
-  // const organizerId = sessionUser.id;
-  // console.log(`*** sessionUser is: ***`, sessionUser)
-  // console.log(`*** sessionUser.id is: ***`, sessionUser.id)
+  const { groupId } = useParams();
+
+  // console.log(`*** in form, groupId is: ***`, groupId)
 
   // controlled inputs
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [name, setName] = useState('');
-  const [about, setAbout] = useState('');
-  const [type, setType] = useState('');
-  const [privacy, setPrivacy] = useState(undefined);
-  const [url, setURL] = useState('');
+  const [city, setCity] = useState(group?.city);
+  const [state, setState] = useState(group?.state);
+  const [name, setName] = useState(group?.name);
+  const [about, setAbout] = useState(group?.about);
+  const [type, setType] = useState(group?.type);
+  const [privacy, setPrivacy] = useState(group?.privacy);
+  const [url, setURL] = useState(group?.url);
 
-  // const [urlError, setURLError] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState({});
-  const [clickedSubmit, setClickedSubmit] = useState(false);
-  const [hasSubmitted, setHasSubmitted] = useState(false);
-
-  // disable button when fields are empty
-  // useEffect(() => {
-  //   if (!city.length) setDisabled(true);
-  //   if (!state.length) setDisabled(true);
-  //   if (state === 'STATE') setDisabled(true);
-  //   if (!name.length) setDisabled(true);
-  //   if (!about.length) setDisabled(true);
-  //   if (!type.length) setDisabled(true);
-  //   if (type === '(select one)') setDisabled(true);
-  //   if (privacy === undefined) setDisabled(true);
-  //   if (privacy === '(select one)') setDisabled(true);
-  //   // if (!url.length) setDisabled(true);
-
-  //   if (city.length &&
-  //     state.length &&
-  //     (state !== 'STATE') &&
-  //     name.length &&
-  //     about.length &&
-  //     type.length &&
-  //     (type !== '(select one)') &&
-  //     (privacy !== undefined) &&
-  //     (privacy !== '(select one)')) setDisabled(false); // removed && url.length
-  // }, [city, state, name, about, type, privacy, url]);
-
-  // validations
-  // useEffect(() => {
-  // const errsObj = {};
-  //   if (city.length < 3) errsObj.name = "City must be 3 or more characters";
-  //   // if (state.length > 2 || state.length < 2) errsObj.state = "State must be 2 characters";
-  //   if (state === 'STATE') errsObj.state = "Please select a state or territory";
-  //   if (type === 'noValue') errsObj.type = "Please select in person or online";
-  //   if (privacy === 'noValue') errsObj.privacy = "Please select private or public";
-
-  //   setErrors(errsObj);
-  // }, [city, state, type, privacy]);
-
 
   // submission
   const handleSubmit = async (e) => { // added async
     e.preventDefault();
 
-    // if (url === '' || url === ' ' || url === '   ') {
-    //   setURLError(true)
-    // };
-
-    let group = {
+    group = {
+      ...group,
       city,
       state,
       name,
@@ -142,206 +102,82 @@ export default function GroupForm() {
       type,
       privacy,
       url,
+      groupId,
     }
 
+    // console.log(`*** in form, group is: ***`, group)
 
-    ////// SEEMS FULLY WORKING
-    ////// redirects if no errors; otherwise, displays errors
-    try {
-      const res = await dispatch(createGroupThunk(group)); // VS Code gives note about not needing 'await', but it IS needed here
-      console.log(`*** in form try, res is: ***`, res)
-      if (res.id) {
-        setErrors({});
-        history.push(`/groups/${res.id}`);
-      } else {
-        return res;
-      }
-    } catch (res) { // if exception in above code, run .catch()
-      console.log(`*** in form catch, res is: ***`, res) // TypeError: Failed to execute 'json' on 'Response': body stream already read
-      const data = await res.json(); // get data from db
-      console.log(`*** in form catch, data is: ***`, data) // TypeError: Failed to execute 'json' on 'Response': body stream already read
-      if (data && data.errors) { // if errors from db
-        setErrors(data.errors); // setErrors
-      }
-    };
+    // refactored to match below
+    if (formType === 'Create Group') {
 
+      try {
+        const res = await dispatch(createGroupThunk(group)); // VS Code gives note about not needing 'await', but it IS needed here
+        console.log(`*** in form CREATE try, res is: ***`, res)
+        if (res.id) {
+          setErrors({});
+          history.push(`/groups/${res.id}`);
+        } else {
+          return res;
+        }
+      } catch (res) { // if exception in above code, run .catch()
+        console.log(`*** in form CREATE catch, res is: ***`, res) // TypeError: Failed to execute 'json' on 'Response': body stream already read
+        const data = await res.json(); // get data from db
+        console.log(`*** in form CREATE catch, data is: ***`, data) // TypeError: Failed to execute 'json' on 'Response': body stream already read
+        if (data && data.errors) { // if errors from db
+          setErrors(data.errors); // setErrors
+        }
+      };
 
-    ////// this displays errors if there are any -- but does not redirect
-    // setErrors({});
-    // return dispatch(createGroupThunk(group))
-    //   .catch(async (res) => { // if exception in above code, run .catch()
-    //     // console.log(`*** in catch, res: ***`, res)
-    //     const data = await res.json(); // get data from db
-    //     if (data && data.errors) { // if errors from db
-    //       setErrors(data.errors); // setErrors
-    //     }
-    //   });
+    } else if (formType === 'Update Group') {
 
+      try {
+        const res = await dispatch(updateGroupThunk(group)); // VS Code gives note about not needing 'await', but it IS needed here
+        console.log(`*** in form UPDATE try, res is: ***`, res)
+        if (res.id) {
+          setErrors({});
+          history.push(`/groups/${res.id}`);
+        } else {
+          return res;
+        }
+      } catch (res) { // if exception in above code, run .catch()
+        console.log(`*** in form UPDATE catch, res is: ***`, res) // TypeError: Failed to execute 'json' on 'Response': body stream already read
+        const data = await res.json(); // get data from db
+        console.log(`*** in form UPDATE catch, data is: ***`, data) // TypeError: Failed to execute 'json' on 'Response': body stream already read
+        if (data && data.errors) { // if errors from db
+          setErrors(data.errors); // setErrors
+        }
+      };
+    }
 
-
-    ////// this redirects when no errors -- but fails to display errors if there are any
-    // const res = await dispatch(createGroupThunk(group));
-    // // group = createdGroup;
-    // console.log(`*** res is: ***`, res)
-    // // console.log(`*** res.id is: ***`, res.id)
-
-    // if (res.errors) {
-    //   setErrors(res.errors);
-    // }
-
-    // if (res.id) {
-    //   setErrors({});
-    //   history.push(`/groups/${res.id}`);
-    // }
-
-
-
-    // let createdGroup;
-    // try {
-    //   createdGroup = dispatch(createGroupThunk(group));
-    //   console.log(`*** form's createdGroup is: ***`, createdGroup)
-    // } catch (res) {
-    //   const data = await res.json(); // get data from db
-    //   if (data && data.errors) { // if errors from db
-    //     setErrors(data.errors); // setErrors
-    //   }
-    // }
-    // if (createdGroup) {
-    //   setErrors({});
-    //   history.push(`/groups/${createdGroup.id}`);
-    // }
-
-
-
-
-    // if (createdGroup.errors) {
-    //   setErrors(createdGroup.errors);
-    // } else {
-    //   history.push(`/groups/${createdGroup.id}`);
-    // }
-
-    // WORKING
-    // setErrors({});
-    // return dispatch(createGroupThunk(group))
-    //   .catch(async (res) => { // if exception in above code, run .catch()
-    //     // console.log(`*** in catch, res: ***`, res)
-    //     const data = await res.json(); // get data from db
-    //     if (data && data.errors) { // if errors from db
-    //       setErrors(data.errors); // setErrors
-    //     }
-    //   });
-
-    // setErrors({});
-    // group = { ...group, understanding, improvement };
-    // if (formType === 'Update Group') {
-    //   const updatedGroup = await dispatch(updateGroupThunk(group));
-    //   group = updatedGroup;
-    // } else if (formType === 'Create Group') {
-    //   const createdGroup = await dispatch(createGroupThunk(group));
+    // // most basic version -- still need to refactor to match below
+    // if (formType === 'Create Group') {
+    //   const createdGroup = await dispatch(createGroupThunk(group))
     //   group = createdGroup;
+    // } else if (formType === 'Update Group') {
+    //   const updatedGroup = await dispatch(updateGroupThunk(group))
+    //   group = updatedGroup;
     // }
 
-    // if (group.errors) {
-    //   setErrors(group.errors);
-    // } else {
-    //   history.push(`/groups/${group.id}`);
-    // }
-
-
-    // setErrors({});
-    // return dispatch(createGroupThunk(group))
-    //   .catch(async (res) => { // if exception in above code, run .catch()
-    //     // console.log(`*** in catch, res: ***`, res)
-    //     const data = await res.json(); // get data from db
-    //     if (data && data.errors) { // if errors from db
-    //       setErrors(data.errors); // setErrors
-    //     }
-    //   })
-    //   .finally((res) => {
-    //     history.push(`/groups/${createdGroup.id}`);
-    //   });
-
-    // setErrors({});
-    // let createdGroup;
-    // createdGroup = await dispatch(createGroupThunk(group))
-    //   .then(
-    //     console.log(`*** in catch, createdGroup: ***`, createdGroup)
-    //   )
-    //   .catch(async (res) => { // if exception in above code, run .catch()
-    //     // console.log(`*** in catch, res: ***`, res)
-    //     const data = await res.json(); // get data from db
-    //     if (data && data.errors) { // if errors from db
-    //       setErrors(data.errors); // setErrors
-    //     }
-    //   });
-
-
-    // let createdGroup;
+    // ////// SEEMS FULLY WORKING
+    // ////// redirects if no errors; otherwise, displays errors
     // try {
-    //   createdGroup = dispatch(createGroupThunk(group));
-    //   console.log(`*** form's createdGroup is: ***`, createdGroup)
-    // } catch (res) {
+    //   const res = await dispatch(createGroupThunk(group)); // VS Code gives note about not needing 'await', but it IS needed here
+    //   console.log(`*** in form try, res is: ***`, res)
+    //   if (res.id) {
+    //     setErrors({});
+    //     history.push(`/groups/${res.id}`);
+    //   } else {
+    //     return res;
+    //   }
+    // } catch (res) { // if exception in above code, run .catch()
+    //   console.log(`*** in form catch, res is: ***`, res) // TypeError: Failed to execute 'json' on 'Response': body stream already read
     //   const data = await res.json(); // get data from db
+    //   console.log(`*** in form catch, data is: ***`, data) // TypeError: Failed to execute 'json' on 'Response': body stream already read
     //   if (data && data.errors) { // if errors from db
     //     setErrors(data.errors); // setErrors
     //   }
-    // }
-    // if (createdGroup) {
-    //   setErrors({});
-    //   history.push(`/groups/${createdGroup.id}`);
-    // }
+    // };
 
-
-
-
-    // WORKING
-    // setErrors({});
-    // return dispatch(createGroupThunk(group))
-    //   .catch(async (res) => { // if exception in above code, run .catch()
-    //     // console.log(`*** in catch, res: ***`, res)
-    //     const data = await res.json(); // get data from db
-    //     if (data && data.errors) { // if errors from db
-    //       setErrors(data.errors); // setErrors
-    //     }
-    //   });
-
-
-
-    // setErrors({});
-    // return dispatch(createGroupThunk(group))
-    //   .catch(async (res) => { // if exception in above code, run .catch()
-    //     console.log(`*** in GroupForm catch -- res is: ***`, res)
-    //     const data = await res.json();
-    //     console.log(`*** in GroupForm catch -- data is: ***`, data);
-    //     if (data && !data.errors) {
-    //     } else if (data && data.errors) {
-    //       setErrors(data.errors);
-    //       // history.push(`/groups/${}`);
-    //     }
-    //   });
-
-
-
-
-
-    // setClickedSubmit(true);
-
-    // // render validation errors
-    // if (Object.values(errors).length) {
-    //   return;
-    // }
-
-    // Reset form state.
-    // setCity('');
-    // setState('');
-    // setName('');
-    // setAbout('');
-    // setType('');
-    // setPrivacy('');
-    // setURL('');
-
-    // setClickedSubmit(false);
-    // setHasSubmitted(false);
   };
 
   return (
@@ -349,7 +185,9 @@ export default function GroupForm() {
       <form onSubmit={handleSubmit}>
 
         <div className='create-group-form-section'>
-          <div className='form-top-header'>Start a new group</div>
+          <div className='form-top-header'>
+            {formType === 'Create Group' ? 'Start a new group' : 'Update your group'}
+          </div>
         </div>
 
         <div className='create-group-form-section'>
@@ -389,8 +227,6 @@ export default function GroupForm() {
               </select>
             </span>
           </div>
-          {/* {errors.city && (<div className="group-create-error-text">{errors.city}</div>)} */}
-          {/* {errors.state && (<div className="group-create-error-text">{errors.state}</div>)} */}
           {errors.city && !errors.state ? <div className="group-create-error-text">{errors.city}</div> : null}
           {errors.state && !errors.city ? <div className="group-create-error-text">{errors.state}</div> : null}
           {errors.city && errors.state ? <div className="group-create-error-text">{errors.city} | {errors.state}</div> : null}
@@ -488,8 +324,15 @@ export default function GroupForm() {
           className={disabled ? "create-group-form-button-disabled" : "create-group-form-button"}
           disabled={disabled}
         >
-          Create group
+          {formType === 'Create Group' ? 'Create group' : 'Update group'}
         </button>
+
+        {/* <button
+          className={disabled ? "create-group-form-button-disabled" : "create-group-form-button"}
+          disabled={disabled}
+        >
+          Create group
+        </button> */}
 
       </form>
     </>

@@ -81,16 +81,19 @@ export default function GroupDetails() {
   const groupImages = useSelector(state => state.groups.singleGroup.GroupImages ? state.groups.singleGroup.GroupImages : []); // {}
 
   let previewImageURL;
+  let previewImages;
   if (groupImages.length) {
-    const previewImages = groupImages.filter(image => {
+    previewImages = groupImages.filter(image => {
       return image.preview === true;
     })
-    previewImageURL = previewImages[0].url;
+    // previewImageURL = previewImages[0].url; // orig
+    previewImageURL = previewImages[previewImages.length - 1].url;
   }
 
   // console.log(`*** group is: ***`, group)
   // console.log(`*** groupImages is: ***`, groupImages)
-  // console.log(`*** previewImageURL is: ***`, previewImageURL)
+  // console.log(`*** previewImages is: ***`, previewImages)
+  console.log(`*** previewImageURL is: ***`, previewImageURL)
 
 
 
@@ -323,9 +326,17 @@ export default function GroupDetails() {
 
           {hideAdminButtons ? null :
             <div id="admin-buttons-div">
-              <button className='admin-button'>Create event</button>
-              <button className='admin-button'>Update</button>
-              <button className='admin-button'>Delete</button>
+              <button className='admin-button'>
+                Create event
+              </button>
+              <Link to={`/groups/${groupId}/update`}>
+                <button className='admin-button'>
+                  Update
+                </button>
+              </Link>
+              <button className='admin-button'>
+                Delete
+              </button>
             </div>
           }
 
