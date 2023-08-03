@@ -6,9 +6,9 @@ import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import HomePage from "./components/HomePage";
 
-// import ShowAll from "./components/ShowAll";
-import ShowAllGroups from "./components/ShowAllGroups";
-import ShowAllEvents from "./components/ShowAllEvents";
+// import DisplayAll from "./components/DisplayAll";
+import DisplayAllGroups from "./components/DisplayAllGroups";
+import DisplayAllEvents from "./components/DisplayAllEvents";
 
 // import GroupForm from "./components/GroupForm";
 import GroupFormCreate from "./components/GroupFormCreate";
@@ -37,11 +37,11 @@ function App() {
         </Route>
 
         <Route exact path='/groups'>
-          <ShowAllGroups />
+          <DisplayAllGroups />
         </Route>
 
         <Route exact path='/events'>
-          <ShowAllEvents />
+          <DisplayAllEvents />
         </Route>
 
         <Route exact path='/groups/new'>

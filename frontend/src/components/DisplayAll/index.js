@@ -6,9 +6,9 @@ import { getAllGroupsThunk } from '../../store/groups';
 
 import DisplayCard from '../DisplayCard';
 
-import './ShowAll.css';
+import './DisplayAll.css';
 
-export default function ShowAll({ displayType }) {
+export default function DisplayAll({ displayType }) {
 
   const groupsStateArr = Object.values(
     useSelector((state) => (state.groups ? state.groups : {}))
