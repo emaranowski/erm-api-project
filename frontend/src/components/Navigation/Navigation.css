@@ -33,6 +33,23 @@
 }
 
 #dropdown-button {
+    color: #FFFFFF;
+    background-color: #087c8c;
+    border: none;
+    border-radius: 5px;
+    margin-top: 5px;
+    padding: 6px 9px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+#dropdown-button:hover {
+    color: #FFFFFF;
+    background-color: #098b9d;
+    cursor: pointer;
+}
+
+#zdropdown-button {
     color: rgb(63, 63, 63);
     font-size: 17px;
     background-color: #FFFFFF;
@@ -46,7 +63,7 @@
     font-weight: 400;
 }
 
-#dropdown-button:hover {
+#zdropdown-button:hover {
     color: #087c8c;
     cursor: pointer;
 }

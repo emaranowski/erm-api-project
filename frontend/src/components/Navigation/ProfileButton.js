@@ -42,10 +42,17 @@ function ProfileButton({ user }) {
     history.push(`/groups`);
   };
 
+  const viewEvents = (e) => {
+    e.preventDefault();
+    closeMenu();
+    history.push(`/events`);
+  };
+
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
     closeMenu();
+    history.push(`/`);
   };
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
@@ -69,6 +76,11 @@ function ProfileButton({ user }) {
             <li>
               <button onClick={viewGroups} id="dropdown-button">
                 View groups
+              </button>
+            </li>
+            <li>
+              <button onClick={viewEvents} id="dropdown-button">
+                View events
               </button>
             </li>
             <li>
