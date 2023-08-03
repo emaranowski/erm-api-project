@@ -3,12 +3,17 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getAllGroupsThunk } from '../../store/groups';
+import { getAllEventsThunk } from '../../store/events';
 
-import DisplayCard from '../DisplayCard';
+// import DisplayCard from '../DisplayCard';
+import DisplayCardGroup from '../DisplayCardGroup';
+import DisplayCardEvent from '../DisplayCardEvent';
 
 import './DisplayAll.css';
 
+
 export default function DisplayAll({ displayType }) {
+  const dispatch = useDispatch();
 
   const groupsStateArr = Object.values(
     useSelector((state) => (state.groups ? state.groups : {}))
@@ -31,16 +36,28 @@ export default function DisplayAll({ displayType }) {
   // console.log(`*** allGroupsHere is: ***`, allGroupsHere)
 
 
-  const dispatch = useDispatch();
+  const state = useSelector(state => state)
+  // console.log(`*** state is: ***`, state) // {session: {…}, groups: {…}, events: {…}}
+
+  const stateEventsSlice = useSelector(state => state.events)
+  // console.log(`*** stateEventsSlice is: ***`, stateEventsSlice) // {allEvents: {…}, singleEvent: {…}}
+
+  const allEvents = useSelector(state => state.events.allEvents)
+  // console.log(`*** allEvents is: ***`, allEvents) // { 1: {id: 1, ...}, 2: {id: 2, ...}, 3: {id: 3, ...} }
+
+  const allEventsArr = Object.values(allEvents)
+  // console.log(`*** allEventsArr is: ***`, allEventsArr) // [ 0: {id: 1, ...}, 1: {id: 2, ...}, 2: {id: 3, ...} ]
+
   useEffect(() => {
     dispatch(getAllGroupsThunk());
+    dispatch(getAllEventsThunk());
   }, [dispatch]);
 
   return (
     <>
       <div className='all-groups-events-box'>
-
         <div className='centering-box'>
+
 
           {displayType === 'Groups' ?
             <div className="events-groups-header-box">
@@ -61,6 +78,16 @@ export default function DisplayAll({ displayType }) {
             : null
           }
 
+          {displayType === 'Groups' ?
+            allGroupsArr.map((group) => (
+              <div key={group.id}>
+                <DisplayCardGroup group={group} />
+              </div>
+            ))
+            : null
+          }
+
+
           {displayType === 'Events' ?
             <div className="events-groups-header-box">
               <div className="events-groups-header">
@@ -80,16 +107,19 @@ export default function DisplayAll({ displayType }) {
             : null
           }
 
-          {allGroupsArr.map((group) => (
-            <div key={group.id}>
-              <DisplayCard group={group} />
-            </div>
-          ))}
+          {displayType === 'Events' ?
+            allEventsArr.map((event) => (
+              <div key={event.id}>
+                {/* {console.log(`*** event is: ***`, event)} */}
+                <DisplayCardEvent event={event} />
+              </div>
+            ))
+            : null
+          }
+
 
         </div>
-
       </div>
-
     </>
   )
 }

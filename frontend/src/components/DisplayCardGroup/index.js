@@ -4,14 +4,12 @@ import { useSelector } from 'react-redux';
 
 // import { getAllGroupsThunk } from '../../store/groups';
 
-import './DisplayCard.css';
+import './DisplayCardGroup.css';
 
-export default function DisplayCard({ group }) {
+export default function DisplayCardGroup({ group }) {
 
-  console.log(`*** in DisplayCard -- group is: ***`, group);
-
-
-
+  // console.log(`*** IN DISPLAY CARD displayType is: ***`, displayType)
+  // console.log(`*** IN DISPLAY CARD group is: ***`, group)
 
 
   // // console.log(`*** group.previewImage is: ***`, group.previewImage);
@@ -31,11 +29,6 @@ export default function DisplayCard({ group }) {
   //   })
   //   // previewImageURL = previewImages[0].url; // orig
   //   previewImageURL = previewImages[previewImages.length - 1].url;
-
-
-
-
-
 
 
   // WORKING -- V2
@@ -59,28 +52,34 @@ export default function DisplayCard({ group }) {
   // }
 
   return (
-    <Link to={`/groups/${group.id}`}>
-      <div className='group-card'>
-        {group.previewImage ? <div><img className='group-card-img' src={group.previewImage}></img></div> : ''}
-        {/* <div className='group-img'> [ image ] </div> */}
-        <div className='group-info'>
-          <div className='group-name'>
-            {group.name}
+    <>
+
+      <Link to={`/groups/${group.id}`}>
+        <div className='group-card'>
+
+          {group.previewImage ? <div><img className='group-card-img' src={group.previewImage}></img></div> : ''}
+
+          <div className='group-info'>
+            <div className='group-name'>
+              {group.name}
+            </div>
+
+            <div className='group-location'>
+              {group.city}, {group.state}
+            </div>
+
+            <div className='group-text'>
+              {group.about}
+            </div>
+
+            <div className='group-num-of-events'>
+              # events · {group.privacy ? <span>Private</span> : <span>Public</span>}
+            </div>
           </div>
-          <div className='group-location'>
-            {group.city}, {group.state}
-          </div>
-          <div className='group-text'>
-            {group.about}
-          </div>
-          <div className='group-num-of-events'>
-            # events · {group.privacy ? <span>Private</span> : <span>Public</span>}
-          </div>
-          {/* <div className='group-privacy'>
-            {group.privacy ? <span>Private</span> : <span>Public</span>}
-          </div> */}
+
         </div>
-      </div>
-    </Link>
+      </Link>
+
+    </>
   )
-}
+};

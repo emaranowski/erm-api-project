@@ -15,17 +15,17 @@ module.exports = {
     await EventImage.bulkCreate([
       {
         eventId: 1,
-        url: 'https://event1.com/event-image-1.png',
+        url: 'https://res.cloudinary.com/dragonspell/images/w_800,h_480,dpr_auto,fl_progressive:steep,f_auto/w_800,h_480/v1623257541/www.travelportland.com/cropped-mktg-20192106-Forest-Park-0004-scaled-1/cropped-mktg-20192106-Forest-Park-0004-scaled-1.jpg',
         preview: true
       },
       {
         eventId: 2,
-        url: 'https://event2.com/event-image-2.png',
+        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Eat_Alberta_Potluck_%287072671637%29.jpg/640px-Eat_Alberta_Potluck_%287072671637%29.jpg',
         preview: true
       },
       {
         eventId: 3,
-        url: 'https://event3.com/event-image-3.png',
+        url: 'https://cdn11.bigcommerce.com/s-7eepw5u9z2/product_images/uploaded_images/pdxdining1.jpg',
         preview: true
       }
     ], { validate: true });

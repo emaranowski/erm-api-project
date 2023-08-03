@@ -78,7 +78,11 @@ export const getAllGroupsThunk = () => async (dispatch) => {
     // console.log(`*** dispatch is: ***`, dispatch(getAllGroups(groups.Groups)))
     // ^ returns obj w/ keys: type, groups: []
 
-    return dispatch(getAllGroups(groups.Groups));
+    // console.log(`*** in GET ALL groups RES.OK, groups is: ***`, groups) // obj -- { Groups: [ 0: { id: 1, ... }, 1: { id: 2, ... } ] }
+    // console.log(`*** in GET ALL groups RES.OK, groups.Groups is: ***`, groups.Groups) // arr -- [ 0: { id: 1, ... }, 1: { id: 2, ... } ]
+
+
+    return dispatch(getAllGroups(groups.Groups)); // groups.Groups is arr
   } else {
     const errors = await res.json();
     return errors;
