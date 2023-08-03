@@ -59,58 +59,58 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <div className="dropdown-box">
-        <button
-          id="dropdown-user-button"
-          onClick={openMenu}
-        >
-          <i className="fas fa-user-circle" />
-        </button>
+      {/* <div className="dropdown-box"> */}
+      <button
+        id="dropdown-user-button"
+        onClick={openMenu}
+      >
+        <i className="fas fa-user-circle" />
+      </button>
 
-        <ul className={ulClassName} ref={ulRef}>
-          {user ? (
-            <>
-              <li id="dropdown-user-hello">Hello, {user.firstName}</li>
-              <li className="dropdown-user-info">{user.username}</li>
-              <li className="dropdown-user-info">{user.firstName} {user.lastName}</li>
-              <li className="dropdown-user-info">{user.email}</li>
-              <li>
-                <button onClick={viewGroups} id="dropdown-button">
-                  View groups
-                </button>
-              </li>
-              <li>
-                <button onClick={viewEvents} id="dropdown-button">
-                  View events
-                </button>
-              </li>
-              <li>
-                <button onClick={logout} id="dropdown-button">
-                  Log out
-                </button>
-              </li>
-            </>
-          ) : (
-            <>
-              <li>
-                <OpenModalButton
-                  buttonText="Log In"
-                  onButtonClick={closeMenu}
-                  modalComponent={<LoginFormModal />}
-                />
-              </li>
-              <li>
-                <OpenModalButton
-                  buttonText="Sign Up"
-                  onButtonClick={closeMenu}
-                  modalComponent={<SignupFormModal />}
-                />
-              </li>
-            </>
-          )}
-        </ul>
-
+      <div className={ulClassName} ref={ulRef}>
+        {user ? (
+          <>
+            <div id="dropdown-user-hello">Hello, {user.firstName}</div>
+            <div className="dropdown-user-info">• {user.username}</div>
+            <div className="dropdown-user-info">• {user.firstName} {user.lastName}</div>
+            <div className="dropdown-user-info">• {user.email}</div>
+            <div>
+              <button onClick={viewGroups} className="dropdown-button">
+                View groups
+              </button>
+            </div>
+            <div>
+              <button onClick={viewEvents} className="dropdown-button">
+                View events
+              </button>
+            </div>
+            <div>
+              <button onClick={logout} className="dropdown-button">
+                Log out
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <li>
+              <OpenModalButton
+                buttonText="Log In"
+                onButtonClick={closeMenu}
+                modalComponent={<LoginFormModal />}
+              />
+            </li>
+            <li>
+              <OpenModalButton
+                buttonText="Sign Up"
+                onButtonClick={closeMenu}
+                modalComponent={<SignupFormModal />}
+              />
+            </li>
+          </>
+        )}
       </div>
+
+      {/* </div> */}
 
 
     </>

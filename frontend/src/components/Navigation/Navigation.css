@@ -21,23 +21,27 @@
     cursor: pointer;
 }
 
+/* was e8245c */
 #dropdown-user-hello {
-    color: #e8245c;
+    color: rgb(63, 63, 63);
     font-size: 14px;
     font-weight: 500;
+    margin-bottom: 5px;
 }
 
 .dropdown-user-info {
+    color: rgb(63, 63, 63);
+    padding-left: 6px;
     font-size: 14px;
     font-weight: 200;
 }
 
-#dropdown-button {
+.dropdown-button {
     color: #FFFFFF;
     background-color: #087c8c;
     border: none;
     border-radius: 5px;
-    margin-top: 5px;
+    margin-top: 10px;
     padding: 6px 9px;
     font-size: 12px;
     font-weight: 600;
@@ -192,7 +196,27 @@ nav {
 
 .profile-dropdown {
     position: absolute;
+    /* top: 67px; */
+    top: 56px;
+    right: 18px;
+    height: 170px;
+    width: 220px;
+    padding: 20px 20px 35px 20px;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    border: 1px solid #707070;
+}
+
+.zprofile-dropdown {
+    position: absolute;
+    color: white;
+    /* top: 67px; */
+    top: 39px;
+    right: 18px;
     height: 200px;
-    width: 500px;
-    background-color: white;
+    width: 250px;
+    background-color: #087c8c;
+    padding-top: 30px;
+    border-radius: 10px;
+    border: 1px solid #087c8c;
 }
