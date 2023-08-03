@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux';
 
 // import { getAllGroupsThunk } from '../../store/groups';
 
-import './GroupCard.css';
+import './DisplayCard.css';
 
-export default function GroupCard({ group }) {
+export default function DisplayCard({ group }) {
 
-  console.log(`*** in GroupCard -- group is: ***`, group);
+  console.log(`*** in DisplayCard -- group is: ***`, group);
 
 
 

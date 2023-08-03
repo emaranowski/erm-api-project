@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { getAllGroupsThunk } from '../../store/groups';
 
-import GroupCard from '../GroupCard';
+import DisplayCard from '../DisplayCard';
 
 import './ShowAll.css';
 
@@ -82,7 +82,7 @@ export default function ShowAll({ displayType }) {
 
           {allGroupsArr.map((group) => (
             <div key={group.id}>
-              <GroupCard group={group} />
+              <DisplayCard group={group} />
             </div>
           ))}
 
