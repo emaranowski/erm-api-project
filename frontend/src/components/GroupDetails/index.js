@@ -11,6 +11,7 @@ import JoinGroupModal from '../../components/JoinGroupModal';
 import './GroupDetails.css';
 
 export default function GroupDetails() {
+  const sessionUser = useSelector(state => state.session.user);
   const { groupId } = useParams();
 
   const groupsStateArr = Object.values(
@@ -169,11 +170,8 @@ export default function GroupDetails() {
   const organizer = singleGroup.Organizer;
   // const organizerFirstName = singleGroup.Organizer.firstName;
   // const organizerLastName = singleGroup.Organizer.lastName;
-
-
   // console.log(`*** singleGroup is: ***`, singleGroup)
   // console.log(`*** organizer is: ***`, organizer)
-
   // if (Object.values(organizer).length) {
   //   const organizerFirstName = singleGroup.Organizer.firstName;
   //   const organizerLastName = singleGroup.Organizer.lastName;
@@ -188,28 +186,82 @@ export default function GroupDetails() {
 
   // console.log(`*** organizerFirstName is: ***`, organizerFirstName)
   // console.log(`*** organizerLastName is: ***`, organizerLastName)
-
   // const allGroups = useSelector(state => state.groups.allGroups ? state.groups.allGroups : {}); // {}
   // console.log(`*** allGroups is: ***`, allGroups)
-
   // useEffect(() => {
   //   dispatch(getAllUsersThunk());
   // }, [dispatch]);
 
 
-  ////////////// 'JOIN' BUTTON LOGIC //////////////
-  // if user is logged in and created group, 'JOIN' BUTTON should hide
-  const currUser = useSelector(state => state.session ? state.session : {}); // {}
-  const currUserId = useSelector(state => state.session.user.id ? state.session.user.id : {}); // {}
-  console.log(`*** currUser is: ***`, currUser)
-  console.log(`*** currUserId is: ***`, currUserId)
+
+
+
+  // const sessionUser = useSelector(state => state.session.user);
+  // console.log(`*** sessionUser is: ***`, sessionUser)
+  // logged out: sessionUser === null
+  // logged in: sessionUser === {id: 1, firstName: 'FirstNameOne', lastName: 'LastNameOne', email: 'demo1@demo.com', username: 'DemoUser1'}
 
   let hideJoinButton = true;
-  if (currUserId !== organizerId) hideJoinButton = false;
+  if (sessionUser === null) {
+    hideJoinButton = true;
+  } else if (sessionUser !== null && sessionUser !== undefined) {
+    const sessionUserId = sessionUser.id;
+    if (sessionUserId !== organizerId) hideJoinButton = false;
+  }
 
-  // // if not logged in, 'JOIN' BUTTON should hide
-  // const sessionUser = useSelector(state => state.session.user);
-  // if (!sessionUser) hideJoinButton = true;
+
+
+
+
+
+
+
+
+
+
+
+  // works when logged in -- do not edit
+  // // ////////////// 'JOIN' BUTTON LOGIC //////////////
+  // // if user is logged in and created group, 'JOIN' BUTTON should hide
+  // const currUser = useSelector(state => state.session ? state.session : {}); // {}
+  // const currUserId = useSelector(state => state.session.user.id ? state.session.user.id : {}); // {}
+  // console.log(`*** currUser is: ***`, currUser)
+  // console.log(`*** currUserId is: ***`, currUserId)
+
+  // let hideJoinButton = true;
+  // if (currUserId !== organizerId) hideJoinButton = false;
+
+  // // // if not logged in, 'JOIN' BUTTON should hide
+  // // if (!sessionUser) hideJoinButton = true;
+
+
+
+
+
+
+
+  ////////////// 'JOIN' BUTTON LOGIC //////////////
+  // if user is logged in and created group, 'JOIN' BUTTON should hide
+  // const currUser = useSelector(state => state.session ? state.session : {}); // {}
+  // const currUserIdOrig = useSelector(state => state.session.user.id ? state.session.user.id : {}); // {}
+
+  // console.log(`*** currUser is: ***`, currUser)
+  // console.log(`*** currUserId is: ***`, currUserId)
+
+  // let currUserId;
+  // if (typeof currUserIdOrig === 'number') {
+  //   currUserId = currUserIdOrig;
+  // }
+
+  // let hideJoinButton = true;
+
+  // if (!sessionUser) {
+  //   hideJoinButton = true;
+  // }
+
+  // if (sessionUser && (currUserId !== organizerId)) {
+  //   hideJoinButton = false;
+  // }
 
   return (
     <>
@@ -250,8 +302,60 @@ export default function GroupDetails() {
             </div>
           }
 
-        </div>
-      </div>
+
+
+          {/* {sessionUser ? (
+            <>
+              <div id="join-group-button-div">
+                <OpenModalButtonJoinGroup
+                  buttonText="Join this group"
+                  modalComponent={<JoinGroupModal />} />
+              </div>
+            </>
+          ) : (
+            <>
+              <div>test</div>
+            </>
+          )} */}
+
+
+          {/* {!sessionUser ? (
+            <>
+              <div className='how-it-works-header-link-inactive small-link-bold-inactive'>
+                Start a new group
+              </div>
+            </>
+          ) : (
+            <>
+              <Link to="/groups/new">
+                <div className='how-it-works-header-link small-link-bold'>
+                  Start a new group
+                </div>
+              </Link>
+            </>
+          )} */}
+
+          {/*
+          {!sessionUser ? (
+            <>
+              <Link to="/groups/new">
+                <div className='how-it-works-header-link small-link-bold'>
+                  Start a new group
+                </div>
+              </Link>
+            </>
+          ) : (
+            <>
+              <div className='how-it-works-header-link-inactive small-link-bold-inactive'>
+                Start a new group
+              </div>
+            </>
+          )} */}
+
+
+
+        </div >
+      </div >
 
       <div className='group-info-box'>
 
