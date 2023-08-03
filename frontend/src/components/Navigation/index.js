@@ -52,7 +52,7 @@ function Navigation({ isLoaded }) {
 
           {sessionUser ? (
             <>
-              <NavLink exact to="/groups/new">
+              <NavLink exact to="/groups/new" style={{ textDecoration: 'none' }}>
                 <span className='nav-grey-link'>
                   Start a new group
                 </span>

@@ -183,3 +183,16 @@ nav {
 #nav-logo:active {
     text-decoration: none;
 }
+
+
+
+.dropdown-box {
+    position: relative;
+}
+
+.profile-dropdown {
+    position: absolute;
+    height: 200px;
+    width: 500px;
+    background-color: white;
+}

@@ -5,7 +5,7 @@ import * as sessionActions from "./store/session";
 
 import Navigation from "./components/Navigation";
 import HomePage from "./components/HomePage";
-import GroupsAll from "./components/GroupsAll";
+import ShowAll from "./components/ShowAll";
 // import GroupForm from "./components/GroupForm";
 import GroupFormCreate from "./components/GroupFormCreate";
 import GroupFormUpdate from "./components/GroupFormUpdate";
@@ -32,7 +32,7 @@ function App() {
         </Route>
 
         <Route exact path='/groups'>
-          <GroupsAll />
+          <ShowAll />
         </Route>
 
         <Route exact path='/groups/new'>
