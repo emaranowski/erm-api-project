@@ -8,7 +8,7 @@ import GroupCard from '../GroupCard';
 
 import './ShowAll.css';
 
-export default function ShowAll() {
+export default function ShowAll({ displayType }) {
 
   const groupsStateArr = Object.values(
     useSelector((state) => (state.groups ? state.groups : {}))
@@ -42,21 +42,45 @@ export default function ShowAll() {
 
         <div className='centering-box'>
 
-          <div className="events-groups-header-box">
-            <div className="events-groups-header">
-              <Link to='/events'>
-                <span className='non-active-event-group-header event-group-header-events'>
+          {displayType === 'Groups' ?
+            <div className="events-groups-header-box">
+              <div className="events-groups-header">
+                <Link to='/events'>
+                  <span className='non-active-event-group-header event-group-header-events'>
+                    Events
+                  </span>
+                </Link>
+                <span className='active-event-group-header'>
+                  Groups
+                </span>
+              </div>
+              <div className='events-groups-subhead'>
+                Groups on MeetBuds
+              </div>
+            </div>
+            :
+            null
+          }
+
+          {displayType === 'Events' ?
+            <div className="events-groups-header-box">
+              <div className="events-groups-header">
+                <Link to='/groups'>
+                  <span className='non-active-event-group-header event-group-header-events'>
+                    Groups
+                  </span>
+                </Link>
+                <span className='active-event-group-header'>
                   Events
                 </span>
-              </Link>
-              <span className='active-event-group-header'>
-                Groups
-              </span>
+              </div>
+              <div className='events-groups-subhead'>
+                Events on MeetBuds
+              </div>
             </div>
-            <div className='events-groups-subhead'>
-              Groups on MeetBuds
-            </div>
-          </div>
+            :
+            null
+          }
 
           {allGroupsArr.map((group) => (
             <div key={group.id}>

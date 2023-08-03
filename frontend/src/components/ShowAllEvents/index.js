@@ -3,6 +3,6 @@ import ShowAll from '../ShowAll';
 export default function ShowAllEvents() {
 
     return (
-        <ShowAll />
+        <ShowAll displayType='Events' />
     );
 };

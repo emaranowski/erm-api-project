@@ -3,6 +3,6 @@ import ShowAll from '../ShowAll';
 export default function ShowAllGroups() {
 
     return (
-        <ShowAll />
+        <ShowAll displayType='Groups' />
     );
 };
