@@ -2,11 +2,13 @@ import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getSingleGroupThunk } from '../../store/groups';
+import { getAllGroupsThunk, getSingleGroupThunk } from '../../store/groups';
 // import { getAllUsersThunk } from '../../store/session';
 
 import OpenModalButtonJoinGroup from '../../components/OpenModalButtonJoinGroup';
 import JoinGroupModal from '../../components/JoinGroupModal';
+import GroupDeleteModalButton from '../GroupDeleteModalButton';
+import GroupDeleteModal from '../GroupDeleteModal';
 
 import './GroupDetails.css';
 
@@ -76,7 +78,17 @@ export default function GroupDetails() {
   // console.log(`*** previewImageURL is: ***`, previewImageURL)
 
 
-  // WORKING -- V2
+
+
+
+
+
+
+
+
+
+
+  // WORKING -- V2 -- used until 2023-08-02
   const group = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
   const groupImages = useSelector(state => state.groups.singleGroup.GroupImages ? state.groups.singleGroup.GroupImages : []); // {}
 
@@ -93,10 +105,15 @@ export default function GroupDetails() {
   // console.log(`*** group is: ***`, group)
   // console.log(`*** groupImages is: ***`, groupImages)
   // console.log(`*** previewImages is: ***`, previewImages)
-  console.log(`*** previewImageURL is: ***`, previewImageURL)
+  // console.log(`*** previewImageURL is: ***`, previewImageURL)
 
 
 
+  // // new on 2023-08-02
+  // const group = useSelector(state => state.groups.allGroups[groupId]);
+  // const previewImageURL = useSelector(state => state.groups.allGroups[groupId].previewImage);
+
+  // // console.log(`*** thisGroup is: ***`, thisGroup)
 
 
 
@@ -163,7 +180,9 @@ export default function GroupDetails() {
     dispatch(getSingleGroupThunk(groupId));
   }, [dispatch, groupId]);
 
-
+  useEffect(() => {
+    dispatch(getAllGroupsThunk());
+  }, [dispatch]);
 
 
 
@@ -334,9 +353,13 @@ export default function GroupDetails() {
                   Update
                 </button>
               </Link>
-              <button className='admin-button'>
+              {/* <button className='admin-button'>
                 Delete
-              </button>
+              </button> */}
+              <GroupDeleteModalButton
+                buttonText="Delete"
+                modalComponent={<GroupDeleteModal groupId={groupId} />}
+              />
             </div>
           }
 

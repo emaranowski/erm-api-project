@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 // import { useEffect } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // import { getAllGroupsThunk } from '../../store/groups';
 
@@ -8,8 +8,55 @@ import './GroupCard.css';
 
 export default function GroupCard({ group }) {
 
-  // console.log(`*** group is: ***`, group);
-  // console.log(`*** group.previewImage is: ***`, group.previewImage);
+  console.log(`*** in GroupCard -- group is: ***`, group);
+
+
+
+
+
+  // // console.log(`*** group.previewImage is: ***`, group.previewImage);
+
+  // const groupPulled = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
+  // const groupPulledImages = group.GroupImages;
+
+  // console.log(`*** groupPulled is: ***`, groupPulled);
+  // console.log(`*** groupPulledImages is: ***`, groupPulledImages);
+
+
+  // let previewImageURL;
+  // let previewImages;
+  // if (groupPulledImages.length !== undefined) {
+  //   previewImages = groupPulledImages.filter(image => {
+  //     return image.preview === true;
+  //   })
+  //   // previewImageURL = previewImages[0].url; // orig
+  //   previewImageURL = previewImages[previewImages.length - 1].url;
+
+
+
+
+
+
+
+  // WORKING -- V2
+  // const group2 = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
+  //   const group2Images = useSelector(state => state.groups.singleGroup.GroupImages ? state.groups.singleGroup.GroupImages : []); // {}
+
+  //   let previewImageURL;
+  //   let previewImages;
+  //   if (group2Images.length) {
+  //     previewImages = group2Images.filter(image => {
+  //       return image.preview === true;
+  //     })
+  //     // previewImageURL = previewImages[0].url; // orig
+  //     previewImageURL = previewImages[previewImages.length - 1].url;
+  //   }
+
+  //   // console.log(`*** group is: ***`, group)
+  //   // console.log(`*** groupImages is: ***`, groupImages)
+  //   // console.log(`*** previewImages is: ***`, previewImages)
+  //   console.log(`*** previewImageURL is: ***`, previewImageURL)
+  // }
 
   return (
     <Link to={`/groups/${group.id}`}>

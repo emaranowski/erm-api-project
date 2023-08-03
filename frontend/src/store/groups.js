@@ -8,6 +8,7 @@ const CREATE_GROUP = "groups/CREATE_GROUP";
 const CREATE_GROUP_IMAGE = "groups/CREATE_GROUP_IMAGE";
 const UPDATE_GROUP = "groups/UPDATE_GROUP";
 const UPDATE_GROUP_IMAGE = "groups/UPDATE_GROUP_IMAGE";
+const DELETE_GROUP = "groups/DELETE_GROUP";
 
 ////////////// Action Creators: //////////////
 
@@ -50,6 +51,13 @@ const updateGroupImage = (image) => {
   return {
     type: UPDATE_GROUP_IMAGE,
     image
+  };
+};
+
+const deleteGroup = (groupId) => {
+  return {
+    type: DELETE_GROUP,
+    groupId
   };
 };
 
@@ -223,6 +231,25 @@ export const updateGroupThunk = (group) => async (dispatch) => {
   };
 };
 
+// (DELETE /api/groups/:groupId)
+export const deleteGroupThunk = (groupId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/groups/${groupId}`, {
+    method: "DELETE",
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    dispatch(deleteGroup(groupId));
+    console.log(`*** in delete thunk, data is: ***`, data) // {message: 'Successfully deleted'}
+    return data;
+  } else {
+    const errors = await res.json();
+    console.log(`*** in delete thunk, errors is: ***`, errors) //
+    return errors;
+  }
+};
+
 
 // ORIG WORKING COPY -- DO NOT EDIT
 // export const createGroupThunk = (group) => async (dispatch) => {
@@ -333,6 +360,16 @@ export default function groupsReducer(state = initialState, action) { // groupRe
     case UPDATE_GROUP_IMAGE:
       newState.singleGroup.GroupImages = [];
       newState.singleGroup.GroupImages.push(action.image);
+      return newState;
+
+    // case UPDATE_GROUP_IMAGE:
+    //   newState.singleGroup.GroupImages = [];
+    //   newState.singleGroup.GroupImages[0] = action.image;
+    //   return newState;
+
+    case DELETE_GROUP:
+      delete newState.allGroups[action.groupId];
+      // delete newState.singleGroup...CREATE_GROUP.at. // need JS to check if singleGroup.id === action.groupId?
       return newState;
 
     default:

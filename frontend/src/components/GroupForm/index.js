@@ -76,6 +76,8 @@ export default function GroupForm({ group, formType }) {
   const { groupId } = useParams();
 
   // console.log(`*** in form, groupId is: ***`, groupId)
+  // console.log(`*** in form, group is: ***`, group)
+
 
   // controlled inputs
   const [city, setCity] = useState(group?.city);
@@ -84,7 +86,7 @@ export default function GroupForm({ group, formType }) {
   const [about, setAbout] = useState(group?.about);
   const [type, setType] = useState(group?.type);
   const [privacy, setPrivacy] = useState(group?.privacy);
-  const [url, setURL] = useState(group?.url);
+  const [url, setURL] = useState(group?.previewImage); // changed from url to previewImage
 
   const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState({});
@@ -207,7 +209,9 @@ export default function GroupForm({ group, formType }) {
                 name="city"
                 onChange={(e) => setCity(e.target.value)}
                 value={city}
-                placeholder='City'
+                // placeholder={group?.city ? group.city : 'City'}
+                // autoComplete="city"
+                placeholder="City"
               />
             </span>
             <span>
