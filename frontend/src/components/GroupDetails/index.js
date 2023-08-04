@@ -11,6 +11,8 @@ import JoinGroupModal from '../../components/JoinGroupModal';
 import GroupDeleteModalButton from '../GroupDeleteModalButton';
 import GroupDeleteModal from '../GroupDeleteModal';
 
+import DisplayCardEventMini from '../DisplayCardEventMini';
+
 import './GroupDetails.css';
 
 export default function GroupDetails() {
@@ -284,7 +286,7 @@ export default function GroupDetails() {
 
 
 
-  /////////////////////////// NUM EVENTS
+  ///////////////// UPCOMING EVENTS, PAST EVENTS, EVENT COUNTS /////////////////
   const allEvents = useSelector(state => state.events.allEvents);
 
   // let allEventsByGroup;
@@ -335,16 +337,7 @@ export default function GroupDetails() {
       const currEvent = allEventsByGroupDESC[i]; // obj {}
 
       const currTimestampNum = Date.now();
-      // const currTimestampStr = currTimestamp.toISOString();
-
-      // const eventStartDate = allEventsByGroupDESC[i].startDate;
       const eventStartDateNum = Date.parse(allEventsByGroupDESC[i].startDate);
-
-      // console.log(`**** currTimestampNum ****`, currTimestampNum) // type: num
-      // console.log(`**********`)
-      // console.log(`**** eventStartDate ****`, eventStartDate)
-      // console.log(`**** eventStartDateNum ****`, eventStartDateNum) // type: num
-      // console.log(`**********`)
 
       if (eventStartDateNum > currTimestampNum) {
         eventsByGroupUpcoming.push(currEvent);
@@ -357,16 +350,7 @@ export default function GroupDetails() {
       const currEvent = allEventsByGroupDESC[i]; // obj {}
 
       const currTimestampNum = Date.now();
-      // const currTimestampStr = currTimestamp.toISOString();
-
-      // const eventStartDate = allEventsByGroupDESC[i].startDate;
       const eventStartDateNum = Date.parse(allEventsByGroupDESC[i].startDate);
-
-      // console.log(`**** currTimestampNum ****`, currTimestampNum) // type: num
-      // console.log(`**********`)
-      // console.log(`**** eventStartDate ****`, eventStartDate)
-      // console.log(`**** eventStartDateNum ****`, eventStartDateNum) // type: num
-      // console.log(`**********`)
 
       if (eventStartDateNum < currTimestampNum) {
         eventsByGroupPast.push(currEvent);
@@ -374,33 +358,11 @@ export default function GroupDetails() {
       eventsByGroupPastNum = eventsByGroupPast.length;
     };
 
-
-
-    // past events
-    // for (let i = 0; i < allEventsByGroupDESC.length; i++) {
-    //   const currTimestamp = Date.now();
-    //   const eventStartDate = allEventsByGroupDESC[i].startDate;
-
-    //   if (eventStartDate < currTimestamp) {
-    //     eventsByGroupUpcoming.push(allEventsByGroupDESC[i]);
-    //   }
-    //   eventsByGroupUpcomingNum = eventsByGroupUpcoming.length;
-    // }
-
-
-    // for (let j = 0; j < allEventsByGroup.length; j++) {
-
-    //   const startDateNum = Date.parse(allEventsByGroup[j].startDate);
-
-    //   if (startDateNum === startDateNumDESC) {
-    //     allEventsByGroupDESC.push(allEventsByGroup[j]);
-    //   }
-    // }
   };
-  console.log(`**** eventsByGroupUpcoming ****`, eventsByGroupUpcoming)
+  // console.log(`**** eventsByGroupUpcoming ****`, eventsByGroupUpcoming)
   // console.log(`**** eventsByGroupUpcomingNum ****`, eventsByGroupUpcomingNum)
 
-  console.log(`**** eventsByGroupPast ****`, eventsByGroupPast)
+  // console.log(`**** eventsByGroupPast ****`, eventsByGroupPast)
   // console.log(`**** eventsByGroupPastNum ****`, eventsByGroupPastNum)
 
 
@@ -535,7 +497,25 @@ export default function GroupDetails() {
 
         <div className='group-info-header'>Upcoming Events ({`${eventsByGroupUpcomingNum}`})</div>
 
+        <div>
+          {eventsByGroupUpcoming.map((event) => (
+            <div key={event.id}>
+              {/* {console.log(`*** event is: ***`, event)} */}
+              <DisplayCardEventMini event={event} />
+            </div>
+          ))}
+        </div>
+
         <div className='group-info-header'>Past Events ({`${eventsByGroupPastNum}`})</div>
+
+        <div>
+          {eventsByGroupPast.map((event) => (
+            <div key={event.id}>
+              {/* {console.log(`*** event is: ***`, event)} */}
+              <DisplayCardEventMini event={event} />
+            </div>
+          ))}
+        </div>
 
         {/* <Link to={`/events/:eventId`}>
           <div className='event-card'>
