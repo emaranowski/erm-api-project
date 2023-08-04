@@ -103,9 +103,9 @@ module.exports = (sequelize, DataTypes) => {
         // Date.parse(): converts "2011-10-10T14:48:00.000+09:00" (date-time form, w/ ms & time zone)
         // into ms since 1 Jan 1970 00:00:00 UTC
         // Date.now(): rets ms since 1 Jan 1970 00:00:00 UTC
-        isAfterCurrentDateTime(value) {
+        isAfterCurrentDateTime(value) { // ORIG BEFORE 2023-08-04
           if (Date.parse(value) <= Date.now()) {
-            throw new Error('Start date must be in the future');
+            throw new Error(`Start date must be in the future`);
           }
         }
       }
@@ -119,9 +119,9 @@ module.exports = (sequelize, DataTypes) => {
         //     throw new Error('End date must be after start date');
         //   }
         // }
-        isAfterStartDateTime(value) {
+        isAfterStartDateTime(value) { // ORIG BEFORE 2023-08-04
           if (Date.parse(value) <= Date.parse(this.startDate)) {
-            throw new Error('End date must be after start date');
+            throw new Error(`End date must be after start date`);
           }
         }
       }

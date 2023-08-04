@@ -33,35 +33,49 @@ export default function EventForm({ event, formType }) {
   const [venueId, setVenueId] = useState(1); // 2023-08-03: hardcoding for now, since it's not part of MVP specs
 
   // to/from HTML form
-  const [startDateHTML, setStartDateHTML] = useState(null);
-  const [startTimeHTML, setStartTimeHTML] = useState(null);
-  const [endDateHTML, setEndDateHTML] = useState(null);
-  const [endTimeHTML, setEndTimeHTML] = useState(null);
+  const [startDateHTML, setStartDateHTML] = useState('');
+  const [startTimeHTML, setStartTimeHTML] = useState('');
+  const [endDateHTML, setEndDateHTML] = useState('');
+  const [endTimeHTML, setEndTimeHTML] = useState('');
 
   // disabling & errors
   const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState({});
 
+  useEffect(() => {
+    const startDateTimeConcat = startDateHTML.concat(' ', startTimeHTML, ':00');
+    console.log(`*** startDateTimeConcat is ***`, startDateTimeConcat)
+    setStartDate(startDateTimeConcat);
+    // console.log(`*** startDate for DB is ***`, startDate)
+
+    const endDateTimeConcat = endDateHTML.concat(' ', endTimeHTML, ':00');
+    console.log(`*** endDateTimeConcat is ***`, endDateTimeConcat)
+    setEndDate(endDateTimeConcat);
+    // console.log(`*** endDate for DB is ***`, endDate)
+  }, [startDateHTML, startTimeHTML, endDateHTML, endTimeHTML]);
+
   // submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // ORIGINALLY HAD DATE + TIME STUFF HERE IN HANDLE SUBMIT
+    // BUT ERRORS WERE NOT RENDERING FROM BACKEND
+
     // --- startDateHTML + startTimeHTML = startDate ("2024-11-19 20:00:00")
     // console.log(`*** startDateHTML is ***`, startDateHTML) // str 2023-08-09
     // console.log(`*** startTimeHTML is ***`, startTimeHTML) // str 10:36
-    const startDateTimeConcat = startDateHTML.concat(' ', startTimeHTML, ':00');
+    // const startDateTimeConcat = startDateHTML.concat(' ', startTimeHTML, ':00');
     // console.log(`*** startDateTimeConcat is ***`, startDateTimeConcat)
-    setStartDate(startDateTimeConcat);
-    // console.log(`*** startDate for DB is ***`, startDate)
-
+    // setStartDate(startDateTimeConcat);
+    console.log(`*** startDate for DB is ***`, startDate)
 
     // --- endDateHTML + endTimeHTML = endDate ("2024-11-19 20:00:00")
     // console.log(`*** endDateHTML is ***`, endDateHTML) // str 2023-08-22
     // console.log(`*** endTimeHTML is ***`, endTimeHTML) // str 22:38
-    const endDateTimeConcat = endDateHTML.concat(' ', endTimeHTML, ':00');
+    // const endDateTimeConcat = endDateHTML.concat(' ', endTimeHTML, ':00');
     // console.log(`*** endDateTimeConcat is ***`, endDateTimeConcat)
-    setEndDate(endDateTimeConcat);
-    // console.log(`*** endDate for DB is ***`, endDate)
+    // setEndDate(endDateTimeConcat);
+    console.log(`*** endDate for DB is ***`, endDate)
 
     event = {
       ...event,

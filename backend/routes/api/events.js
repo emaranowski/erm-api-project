@@ -520,11 +520,11 @@ const validateEvent = [
         .exists({ checkFalsy: true })
         .isLength({ min: 30 })
         .withMessage(`Description must be at least 30 characters`),
-    check('startDate')
+    check('startDate') // ORIG BEFORE 2023-08-04
         .exists({ checkFalsy: true })
         .isAfter(Date.parse(Date.now()))
         .withMessage(`Start date must be in the future`),
-    check('endDate')
+    check('endDate') // ORIG BEFORE 2023-08-04
         .exists({ checkFalsy: true })
         .isAfter(Date.parse(this.startDate))
         .withMessage(`End date must be after start date`),
