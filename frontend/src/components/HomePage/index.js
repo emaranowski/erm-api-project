@@ -101,7 +101,9 @@ function HomePage({ isLoaded }) {
         </div>
 
 
-        <div className="events-box">
+
+
+        {/* <div className="events-box">
 
           <div className='events-header-box'>
             <span className="homepage-header">
@@ -207,13 +209,13 @@ function HomePage({ isLoaded }) {
             </span>
           </div>
 
-        </div>
+        </div> */}
 
 
 
 
 
-        <div className="events-box">
+        {/* <div className="events-box">
 
           <div className='events-header-box'>
             <span className="homepage-header">
@@ -319,11 +321,11 @@ function HomePage({ isLoaded }) {
             </span>
           </div>
 
-        </div>
+        </div> */}
 
 
 
-        <div id="explore-categories-box">
+        {/* <div id="explore-categories-box">
 
           <div className="homepage-header">
             Explore top categories
@@ -364,10 +366,11 @@ function HomePage({ isLoaded }) {
             </span>
           </div>
 
-        </div>
+        </div> */}
 
 
-        <div id="friendships-are-made-box">
+
+        {/* <div id="friendships-are-made-box">
 
           <div className="homepage-header">
             Friendships are made on MeetBuds
@@ -423,7 +426,17 @@ function HomePage({ isLoaded }) {
               </div>
             </span>
           </div>
-        </div>
+        </div> */}
+
+
+
+
+
+
+
+
+
+
 
 
 
