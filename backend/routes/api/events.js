@@ -520,11 +520,11 @@ const validateEvent = [
         .exists({ checkFalsy: true })
         .isLength({ min: 30 })
         .withMessage(`Description must be at least 30 characters`),
-    check('startDate') // ORIG BEFORE 2023-08-04
+    check('startDate')
         .exists({ checkFalsy: true })
         .isAfter(Date.parse(Date.now()))
         .withMessage(`Start date must be in the future`),
-    check('endDate') // ORIG BEFORE 2023-08-04
+    check('endDate')
         .exists({ checkFalsy: true })
         .isAfter(Date.parse(this.startDate))
         .withMessage(`End date must be after start date`),
@@ -862,6 +862,8 @@ const validatePageAndSize = [
     handleValidationErrors
 ];
 
+// NOTE 2023-08-04: Add order clause to .findAll(), to list events by startDate DESC
+// larger/more recent --> smaller/less recent (DESC: large --> small)
 // Get all Events (GET /api/events)
 router.get('/', validatePageAndSize, async (req, res) => {
     let allEventsObj = { Events: [] };
@@ -883,7 +885,14 @@ router.get('/', validatePageAndSize, async (req, res) => {
     // should assume default vals,
     // or display all data.
 
-    const eventsOrig = await Event.findAll({
+
+
+
+
+
+    // eventsOrig is arr of Event objs
+    const eventsOrig = await Event.findAll({ // AFTER EDITS 2024-08-04
+        order: [['startDate', 'DESC']],
         include: [
             { model: Attendance },
             { model: EventImage },
@@ -894,6 +903,45 @@ router.get('/', validatePageAndSize, async (req, res) => {
         limit: size,
     });
 
+    // // console.log(`***** eventsOrig *****`, eventsOrig); // arr of Event objs
+    // // console.log(`***** eventsOrig is Array *****`, Array.isArray(eventsOrig)); // TRUE is array
+    // eventsOrig.forEach(eventObj => {
+    //     // console.log(`***** eventObj.dataValues.startDate typeof *****`, typeof eventObj.dataValues.startDate); // object form
+    //     console.log(`***** eventObj.dataValues.startDate *****`, eventObj.dataValues.startDate);
+    //     console.log(`**********`)
+    //     // console.log(`***** eventObj.dataValues.startDate typeof *****`, typeof Date.parse(eventObj.dataValues.startDate)); // number form
+    //     console.log(`***** eventObj.dataValues.startDate typeof *****`, Date.parse(eventObj.dataValues.startDate)); //
+    //     console.log(`**********`)
+    // });
+
+    // // use number form --> Date.parse(eventObj.dataValues.startDate)
+    // // created ordered array
+    // const eventsOrigDESC = [];
+    // let startDateNumToCompare = Date.parse(eventsOrig[0].dataValues.startDate);
+    // console.log(`***** date obj form *****`, eventsOrig[0].dataValues.startDate);
+    // console.log(`***** startDateNumToCompare *****`, startDateNumToCompare);
+    // // eventsOrig.forEach(eventObj => {
+    // //     const startDateNum = Date.parse(eventObj.dataValues.startDate);
+
+    // // });
+
+
+
+
+
+
+
+    // const eventsOrig = await Event.findAll({ // ORIG BEFORE 2024-08-04
+    //     include: [
+    //         { model: Attendance },
+    //         { model: EventImage },
+    //         { model: Group },
+    //         { model: Venue }
+    //     ],
+    //     offset: (page - 1) * size,
+    //     limit: size,
+    // });
+
     // convert to JSON
     let events = [];
     eventsOrig.forEach(event => {
@@ -902,12 +950,12 @@ router.get('/', validatePageAndSize, async (req, res) => {
 
     events.forEach(event => {
 
-        // 1. create + add numAttending
+        // 1. forEach: create + add numAttending
         const attendancesArr = event.Attendances;
         event.numAttending = attendancesArr.length;
         delete event.Attendances;
 
-        // 2. create + add previewImage
+        // 2. forEach: create + add previewImage
         event.EventImages.forEach(image => {
             if (image.preview === true) {
                 event.previewImage = image.url;
@@ -959,14 +1007,20 @@ router.get('/', validatePageAndSize, async (req, res) => {
 
         event.Venue = venueVal;
 
-        // 3. add event to allEventsObj
+        // 3. forEach: add event to allEventsObj
         allEventsObj.Events.push(event);
     });
 
-
-
     return res.json(allEventsObj);
 });
+
+
+
+
+
+
+
+
 
 
 module.exports = router;

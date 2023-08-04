@@ -1,16 +1,11 @@
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { getAllGroupsThunk } from '../../store/groups';
 import { getAllEventsThunk } from '../../store/events';
-
-// import DisplayCard from '../DisplayCard';
 import DisplayCardGroup from '../DisplayCardGroup';
 import DisplayCardEvent from '../DisplayCardEvent';
-
 import './DisplayAll.css';
-
 
 export default function DisplayAll({ displayType }) {
   const dispatch = useDispatch();
@@ -18,32 +13,100 @@ export default function DisplayAll({ displayType }) {
   const groupsStateArr = Object.values(
     useSelector((state) => (state.groups ? state.groups : {}))
   ); // ret arr
-
   const groupsStateKeys = Object.keys(
     useSelector((state) => (state.groups ? state.groups : {}))
   ); // ret arr // 0: allGroups, 1: singleGroup
 
-  // const groups = groupsState.allGroups;
-
   const allGroups = groupsStateArr[0];
   const allGroupsArr = Object.values(allGroups)
 
-  // console.log(`*** groupsStateArr is: ***`, groupsStateArr)
-  // console.log(`*** groupsStateKeys is: ***`, groupsStateKeys)
-  // console.log(`*** allGroups is: ***`, allGroups)
-  // console.log(`*** allGroupsArr is: ***`, allGroupsArr)
-  // const allGroupsHere = useSelector(state => state.groups.allGroups ? state.groups.allGroups : {}); // {}
-  // console.log(`*** allGroupsHere is: ***`, allGroupsHere)
-
   const state = useSelector(state => state)
-  // console.log(`*** state is: ***`, state) // {session: {…}, groups: {…}, events: {…}}
   const stateEventsSlice = useSelector(state => state.events)
-  // console.log(`*** stateEventsSlice is: ***`, stateEventsSlice) // {allEvents: {…}, singleEvent: {…}}
-  const allEvents = useSelector(state => state.events.allEvents)
-  // console.log(`*** allEvents is: ***`, allEvents) // { 1: {id: 1, ...}, 2: {id: 2, ...}, 3: {id: 3, ...} }
-  const allEventsArr = Object.values(allEvents)
 
-  // console.log(`*** allEventsArr is: ***`, allEventsArr) // [ 0: {id: 1, ...}, 1: {id: 2, ...}, 2: {id: 3, ...} ]
+  const allEvents = useSelector(state => state.events.allEvents)
+  // console.log(`*** allEvents is: ***`, allEvents) // normalized obj -- { 1: {id: 1, ...}, 2: {id: 2, ...}, 3: {id: 3, ...} }
+  // ^ each obj includes startDate
+  const allEventsArr = Object.values(allEvents)
+  // console.log(`*** allEventsArr is: ***`, allEventsArr) // arr --[ 0: {id: 1, ...}, 1: {id: 2, ...}, 2: {id: 3, ...} ]
+  // ^ each ele/obj includes startDate -- like allEventsArr[0].startDate
+
+
+
+
+  // console.log(`***** allEventsArr *****`, allEventsArr); // arr of Event objs
+  // console.log(`***** allEventsArr is Array *****`, Array.isArray(allEventsArr)); // TRUE is array
+  allEventsArr.forEach(eventObj => {
+    // console.log(`***** eventObj.startDate typeof *****`, typeof eventObj.startDate); // string form
+    // console.log(`***** eventObj.startDate *****`, eventObj.startDate);
+    // console.log(`**********`)
+    // console.log(`***** eventObj.startDate typeof *****`, typeof Date.parse(eventObj.startDate)); // number form
+    // console.log(`***** eventObj.startDate typeof *****`, Date.parse(eventObj.startDate)); //
+    // console.log(`**********`)
+  });
+
+  // // use number form --> Date.parse(eventObj.startDate)
+  // // created ordered array
+
+
+
+  // if (allEventsArr[0] !== undefined && allEventsArr[0] !== null) {
+  //   let startDateNumToCompare = Date.parse(allEventsArr[0].startDate);
+  //   // console.log(`***** date string form *****`, allEventsArr[0].startDate);
+  //   console.log(`***** startDateNumToCompare *****`, startDateNumToCompare);
+  //   allEventsArr.forEach(eventObj => {
+  //     const startDateNum = Date.parse(eventObj.startDate);
+  //     console.log(`***** startDateNum *****`, startDateNum);
+
+  //   });
+  // }
+
+  let startDateNumsUnordered = [];
+  let allEventsArrDESC = [];
+  if (allEventsArr[0] !== undefined && allEventsArr[0] !== null) {
+    allEventsArr.forEach(eventObj => {
+      const startDateNum = Date.parse(eventObj.startDate);
+      startDateNumsUnordered.push(startDateNum);
+    });
+    // console.log(`***** startDateNumsUnordered *****`, startDateNumsUnordered);
+
+    let startDateNumsASC = startDateNumsUnordered.toSorted();
+    // console.log(`***** startDateNumsASC *****`, startDateNumsASC);
+
+    let startDateNumsDESC = startDateNumsASC.toReversed();
+    // console.log(`***** startDateNumsDESC *****`, startDateNumsDESC);
+
+
+    for (let i = 0; i < startDateNumsDESC.length; i++) {
+      const startDateNumDESC = startDateNumsDESC[i];
+
+      for (let j = 0; j < allEventsArr.length; j++) {
+        const startDateNum = Date.parse(allEventsArr[j].startDate);
+        if (startDateNum === startDateNumDESC) {
+          allEventsArrDESC.push(allEventsArr[j]);
+        }
+      }
+    }
+
+
+
+
+
+    // allEventsArr.forEach(eventObj => {
+    //   const startDateNum = Date.parse(eventObj.startDate);
+    //   if (startDateNum === ) {
+    //     allEventsArrDESC.push(eventObj);
+    //   }
+    // })
+  };
+
+  console.log(`***** startDateNumsUnordered *****`, startDateNumsUnordered);
+  console.log(`***** allEventsArrDESC *****`, allEventsArrDESC);
+
+
+
+
+
+
 
 
 
@@ -83,7 +146,6 @@ export default function DisplayAll({ displayType }) {
     <>
       <div className='all-groups-events-box'>
         <div className='centering-box'>
-
 
           {displayType === 'Groups' ?
             <div className="events-groups-header-box">
@@ -134,7 +196,7 @@ export default function DisplayAll({ displayType }) {
           }
 
           {displayType === 'Events' ?
-            allEventsArr.map((event) => (
+            allEventsArrDESC.map((event) => (
               <div key={event.id}>
                 {/* {console.log(`*** event is: ***`, event)} */}
                 <DisplayCardEvent event={event} />
@@ -143,9 +205,10 @@ export default function DisplayAll({ displayType }) {
             : null
           }
 
-
         </div>
       </div>
     </>
   )
 }
+
+// NOTE 2023-08-04: changed allEventsArr.map to allEventsArrDESC.map

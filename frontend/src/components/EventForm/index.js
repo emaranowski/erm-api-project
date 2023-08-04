@@ -44,12 +44,12 @@ export default function EventForm({ event, formType }) {
 
   useEffect(() => {
     const startDateTimeConcat = startDateHTML.concat(' ', startTimeHTML, ':00');
-    console.log(`*** startDateTimeConcat is ***`, startDateTimeConcat)
+    // console.log(`*** startDateTimeConcat is ***`, startDateTimeConcat)
     setStartDate(startDateTimeConcat);
     // console.log(`*** startDate for DB is ***`, startDate)
 
     const endDateTimeConcat = endDateHTML.concat(' ', endTimeHTML, ':00');
-    console.log(`*** endDateTimeConcat is ***`, endDateTimeConcat)
+    // console.log(`*** endDateTimeConcat is ***`, endDateTimeConcat)
     setEndDate(endDateTimeConcat);
     // console.log(`*** endDate for DB is ***`, endDate)
   }, [startDateHTML, startTimeHTML, endDateHTML, endTimeHTML]);
@@ -59,7 +59,9 @@ export default function EventForm({ event, formType }) {
     e.preventDefault();
 
     // ORIGINALLY HAD DATE + TIME STUFF HERE IN HANDLE SUBMIT
-    // BUT ERRORS WERE NOT RENDERING FROM BACKEND
+    // BUT ERRORS WERE NOT TRIGGERING AT CORRECT TIME FROM BACKEND
+    // .toISOString() could be useful in future
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
 
     // --- startDateHTML + startTimeHTML = startDate ("2024-11-19 20:00:00")
     // console.log(`*** startDateHTML is ***`, startDateHTML) // str 2023-08-09
@@ -67,7 +69,7 @@ export default function EventForm({ event, formType }) {
     // const startDateTimeConcat = startDateHTML.concat(' ', startTimeHTML, ':00');
     // console.log(`*** startDateTimeConcat is ***`, startDateTimeConcat)
     // setStartDate(startDateTimeConcat);
-    console.log(`*** startDate for DB is ***`, startDate)
+    // console.log(`*** startDate for DB is ***`, startDate)
 
     // --- endDateHTML + endTimeHTML = endDate ("2024-11-19 20:00:00")
     // console.log(`*** endDateHTML is ***`, endDateHTML) // str 2023-08-22
@@ -75,7 +77,7 @@ export default function EventForm({ event, formType }) {
     // const endDateTimeConcat = endDateHTML.concat(' ', endTimeHTML, ':00');
     // console.log(`*** endDateTimeConcat is ***`, endDateTimeConcat)
     // setEndDate(endDateTimeConcat);
-    console.log(`*** endDate for DB is ***`, endDate)
+    // console.log(`*** endDate for DB is ***`, endDate)
 
     event = {
       ...event,
