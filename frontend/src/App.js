@@ -15,6 +15,8 @@ import GroupFormCreate from "./components/GroupFormCreate";
 import GroupFormUpdate from "./components/GroupFormUpdate";
 
 import GroupDetails from "./components/GroupDetails";
+import EventDetails from "./components/EventDetails";
+
 import Footer from "./components/Footer";
 
 import './app.css';
@@ -40,10 +42,6 @@ function App() {
           <DisplayAllGroups />
         </Route>
 
-        <Route exact path='/events'>
-          <DisplayAllEvents />
-        </Route>
-
         <Route exact path='/groups/new'>
           <GroupFormCreate />
         </Route>
@@ -54,6 +52,14 @@ function App() {
 
         <Route exact path='/groups/:groupId'>
           <GroupDetails />
+        </Route>
+
+        <Route exact path='/events'>
+          <DisplayAllEvents />
+        </Route>
+
+        <Route exact path='/events/:eventId'>
+          <EventDetails />
         </Route>
 
         {/* <Route exact path='/:groupId/images'>

@@ -17,26 +17,25 @@ export default function DisplayCardEvent({ event }) {
   // console.log(`*** startDateTime is: ***`, startDateTime) // str
   // console.log(`*** startDateTimeArr is: ***`, startDateTimeArr) // arr
 
-  let dateArr = [];
-  let timeArr = [];
+  let startDateArr = [];
+  let startTimeArr = [];
 
   for (let i = 0; i < 10; i++) {
-    dateArr.push(startDateTimeArr[i]);
+    startDateArr.push(startDateTimeArr[i]);
   }
 
   for (let i = 11; i < 16; i++) {
-    timeArr.push(startDateTimeArr[i]);
+    startTimeArr.push(startDateTimeArr[i]);
   }
 
-  let dateStr = dateArr.join('');
-  let timeStr = timeArr.join('');
+  let startDateStr = startDateArr.join('');
+  let startTimeStr = startTimeArr.join('');
 
   // console.log(`*** dateStr is: ***`, dateStr) // str
   // console.log(`*** timeStr is: ***`, timeStr) // arr
 
   return (
     <>
-
       <Link to={`/events/${event.id}`}>
         <div className='group-card'>
 
@@ -46,7 +45,7 @@ export default function DisplayCardEvent({ event }) {
             <div className='event-date-time'>
               {/* [ YYY-MM-DD ] · [ time ] <br></br>
               {event.startDate} */}
-              {dateStr} · {timeStr}
+              {startDateStr} · {startTimeStr}
             </div>
 
             <div className='event-name'>
@@ -65,7 +64,6 @@ export default function DisplayCardEvent({ event }) {
 
         </div>
       </Link>
-
     </>
   )
 };
