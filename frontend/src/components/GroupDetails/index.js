@@ -31,15 +31,12 @@ export default function GroupDetails() {
   // console.log(`*** allGroups is: ***`, allGroups)
   // console.log(`*** allGroupsArr is: ***`, allGroupsArr)
 
-
-
   // const singleGroup = groupsStateArr[1]; // obj
   // // const singleGroupArr = Object.values(singleGroup)
 
   // const group = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {});
 
   // console.log(`*** group is: ***`, group)
-
   // console.log(`*** singleGroup is: ***`, singleGroup) //
 
   // const singleGroupImagesArr = groupsStateArr[1].GroupImages; // [ {imageObj} ]
@@ -50,16 +47,8 @@ export default function GroupDetails() {
   // });
   // const previewImageURL = previewImagesArr[0].url;
 
-
-
-
-
   // console.log(`*** previewImagesArr is: ***`, previewImagesArr) //
   // console.log(`*** previewImageURL is: ***`, previewImageURL) //
-
-
-
-
   // console.log(`*** singleGroup is: ***`, singleGroup)
   // console.log(`*** singleGroupArr is: ***`, singleGroupArr)
 
@@ -76,17 +65,6 @@ export default function GroupDetails() {
   // console.log(`*** group is: ***`, group)
   // console.log(`*** groupImages is: ***`, groupImages)
   // console.log(`*** previewImageURL is: ***`, previewImageURL)
-
-
-
-
-
-
-
-
-
-
-
 
   // WORKING -- V2 -- used until 2023-08-02
   const group = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
@@ -107,8 +85,6 @@ export default function GroupDetails() {
   // console.log(`*** previewImages is: ***`, previewImages)
   // console.log(`*** previewImageURL is: ***`, previewImageURL)
 
-
-
   // // new on 2023-08-02
   // const group = useSelector(state => state.groups.allGroups[groupId]);
   // const previewImageURL = useSelector(state => state.groups.allGroups[groupId].previewImage);
@@ -117,30 +93,9 @@ export default function GroupDetails() {
 
 
 
-
-
-  /////////////////////////// NUM EVENTS
-  const allEvents = useSelector(state => state.events.allEvents);
-
-  let numEvents;
-  if (Object.values(allEvents).length) {
-    let allEventsArr = Object.values(allEvents);
-
-    let eventsByThisGroup = allEventsArr.filter(eventObj => {
-      return eventObj.groupId === groupIdAsNum
-    });
-
-    numEvents = eventsByThisGroup.length;
-  };
-
-
-
-
-
-
   // console.log(`*** typeof allEvents['1'] === 'object' ***`, typeof allEvents['1'] === 'object')
 
-  if (typeof allEvents['1'] === 'object') { }
+  // if (typeof allEvents['1'] === 'object') { }
   ///////////////////////////
 
 
@@ -163,10 +118,6 @@ export default function GroupDetails() {
   // }
 
 
-
-
-
-
   // const previewImage = groupImages[0];
   // const groupPreviewImages = groupImages.filter(image => { // [{}]
   //   return image.preview === true;
@@ -176,8 +127,6 @@ export default function GroupDetails() {
   // console.log(`*** groupImages is: ***`, groupImages)
   // console.log(`*** groupPreviewImages is: ***`, groupPreviewImages)
   // console.log(`*** previewImage is: ***`, previewImage)
-
-
 
 
   // // Current user must be "host" or "co-host" of Group that Event belongs to
@@ -327,6 +276,134 @@ export default function GroupDetails() {
   //   hideJoinButton = false;
   // }
 
+
+
+
+
+
+
+
+
+  /////////////////////////// NUM EVENTS
+  const allEvents = useSelector(state => state.events.allEvents);
+
+  // let allEventsByGroup;
+  let eventsByGroupTotalNum;
+
+  let eventsByGroupUpcoming = [];
+  let eventsByGroupUpcomingNum;
+
+  let eventsByGroupPast = [];
+  let eventsByGroupPastNum;
+
+  if (Object.values(allEvents).length) {
+
+    // all events by group
+    let allEventsArr = Object.values(allEvents);
+    let allEventsByGroup = allEventsArr.filter(eventObj => {
+      return eventObj.groupId === groupIdAsNum
+    });
+    eventsByGroupTotalNum = allEventsByGroup.length;
+
+    // all events by group DESC
+    let startDateNumsUnordered = [];
+    let allEventsByGroupDESC = [];
+    if (allEventsByGroup[0] !== undefined && allEventsByGroup[0] !== null) {
+
+      allEventsByGroup.forEach(eventObj => {
+        const startDateNum = Date.parse(eventObj.startDate);
+        startDateNumsUnordered.push(startDateNum);
+      });
+
+      let startDateNumsASC = startDateNumsUnordered.toSorted();
+      let startDateNumsDESC = startDateNumsASC.toReversed();
+
+      for (let i = 0; i < startDateNumsDESC.length; i++) {
+        const startDateNumDESC = startDateNumsDESC[i];
+
+        for (let j = 0; j < allEventsByGroup.length; j++) {
+          const startDateNum = Date.parse(allEventsByGroup[j].startDate);
+          if (startDateNum === startDateNumDESC) {
+            allEventsByGroupDESC.push(allEventsByGroup[j]);
+          }
+        }
+      }
+    };
+
+    // upcoming events
+    for (let i = 0; i < allEventsByGroupDESC.length; i++) {
+      const currEvent = allEventsByGroupDESC[i]; // obj {}
+
+      const currTimestampNum = Date.now();
+      // const currTimestampStr = currTimestamp.toISOString();
+
+      // const eventStartDate = allEventsByGroupDESC[i].startDate;
+      const eventStartDateNum = Date.parse(allEventsByGroupDESC[i].startDate);
+
+      // console.log(`**** currTimestampNum ****`, currTimestampNum) // type: num
+      // console.log(`**********`)
+      // console.log(`**** eventStartDate ****`, eventStartDate)
+      // console.log(`**** eventStartDateNum ****`, eventStartDateNum) // type: num
+      // console.log(`**********`)
+
+      if (eventStartDateNum > currTimestampNum) {
+        eventsByGroupUpcoming.push(currEvent);
+      }
+      eventsByGroupUpcomingNum = eventsByGroupUpcoming.length;
+    };
+
+    // past events
+    for (let i = 0; i < allEventsByGroupDESC.length; i++) {
+      const currEvent = allEventsByGroupDESC[i]; // obj {}
+
+      const currTimestampNum = Date.now();
+      // const currTimestampStr = currTimestamp.toISOString();
+
+      // const eventStartDate = allEventsByGroupDESC[i].startDate;
+      const eventStartDateNum = Date.parse(allEventsByGroupDESC[i].startDate);
+
+      // console.log(`**** currTimestampNum ****`, currTimestampNum) // type: num
+      // console.log(`**********`)
+      // console.log(`**** eventStartDate ****`, eventStartDate)
+      // console.log(`**** eventStartDateNum ****`, eventStartDateNum) // type: num
+      // console.log(`**********`)
+
+      if (eventStartDateNum < currTimestampNum) {
+        eventsByGroupPast.push(currEvent);
+      }
+      eventsByGroupPastNum = eventsByGroupPast.length;
+    };
+
+
+
+    // past events
+    // for (let i = 0; i < allEventsByGroupDESC.length; i++) {
+    //   const currTimestamp = Date.now();
+    //   const eventStartDate = allEventsByGroupDESC[i].startDate;
+
+    //   if (eventStartDate < currTimestamp) {
+    //     eventsByGroupUpcoming.push(allEventsByGroupDESC[i]);
+    //   }
+    //   eventsByGroupUpcomingNum = eventsByGroupUpcoming.length;
+    // }
+
+
+    // for (let j = 0; j < allEventsByGroup.length; j++) {
+
+    //   const startDateNum = Date.parse(allEventsByGroup[j].startDate);
+
+    //   if (startDateNum === startDateNumDESC) {
+    //     allEventsByGroupDESC.push(allEventsByGroup[j]);
+    //   }
+    // }
+  };
+  console.log(`**** eventsByGroupUpcoming ****`, eventsByGroupUpcoming)
+  // console.log(`**** eventsByGroupUpcomingNum ****`, eventsByGroupUpcomingNum)
+
+  console.log(`**** eventsByGroupPast ****`, eventsByGroupPast)
+  // console.log(`**** eventsByGroupPastNum ****`, eventsByGroupPastNum)
+
+
   return (
     <>
       <div>
@@ -454,11 +531,11 @@ export default function GroupDetails() {
           {group.about}
         </div>
 
-        <div className='group-info-header'>Events ({`${numEvents}`} total)</div>
+        <div className='group-info-header'>Events ({`${eventsByGroupTotalNum}`} total)</div>
 
-        <div className='group-info-header'>Upcoming Events (#)</div>
+        <div className='group-info-header'>Upcoming Events ({`${eventsByGroupUpcomingNum}`})</div>
 
-        <div className='group-info-header'>Past Events (#)</div>
+        <div className='group-info-header'>Past Events ({`${eventsByGroupPastNum}`})</div>
 
         {/* <Link to={`/events/:eventId`}>
           <div className='event-card'>
