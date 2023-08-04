@@ -7,8 +7,8 @@ import { getAllGroupsThunk, getSingleGroupThunk } from '../../store/groups';
 
 // import OpenModalButtonJoinEvent from '../../components/OpenModalButtonJoinEvent';
 // import JoinEventModal from '../../components/JoinEventModal';
-// import EventDeleteModalButton from '../EventDeleteModalButton';
-// import EventDeleteModal from '../EventDeleteModal';
+import EventDeleteModalButton from '../EventDeleteModalButton';
+import EventDeleteModal from '../EventDeleteModal';
 
 import './EventDetails.css';
 
@@ -194,13 +194,13 @@ export default function EventDetails() {
   // if logged in and created event, 'JOIN' BUTTON should hide
   // if logged in and did not create event, 'JOIN' BUTTON should display
 
-  let hideJoinButton = true;
-  if (sessionUser === null) { // logged out
-    hideJoinButton = true;
-  } else if (sessionUser !== null && sessionUser !== undefined) { // logged in
-    const sessionUserId = sessionUser.id; // must create in block, after confirming !null && !undefined
-    if (sessionUserId !== organizerId) hideJoinButton = false; // logged in + did not create event: so display 'join' btn
-  }
+  // let hideJoinButton = true;
+  // if (sessionUser === null) { // logged out
+  //   hideJoinButton = true;
+  // } else if (sessionUser !== null && sessionUser !== undefined) { // logged in
+  //   const sessionUserId = sessionUser.id; // must create in block, after confirming !null && !undefined
+  //   if (sessionUserId !== organizerId) hideJoinButton = false; // logged in + did not create event: so display 'join' btn
+  // }
 
   ////////////// 'Create Event', 'Update', 'Delete' ADMIN BUTTONS LOGIC //////////////
   // if logged in and created event, ADMIN BUTTONS should display
@@ -301,13 +301,10 @@ export default function EventDetails() {
                       Update
                     </button>
                   </Link>
-                  <button className='admin-button'>
-                    Delete
-                  </button>
-                  {/* <EventDeleteModalButton
+                  <EventDeleteModalButton
                     buttonText="Delete"
                     modalComponent={<EventDeleteModal eventId={eventId} />}
-                  /> */}
+                  />
                 </div>
               }
 

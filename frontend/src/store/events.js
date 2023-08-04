@@ -7,6 +7,9 @@ const GET_SINGLE_EVENT = "events/GET_SINGLE_EVENT";
 const CREATE_EVENT = "events/CREATE_EVENT";
 const CREATE_EVENT_IMAGE = "events/CREATE_EVENT_IMAGE";
 
+
+const DELETE_EVENT = "events/DELETE_EVENT";
+
 ////////////// Action Creators: //////////////
 
 const getAllEvents = (events) => {
@@ -35,6 +38,13 @@ const createEventImage = (image) => {
   return {
     type: CREATE_EVENT_IMAGE,
     image
+  };
+};
+
+const deleteEvent = (eventId) => {
+  return {
+    type: DELETE_EVENT,
+    eventId
   };
 };
 
@@ -152,6 +162,26 @@ export const createEventThunk = (event) => async (dispatch) => {
   };
 };
 
+// (DELETE /api/events/:eventId)
+////////////// Delete Event
+export const deleteEventThunk = (eventId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/events/${eventId}`, {
+    method: "DELETE",
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    dispatch(deleteEvent(eventId));
+    console.log(`*** in delete thunk, data is: ***`, data) // {message: 'Successfully deleted'}
+    return data;
+  } else {
+    const errors = await res.json();
+    console.log(`*** in delete thunk, errors is: ***`, errors) //
+    return errors;
+  }
+};
+
 
 ////////////// Reducer: //////////////
 
@@ -184,6 +214,10 @@ export default function eventsReducer(state = initialState, action) { // eventsR
     case CREATE_EVENT_IMAGE:
       newState.singleEvent.EventImages = [];
       newState.singleEvent.EventImages.push(action.image);
+      return newState;
+
+    case DELETE_EVENT:
+      delete newState.allEvents[action.eventId];
       return newState;
 
     default:
