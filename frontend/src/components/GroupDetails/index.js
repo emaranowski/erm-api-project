@@ -116,6 +116,9 @@ export default function GroupDetails() {
   // // console.log(`*** thisGroup is: ***`, thisGroup)
 
 
+
+
+
   /////////////////////////// NUM EVENTS
   const allEvents = useSelector(state => state.events.allEvents);
 

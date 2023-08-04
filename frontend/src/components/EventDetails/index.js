@@ -89,7 +89,7 @@ export default function EventDetails() {
 
   ////////////// HOST NAME (GROUP ORGANIZER NAME) //////////////
   const test = useSelector(state => state.groups.singleGroup)
-  console.log(`*** test is: ***`, test)
+  // console.log(`*** test is: ***`, test)
 
   const singleGroup = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {});
   let organizerId;
@@ -101,11 +101,20 @@ export default function EventDetails() {
     organizerLastName = singleGroup.Organizer.lastName;
   }
 
+  // ////////////// GROUP IMAGE //////////////
+  // const allGroups = useSelector(state => state.groups.allGroups ? state.groups.allGroups : {});
+  // let groupPreviewImageURL;
+  // if (allGroups[groupId] !== undefined) {
+  //   groupPreviewImageURL = allGroups[groupId].previewImage;
+  // }
+
   ////////////// GROUP IMAGE //////////////
-  const allGroups = useSelector(state => state.groups.allGroups ? state.groups.allGroups : {});
+  const allGroups = useSelector(state => state.groups.allGroups);
   let groupPreviewImageURL;
-  if (allGroups[groupId] !== undefined) {
-    groupPreviewImageURL = allGroups[groupId].previewImage;
+  if (Object.values(allGroups).length) {
+    if (allGroups[groupId] !== undefined) {
+      groupPreviewImageURL = allGroups[groupId].previewImage;
+    }
   }
   // console.log(`*** allGroups is: ***`, allGroups)
   // console.log(`*** allGroups[groupId] is: ***`, allGroups[groupId])
