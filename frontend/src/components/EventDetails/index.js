@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getAllEventsThunk, getSingleEventThunk } from '../../store/events';
-import { getSingleGroupThunk } from '../../store/groups';
+import { getAllGroupsThunk, getSingleGroupThunk } from '../../store/groups';
 
 // import OpenModalButtonJoinEvent from '../../components/OpenModalButtonJoinEvent';
 // import JoinEventModal from '../../components/JoinEventModal';
@@ -18,14 +18,13 @@ export default function EventDetails() {
   const sessionUser = useSelector(state => state.session.user);
   const { eventId } = useParams();
 
+  // const eventsStateArr = Object.values(
+  //   useSelector((state) => (state.events ? state.events : {}))
+  // ); // ret arr
 
-  const eventsStateArr = Object.values(
-    useSelector((state) => (state.events ? state.events : {}))
-  ); // ret arr
-
-  const eventsStateKeys = Object.keys(
-    useSelector((state) => (state.events ? state.events : {}))
-  ); // ret arr // 0: allEvents, 1: singleEvent
+  // const eventsStateKeys = Object.keys(
+  //   useSelector((state) => (state.events ? state.events : {}))
+  // ); // ret arr // 0: allEvents, 1: singleEvent
 
 
   // WORKING -- V2 -- used until 2023-08-02
@@ -62,27 +61,49 @@ export default function EventDetails() {
     dispatch(getAllEventsThunk());
   }, [dispatch]);
 
-
   useEffect(() => {
     dispatch(getSingleGroupThunk(groupId));
   }, [dispatch, groupId]);
 
+  useEffect(() => {
+    dispatch(getAllGroupsThunk());
+  }, [dispatch]);
+
+
+  // useEffect(() => {
+  //   const getAllData = async () => {
+  //     await Promise.all([
+  //       dispatch(getSingleEventThunk(eventId)),
+  //       dispatch(getAllEventsThunk()),
+  //       dispatch(getSingleGroupThunk(groupId)),
+  //       dispatch(getAllGroupsThunk()),
+  //     ])
+  //   }
+  //   getAllData();
+  // }, [dispatch, eventId, groupId])
+
+
   ////////////// HOST NAME (GROUP ORGANIZER NAME) //////////////
-  const singleGroup = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
-  const organizerId = singleGroup.organizerId;
+  const singleGroup = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {});
+  let organizerId;
   let organizerFirstName;
   let organizerLastName;
   if (singleGroup.id !== undefined) {
+    organizerId = singleGroup.organizerId;
     organizerFirstName = singleGroup.Organizer.firstName;
     organizerLastName = singleGroup.Organizer.lastName;
   }
-  // console.log(`*** IN EVENT DETAILS singleGroup is: ***`, singleGroup)
 
   ////////////// GROUP IMAGE //////////////
-  let groupImage;
-  if (event.Group !== undefined) {
-
+  const allGroups = useSelector(state => state.groups.allGroups ? state.groups.allGroups : {});
+  let groupPreviewImageURL;
+  if (allGroups[groupId] !== undefined) {
+    groupPreviewImageURL = allGroups[groupId].previewImage;
   }
+  // console.log(`*** allGroups is: ***`, allGroups)
+  // console.log(`*** allGroups[groupId] is: ***`, allGroups[groupId])
+  // console.log(`*** allGroups[groupId].previewImage is: ***`, allGroups[groupId].previewImage) //
+
 
   ////////////// GROUP NAME //////////////
   let groupName;
@@ -213,7 +234,7 @@ export default function EventDetails() {
             <Link to={`/groups/${groupId}`}>
               <div className='event-group-mini-card-row'>
                 <div className='event-group-mini-image-col'>
-                  [ image ]
+                  {groupPreviewImageURL ? <img className='event-detail-group-img' src={groupPreviewImageURL}></img> : ''}
                 </div>
                 <div className='event-group-mini-name-visibility-col'>
                   <div className='event-group-mini-name-row'>

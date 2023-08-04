@@ -35,8 +35,16 @@
 
 .event-detail-img {
     background-color: bisque;
-    width: 250px;
+    width: 350px;
     height: 220px;
+    margin-right: 15px;
+    border-radius: 10px;
+}
+
+.event-detail-group-img {
+    background-color: bisque;
+    width: 70px;
+    height: 55px;
     margin-right: 15px;
     border-radius: 10px;
 }
