@@ -205,12 +205,19 @@ export default function EventForm({ event, formType }) {
             <span>
               <input
                 className="input-spacer input-text"
-                size="26"
-                type="text"
+                type="date"
                 name="startDate"
                 onChange={(e) => setStartDate(e.target.value)}
                 value={startDate}
-                placeholder="MM/DD/YYY HH:mm AM"
+              />
+            </span>
+            <span>
+              <input
+                className="input-spacer input-text"
+                type="time"
+                name="startTime"
+                onChange={(e) => setStartTime(e.target.value)}
+                value={startTime}
               />
             </span>
           </div>
@@ -221,12 +228,20 @@ export default function EventForm({ event, formType }) {
             <span>
               <input
                 className="input-spacer input-text"
-                size="26"
-                type="text"
+                type="date"
                 name="endDate"
                 onChange={(e) => setEndDate(e.target.value)}
                 value={endDate}
                 placeholder="MM/DD/YYY HH:mm PM"
+              />
+            </span>
+            <span>
+              <input
+                className="input-spacer input-text"
+                type="time"
+                name="endTime"
+                onChange={(e) => setEndTime(e.target.value)}
+                value={endTime}
               />
             </span>
           </div>
