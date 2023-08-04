@@ -20,11 +20,26 @@ module.exports = {
       },
       {
         eventId: 2,
-        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Eat_Alberta_Potluck_%287072671637%29.jpg/640px-Eat_Alberta_Potluck_%287072671637%29.jpg',
+        url: 'https://res.cloudinary.com/dragonspell/images/w_800,h_480,dpr_auto,fl_progressive:steep,f_auto/w_800,h_480/v1623257541/www.travelportland.com/cropped-mktg-20192106-Forest-Park-0004-scaled-1/cropped-mktg-20192106-Forest-Park-0004-scaled-1.jpg',
         preview: true
       },
       {
         eventId: 3,
+        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Eat_Alberta_Potluck_%287072671637%29.jpg/640px-Eat_Alberta_Potluck_%287072671637%29.jpg',
+        preview: true
+      },
+      {
+        eventId: 4,
+        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Eat_Alberta_Potluck_%287072671637%29.jpg/640px-Eat_Alberta_Potluck_%287072671637%29.jpg',
+        preview: true
+      },
+      {
+        eventId: 5,
+        url: 'https://cdn11.bigcommerce.com/s-7eepw5u9z2/product_images/uploaded_images/pdxdining1.jpg',
+        preview: true
+      },
+      {
+        eventId: 6,
         url: 'https://cdn11.bigcommerce.com/s-7eepw5u9z2/product_images/uploaded_images/pdxdining1.jpg',
         preview: true
       }
@@ -42,8 +57,11 @@ module.exports = {
       //     'https://tinyurl.com/meetup-schema'
       //   ]
       // } // if more urls added in up, add in down too
-      eventId: {
-        [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      // eventId: {
+      //   [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      // } // added to accomodate later tests
+      preview: {
+        [Op.in]: [true, false]
       } // added to accomodate later tests
     }, {});
 

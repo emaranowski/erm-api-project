@@ -18,35 +18,68 @@ module.exports = {
       {
         venueId: 1,
         groupId: 1,
-        name: 'Forest Park Hike',
+        name: 'Forest Park Hike (2011 Sep)',
         description: 'A shady hike through Forest Park.',
         type: 'In person',
         capacity: 100,
         price: 5,
-        startDate: '2024-08-12 09:00:00',
-        endDate: '2024-08-12 11:00:00'
+        startDate: '2011-09-12 09:00:00',
+        endDate: '2011-09-12 11:00:00'
+      },
+      {
+        venueId: 1,
+        groupId: 1,
+        name: 'Forest Park Hike (2025 Sep)',
+        description: 'A shady hike through Forest Park.',
+        type: 'In person',
+        capacity: 100,
+        price: 5,
+        startDate: '2025-09-12 09:00:00',
+        endDate: '2025-09-12 11:00:00'
       },
       {
         venueId: 2,
         groupId: 2,
-        name: 'First Sunday Potluck',
+        name: 'First Sunday Potluck (2011 Aug)',
         description: 'A cozy potluck. Bring your best culinary inventions!',
         type: 'In person',
         capacity: 15,
         price: 5.75,
-        startDate: '2024-08-06 12:00:00',
-        endDate: '2024-08-06 14:00:00'
+        startDate: '2011-08-03 21:00:00',
+        endDate: '2011-08-03 22:00:00'
+      },
+      {
+        venueId: 2,
+        groupId: 2,
+        name: 'First Sunday Potluck (2025 Aug)',
+        description: 'A cozy potluck. Bring your best culinary inventions!',
+        type: 'In person',
+        capacity: 15,
+        price: 5.75,
+        startDate: '2025-08-03 21:00:00',
+        endDate: '2025-08-03 22:00:00'
       },
       {
         venueId: null, // changed from 3 to null
         groupId: 3,
-        name: 'Mox Board Game Night',
+        name: 'Mox Board Game Night (2011 Jul)',
         description: 'Wednesday night board games at Mox Boarding House.',
         type: 'Online',
         capacity: 30,
         price: 0,
-        startDate: '2024-08-23 14:00:00',
-        endDate: '2024-08-23 16:00:00'
+        startDate: '2011-07-23 14:00:00',
+        endDate: '2011-07-23 16:00:00'
+      },
+      {
+        venueId: null, // changed from 3 to null
+        groupId: 3,
+        name: 'Mox Board Game Night (2025 Jul)',
+        description: 'Wednesday night board games at Mox Boarding House.',
+        type: 'Online',
+        capacity: 30,
+        price: 0,
+        startDate: '2025-07-23 14:00:00',
+        endDate: '2025-07-23 16:00:00'
       },
     ], { validate: true });
 
@@ -63,7 +96,8 @@ module.exports = {
       //     'Mox Board Game Night',
       //     'Tennis Group First Meet and Greet']
       // },
-      groupId: { [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }
+      // groupId: { [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+      type: { [Op.in]: ['In person', 'Online'] }
     }, {});
 
   }

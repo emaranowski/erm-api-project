@@ -99,16 +99,16 @@ module.exports = (sequelize, DataTypes) => {
     startDate: {
       type: DataTypes.DATE,
       allowNull: false,
-      validate: {
-        // Date.parse(): converts "2011-10-10T14:48:00.000+09:00" (date-time form, w/ ms & time zone)
-        // into ms since 1 Jan 1970 00:00:00 UTC
-        // Date.now(): rets ms since 1 Jan 1970 00:00:00 UTC
-        isAfterCurrentDateTime(value) { // ORIG BEFORE 2023-08-04
-          if (Date.parse(value) <= Date.now()) {
-            throw new Error(`Start date must be in the future`);
-          }
-        }
-      }
+      // validate: { // commented out 2023-08-04 -- TO ALLOW SEED DATA IN THE PAST
+      //   // Date.parse(): converts "2011-10-10T14:48:00.000+09:00" (date-time form, w/ ms & time zone)
+      //   // into ms since 1 Jan 1970 00:00:00 UTC
+      //   // Date.now(): rets ms since 1 Jan 1970 00:00:00 UTC
+      //   isAfterCurrentDateTime(value) { // ORIG BEFORE 2023-08-04
+      //     if (Date.parse(value) <= Date.now()) {
+      //       throw new Error(`Start date must be in the future`);
+      //     }
+      //   }
+      // }
     },
     endDate: {
       type: DataTypes.DATE,

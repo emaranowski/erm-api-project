@@ -887,22 +887,21 @@ router.get('/', validatePageAndSize, async (req, res) => {
 
 
 
-
-
-
     // eventsOrig is arr of Event objs
-    const eventsOrig = await Event.findAll({ // AFTER EDITS 2024-08-04
-        order: [['startDate', 'DESC']],
-        include: [
-            { model: Attendance },
-            { model: EventImage },
-            { model: Group },
-            { model: Venue }
-        ],
-        offset: (page - 1) * size,
-        limit: size,
-    });
+    // const eventsOrig = await Event.findAll({ // tried adding order clause on 2023-08-04
+    //     // order: [['startDate', 'DESC']], // wasn't working, prob because startDate is stored as date obj in DB?
+    //     include: [
+    //         { model: Attendance },
+    //         { model: EventImage },
+    //         { model: Group },
+    //         { model: Venue }
+    //     ],
+    //     offset: (page - 1) * size,
+    //     limit: size,
+    // });
 
+    // THIS IS DRAFT LOGIC FROM 2023-08-04
+    // ENDED UP SORTING ON FRONTEND
     // // console.log(`***** eventsOrig *****`, eventsOrig); // arr of Event objs
     // // console.log(`***** eventsOrig is Array *****`, Array.isArray(eventsOrig)); // TRUE is array
     // eventsOrig.forEach(eventObj => {
@@ -922,25 +921,20 @@ router.get('/', validatePageAndSize, async (req, res) => {
     // console.log(`***** startDateNumToCompare *****`, startDateNumToCompare);
     // // eventsOrig.forEach(eventObj => {
     // //     const startDateNum = Date.parse(eventObj.dataValues.startDate);
-
     // // });
 
 
 
-
-
-
-
-    // const eventsOrig = await Event.findAll({ // ORIG BEFORE 2024-08-04
-    //     include: [
-    //         { model: Attendance },
-    //         { model: EventImage },
-    //         { model: Group },
-    //         { model: Venue }
-    //     ],
-    //     offset: (page - 1) * size,
-    //     limit: size,
-    // });
+    const eventsOrig = await Event.findAll({ // ORIG
+        include: [
+            { model: Attendance },
+            { model: EventImage },
+            { model: Group },
+            { model: Venue }
+        ],
+        offset: (page - 1) * size,
+        limit: size,
+    });
 
     // convert to JSON
     let events = [];
