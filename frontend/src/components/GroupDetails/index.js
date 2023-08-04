@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getAllGroupsThunk, getSingleGroupThunk } from '../../store/groups';
+import { getAllEventsThunk } from '../../store/events';
 // import { getAllUsersThunk } from '../../store/session';
 
 import OpenModalButtonJoinGroup from '../../components/OpenModalButtonJoinGroup';
@@ -15,6 +16,7 @@ import './GroupDetails.css';
 export default function GroupDetails() {
   const sessionUser = useSelector(state => state.session.user);
   const { groupId } = useParams();
+  const groupIdAsNum = parseInt(groupId);
 
   const groupsStateArr = Object.values(
     useSelector((state) => (state.groups ? state.groups : {}))
@@ -28,8 +30,6 @@ export default function GroupDetails() {
   // console.log(`*** groupsStateKeys is: ***`, groupsStateKeys)
   // console.log(`*** allGroups is: ***`, allGroups)
   // console.log(`*** allGroupsArr is: ***`, allGroupsArr)
-
-
 
 
 
@@ -116,12 +116,29 @@ export default function GroupDetails() {
   // // console.log(`*** thisGroup is: ***`, thisGroup)
 
 
+  /////////////////////////// NUM EVENTS
+  const allEvents = useSelector(state => state.events.allEvents);
+
+  let numEvents;
+  if (Object.values(allEvents).length) {
+    let allEventsArr = Object.values(allEvents);
+
+    let eventsByThisGroup = allEventsArr.filter(eventObj => {
+      return eventObj.groupId === groupIdAsNum
+    });
+
+    numEvents = eventsByThisGroup.length;
+  };
 
 
 
 
 
 
+  // console.log(`*** typeof allEvents['1'] === 'object' ***`, typeof allEvents['1'] === 'object')
+
+  if (typeof allEvents['1'] === 'object') { }
+  ///////////////////////////
 
 
 
@@ -182,6 +199,10 @@ export default function GroupDetails() {
 
   useEffect(() => {
     dispatch(getAllGroupsThunk());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getAllEventsThunk());
   }, [dispatch]);
 
 
@@ -429,6 +450,8 @@ export default function GroupDetails() {
         <div className='group-info-text'>
           {group.about}
         </div>
+
+        <div className='group-info-header'>Events ({`${numEvents}`} total)</div>
 
         <div className='group-info-header'>Upcoming Events (#)</div>
 
