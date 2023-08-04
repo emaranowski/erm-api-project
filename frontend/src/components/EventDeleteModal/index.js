@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import * as sessionActions from "../../store/session"; // sessionActions is obj
 import { useDispatch } from "react-redux";
+import { useSelector } from 'react-redux';
 import { useModal } from "../../context/Modal";
-import { useParams } from 'react-router-dom';
 import { deleteEventThunk } from "../../store/events";
 import { useHistory } from "react-router-dom";
 import "./EventDeleteModal.css";
@@ -11,8 +11,13 @@ function EventDeleteModal({ eventId }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const { closeModal } = useModal();
-  // const { eventId } = useParams();
-  console.log(`****** eventId is : ******`, eventId)
+
+  const singleGroup = useSelector(state => state.groups.singleGroup);
+  let groupId;
+  if (singleGroup.id !== undefined && singleGroup.id !== null) {
+    groupId = singleGroup.id;
+  };
+  // console.log(`****** groupId is : ******`, groupId);
 
   const [errors, setErrors] = useState('');
 
@@ -24,7 +29,7 @@ function EventDeleteModal({ eventId }) {
     return dispatch(deleteEventThunk(eventId))
       .then(closeModal)
       .then(() => {
-        history.push(`/events/`);
+        history.push(`/groups/${groupId}`);
       })
       .catch(async (res) => {
         const data = await res.json();

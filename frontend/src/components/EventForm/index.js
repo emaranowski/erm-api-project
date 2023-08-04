@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { createEventThunk } from "../../store/events";
+import { createEventThunk, getSingleEventThunk } from "../../store/events";
+import { getSingleGroupThunk } from "../../store/groups";
 // import { updateEventThunk } from "../../store/events";
 import './EventForm.css';
 
@@ -13,7 +14,12 @@ export default function EventForm({ event, formType }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const { groupId } = useParams();
-  const groupName = 'GROUPNAMEHERE'
+
+  const singleGroup = useSelector(state => state.groups.singleGroup);
+  let groupName;
+  if (singleGroup.id !== undefined && singleGroup.id !== null) {
+    groupName = singleGroup.name;
+  }
 
   // controlled inputs
   const [name, setName] = useState(event?.name);
@@ -94,6 +100,10 @@ export default function EventForm({ event, formType }) {
     // }
 
   };
+
+  useEffect(() => {
+    dispatch(getSingleGroupThunk(groupId));
+  }, [dispatch, groupId]);
 
   return (
     <>
