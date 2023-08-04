@@ -22,31 +22,33 @@ function Footer() {
             </div>
             <div className='footer-link'>Sign Up</div>
             <div className='footer-link'>Log In</div>
-            <div className='footer-link'>Help</div>
-            <div className='footer-link'>Become an Affiliate</div>
+            {/* <div className='footer-link'>Help</div> */}
+            {/* <div className='footer-link'>Become an Affiliate</div> */}
           </div>
           <div id="footer-links-col-2">
             <div className="footer-links-col-header">
               Discover
             </div>
             <div className='footer-link'>Groups</div>
-            <div className='footer-link'>Calendar</div>
-            <div className='footer-link'>Topics</div>
-            <div className='footer-link'>Cities</div>
-            <div className='footer-link'>Online Events</div>
-            <div className='footer-link'>Local Guides</div>
-            <div className='footer-link'>Make Friends</div>
+            <div className='footer-link'>Events</div>
+            {/* <div className='footer-link'>Calendar</div> */}
+            {/* <div className='footer-link'>Topics</div> */}
+            {/* <div className='footer-link'>Cities</div> */}
+            {/* <div className='footer-link'>Online Events</div> */}
+            {/* <div className='footer-link'>Local Guides</div> */}
+            {/* <div className='footer-link'>Make Friends</div> */}
           </div>
           <div id="footer-links-col-3">
             <div className="footer-links-col-header">
               MeetBuds
             </div>
-            <div className='footer-link'>About</div>
-            <div className='footer-link'>Blog</div>
-            <div className='footer-link'>Meetup Pro</div>
-            <div className='footer-link'>Careers</div>
-            <div className='footer-link'>Apps</div>
-            <div className='footer-link'>Podcast</div>
+            <div className='footer-link'>Home</div>
+            {/* <div className='footer-link'>About</div> */}
+            {/* <div className='footer-link'>Blog</div> */}
+            {/* <div className='footer-link'>Meetup Pro</div> */}
+            {/* <div className='footer-link'>Careers</div> */}
+            {/* <div className='footer-link'>Apps</div> */}
+            {/* <div className='footer-link'>Podcast</div> */}
           </div>
         </div>
 

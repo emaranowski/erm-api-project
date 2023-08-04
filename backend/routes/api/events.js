@@ -697,7 +697,7 @@ router.get('/:eventId', async (req, res) => {
         {
             include: [
                 { model: Attendance },
-                { model: Group },
+                { model: Group }, // include group images
                 { model: Venue },
                 { model: EventImage },
             ]
@@ -729,7 +729,8 @@ router.get('/:eventId', async (req, res) => {
         name: group.name,
         privacy: group.privacy,
         city: group.city,
-        state: group.state
+        state: group.state,
+        groupPreviewImage: group.previewImage, // added 2023-08-04
     }
 
     // get venue

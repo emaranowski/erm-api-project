@@ -88,7 +88,6 @@ export default function DisplayCardGroup({ group }) {
             </div>
 
             <div className='group-num-of-events'>
-              {/* # events */}
               {numEvents === 1 ? `${numEvents} event` : `${numEvents} events`} · {group.privacy ? <span>Private</span> : <span>Public</span>}
             </div>
           </div>

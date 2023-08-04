@@ -46,12 +46,10 @@ export default function EventDetails() {
   let groupId;
   if (event.Group !== undefined) {
     groupId = event.groupId;
-  }
+  };
 
   // const group = useSelector(state => state)
   // console.log(`*** IN EVENT DETAILS group is: ***`, group)
-
-
 
 
   // useEffect(() => {
@@ -67,31 +65,29 @@ export default function EventDetails() {
   //   dispatch(getAllGroupsThunk());
   // }, [dispatch]);
 
-  // useEffect(() => {
-  //   dispatch(getSingleEventThunk(eventId));
-  //   dispatch(getAllEventsThunk());
-  //   dispatch(getSingleGroupThunk(groupId));
-  //   dispatch(getAllGroupsThunk());
-  // }, [dispatch, eventId, groupId]);
-
   useEffect(() => {
-    const getAllData = async () => {
-      await Promise.all([
-        dispatch(getSingleEventThunk(eventId)),
-        dispatch(getAllEventsThunk()),
-        dispatch(getSingleGroupThunk(groupId)),
-        dispatch(getAllGroupsThunk()),
-      ])
-    }
-    getAllData();
-  }, [dispatch, eventId, groupId])
+    dispatch(getSingleEventThunk(eventId));
+    dispatch(getAllEventsThunk());
+    dispatch(getSingleGroupThunk(groupId));
+    dispatch(getAllGroupsThunk());
+  }, [dispatch, eventId, groupId]);
+
+  // useEffect(() => {
+  //   const getAllData = async () => {
+  //     await Promise.all([
+  //       dispatch(getSingleEventThunk(eventId)),
+  //       dispatch(getAllEventsThunk()),
+  //       dispatch(getSingleGroupThunk(groupId)),
+  //       dispatch(getAllGroupsThunk()),
+  //     ])
+  //   }
+  //   getAllData();
+  // }, [dispatch, eventId, groupId])
 
 
   ////////////// HOST NAME (GROUP ORGANIZER NAME) //////////////
-  const test = useSelector(state => state.groups.singleGroup)
-  // console.log(`*** test is: ***`, test)
-
-  const singleGroup = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {});
+  const singleGroup = useSelector(state => state.groups.singleGroup);
+  console.log(`*** singleGroup is: ***`, singleGroup)
   let organizerId;
   let organizerFirstName;
   let organizerLastName;
@@ -110,13 +106,14 @@ export default function EventDetails() {
 
   ////////////// GROUP IMAGE //////////////
   const allGroups = useSelector(state => state.groups.allGroups);
+  console.log(`*** allGroups is: ***`, allGroups)
   let groupPreviewImageURL;
   if (Object.values(allGroups).length) {
     if (allGroups[groupId] !== undefined) {
       groupPreviewImageURL = allGroups[groupId].previewImage;
     }
   }
-  // console.log(`*** allGroups is: ***`, allGroups)
+
   // console.log(`*** allGroups[groupId] is: ***`, allGroups[groupId])
   // console.log(`*** allGroups[groupId].previewImage is: ***`, allGroups[groupId].previewImage) //
 
@@ -325,7 +322,7 @@ export default function EventDetails() {
 
         <div className='event-detail-lower-text-row'>
           <div className='event-info-header'>
-            Details
+            Description
           </div>
 
           <div className='event-info-text'>
