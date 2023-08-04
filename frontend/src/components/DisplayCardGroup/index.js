@@ -8,6 +8,21 @@ import './DisplayCardGroup.css';
 
 export default function DisplayCardGroup({ group }) {
 
+  /////////////////////////// NUM EVENTS
+  const groupIdAsNum = group.id;
+  const allEvents = useSelector(state => state.events.allEvents);
+
+  let numEvents;
+  if (Object.values(allEvents).length) {
+    let allEventsArr = Object.values(allEvents);
+
+    let eventsByThisGroup = allEventsArr.filter(eventObj => {
+      return eventObj.groupId === groupIdAsNum;
+    });
+
+    numEvents = eventsByThisGroup.length;
+  };
+
   // console.log(`*** IN DISPLAY CARD displayType is: ***`, displayType)
   // console.log(`*** IN DISPLAY CARD group is: ***`, group)
 
@@ -73,7 +88,8 @@ export default function DisplayCardGroup({ group }) {
             </div>
 
             <div className='group-num-of-events'>
-              # events · {group.privacy ? <span>Private</span> : <span>Public</span>}
+              {/* # events */}
+              {numEvents === 1 ? `${numEvents} event` : `${numEvents} events`} · {group.privacy ? <span>Private</span> : <span>Public</span>}
             </div>
           </div>
 
