@@ -342,12 +342,15 @@ export default function GroupDetails() {
             </div>
           }
 
+          {/* (POST /api/groups/:groupId/events) */}
 
           {hideAdminButtons ? null :
             <div id="admin-buttons-div">
-              <button className='admin-button'>
-                Create event
-              </button>
+              <Link to={`/groups/${groupId}/events/new`}>
+                <button className='admin-button'>
+                  Create event
+                </button>
+              </Link>
               <Link to={`/groups/${groupId}/update`}>
                 <button className='admin-button'>
                   Update

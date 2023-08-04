@@ -14,6 +14,9 @@ import DisplayAllEvents from "./components/DisplayAllEvents";
 import GroupFormCreate from "./components/GroupFormCreate";
 import GroupFormUpdate from "./components/GroupFormUpdate";
 
+import EventFormCreate from "./components/EventFormCreate";
+// import EventFormUpdate from "./components/EventFormUpdate";
+
 import GroupDetails from "./components/GroupDetails";
 import EventDetails from "./components/EventDetails";
 
@@ -48,6 +51,14 @@ function App() {
 
         <Route exact path='/groups/:groupId/update'>
           <GroupFormUpdate />
+        </Route>
+
+        <Route exact path='/groups/:groupId/events/new'>
+          <EventFormCreate />
+        </Route>
+
+        <Route exact path='/groups/:groupId/events/update'>
+          {/* <EventFormUpdate /> */}
         </Route>
 
         <Route exact path='/groups/:groupId'>

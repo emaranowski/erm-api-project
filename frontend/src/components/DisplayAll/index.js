@@ -35,18 +35,44 @@ export default function DisplayAll({ displayType }) {
   // const allGroupsHere = useSelector(state => state.groups.allGroups ? state.groups.allGroups : {}); // {}
   // console.log(`*** allGroupsHere is: ***`, allGroupsHere)
 
-
   const state = useSelector(state => state)
   // console.log(`*** state is: ***`, state) // {session: {…}, groups: {…}, events: {…}}
-
   const stateEventsSlice = useSelector(state => state.events)
   // console.log(`*** stateEventsSlice is: ***`, stateEventsSlice) // {allEvents: {…}, singleEvent: {…}}
-
   const allEvents = useSelector(state => state.events.allEvents)
   // console.log(`*** allEvents is: ***`, allEvents) // { 1: {id: 1, ...}, 2: {id: 2, ...}, 3: {id: 3, ...} }
-
   const allEventsArr = Object.values(allEvents)
+
   // console.log(`*** allEventsArr is: ***`, allEventsArr) // [ 0: {id: 1, ...}, 1: {id: 2, ...}, 2: {id: 3, ...} ]
+
+
+
+  ///// COME BACK TO THIS FOR THE ORDERING OF EVENTS
+  // const allEventsArrOrdered = []; // order: future to past
+
+  // for (let i = 0; i < allEventsArr.length; i++) {
+  //   const currEvent = allEventsArr[i];
+  //   let mostRecentDateTime;
+  //   let currStartDate;
+  // }
+  // ////////////// START DATE + TIME //////////////
+  // let startDateArr = [];
+  // let startTimeArr = [];
+  // if (allEventsArr.length) {
+  //   const startDateTime = event.startDate; // startDateTime is string
+  //   const startDateTimeArr = startDateTime.split('');
+
+  //   for (let i = 0; i < 10; i++) {
+  //     startDateArr.push(startDateTimeArr[i]);
+  //   }
+  //   for (let i = 11; i < 16; i++) {
+  //     startTimeArr.push(startDateTimeArr[i]);
+  //   }
+  // }
+  // let startDateStr = startDateArr.join('');
+  // let startTimeStr = startTimeArr.join('');
+
+
 
   useEffect(() => {
     dispatch(getAllGroupsThunk());

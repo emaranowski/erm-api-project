@@ -4,6 +4,8 @@ import { csrfFetch } from "./csrf";
 
 const GET_ALL_EVENTS = "events/GET_ALL_EVENTS";
 const GET_SINGLE_EVENT = "events/GET_SINGLE_EVENT";
+const CREATE_EVENT = "events/CREATE_EVENT";
+const CREATE_EVENT_IMAGE = "events/CREATE_EVENT_IMAGE";
 
 ////////////// Action Creators: //////////////
 
@@ -22,8 +24,23 @@ const getSingleEvent = (event) => {
   };
 };
 
+const createEvent = (event) => {
+  return {
+    type: CREATE_EVENT,
+    event
+  };
+};
+
+const createEventImage = (image) => {
+  return {
+    type: CREATE_EVENT_IMAGE,
+    image
+  };
+};
+
 ////////////// Thunk Action Creators: //////////////
 
+////////////// Get All Events
 export const getAllEventsThunk = () => async (dispatch) => {
   const res = await csrfFetch('/api/events', {
     method: 'GET'
@@ -50,17 +67,91 @@ export const getAllEventsThunk = () => async (dispatch) => {
   }
 };
 
+////////////// Get Single Event
 export const getSingleEventThunk = (eventId) => async (dispatch) => {
   const res = await csrfFetch(`/api/events/${eventId}`);
 
   if (res.ok) {
     const eventDetails = await res.json();
     dispatch(getSingleEvent(eventDetails));
+    // return eventDetails; // 2023-08-03 tried adding return
   } else {
     const errors = await res.json();
     return errors;
   }
 };
+
+// (POST /api/groups/:groupId/events)
+////////////// Create Event + Create EventImage
+export const createEventThunk = (event) => async (dispatch) => {
+  const { groupId, venueId, name, type, capacity, price, description, startDate, endDate, url } = event;
+  const preview = true;
+
+  const res = await csrfFetch(`/api/groups/${groupId}/events`, {
+    method: "POST",
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      venueId,
+      name,
+      type,
+      capacity,
+      price,
+      description,
+      startDate,
+      endDate,
+    }),
+  });
+
+  if (res.ok) {
+    // console.log(`*** in res.ok ***`)
+
+    const data = await res.json(); // data is event's obj { id: 4, ... } // need eventId (assigned by db)
+    const eventId = data.id;
+
+    // console.log(`*** in res.ok -- data is: ***`, data) // event's obj { id: 4, ... }
+    // console.log(`*** in res.ok -- eventId is: ***`, eventId) // 4
+
+    dispatch(createEvent(data));
+
+    const imageRes = await csrfFetch(`/api/events/${eventId}/images`, { // router.post('/:eventId/images'
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        eventId,
+        url,
+        preview,
+      }),
+    });
+    // console.log(`*** in thunk res.ok -- imageRes is: ***`, imageRes) // Response obj {}
+
+    if (imageRes.ok) {
+      // console.log(`*** in imageRes.ok -- imageRes is: ***`, imageRes) // Response obj {}
+      const image = await imageRes.json(); // image is eventImage obj
+      // const imageId = image.id;
+      // console.log(`*** in imageRes.ok -- image is: ***`, image) //
+      // console.log(`*** in imageRes.ok -- imageId is: ***`, imageId) //
+
+      const imageForStore = {
+        id: image.id,
+        eventId: eventId,
+        url: image.url,
+        preview: image.preview
+      }
+      // console.log(`*** in imageRes.ok -- imageForStore is: ***`, imageForStore) //
+
+      dispatch(createEventImage(imageForStore));
+    }
+
+    return data;
+
+  } else {
+    console.log(`*** in thunk RES NOT OK ***`)
+    const errors = await res.json();
+    console.log(`*** in thunk RES NOT OK -- errors is: ***`, errors)
+    return errors;
+  };
+};
+
 
 ////////////// Reducer: //////////////
 
@@ -84,6 +175,15 @@ export default function eventsReducer(state = initialState, action) { // eventsR
 
     case GET_SINGLE_EVENT:
       newState.singleEvent = action.event;
+      return newState;
+
+    case CREATE_EVENT:
+      newState.allEvents[action.event.id] = action.event;
+      return newState;
+
+    case CREATE_EVENT_IMAGE:
+      newState.singleEvent.EventImages = [];
+      newState.singleEvent.EventImages.push(action.image);
       return newState;
 
     default:

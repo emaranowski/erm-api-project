@@ -14,7 +14,6 @@ import './EventDetails.css';
 
 export default function EventDetails() {
   const dispatch = useDispatch();
-
   const sessionUser = useSelector(state => state.session.user);
   const { eventId } = useParams();
 
@@ -53,37 +52,45 @@ export default function EventDetails() {
   // console.log(`*** IN EVENT DETAILS group is: ***`, group)
 
 
-  useEffect(() => {
-    dispatch(getSingleEventThunk(eventId));
-  }, [dispatch, eventId]);
-
-  useEffect(() => {
-    dispatch(getAllEventsThunk());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(getSingleGroupThunk(groupId));
-  }, [dispatch, groupId]);
-
-  useEffect(() => {
-    dispatch(getAllGroupsThunk());
-  }, [dispatch]);
 
 
   // useEffect(() => {
-  //   const getAllData = async () => {
-  //     await Promise.all([
-  //       dispatch(getSingleEventThunk(eventId)),
-  //       dispatch(getAllEventsThunk()),
-  //       dispatch(getSingleGroupThunk(groupId)),
-  //       dispatch(getAllGroupsThunk()),
-  //     ])
-  //   }
-  //   getAllData();
-  // }, [dispatch, eventId, groupId])
+  //   dispatch(getSingleEventThunk(eventId));
+  // }, [dispatch, eventId]);
+  // useEffect(() => {
+  //   dispatch(getAllEventsThunk());
+  // }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getSingleGroupThunk(groupId));
+  // }, [dispatch, groupId]);
+  // useEffect(() => {
+  //   dispatch(getAllGroupsThunk());
+  // }, [dispatch]);
+
+  // useEffect(() => {
+  //   dispatch(getSingleEventThunk(eventId));
+  //   dispatch(getAllEventsThunk());
+  //   dispatch(getSingleGroupThunk(groupId));
+  //   dispatch(getAllGroupsThunk());
+  // }, [dispatch, eventId, groupId]);
+
+  useEffect(() => {
+    const getAllData = async () => {
+      await Promise.all([
+        dispatch(getSingleEventThunk(eventId)),
+        dispatch(getAllEventsThunk()),
+        dispatch(getSingleGroupThunk(groupId)),
+        dispatch(getAllGroupsThunk()),
+      ])
+    }
+    getAllData();
+  }, [dispatch, eventId, groupId])
 
 
   ////////////// HOST NAME (GROUP ORGANIZER NAME) //////////////
+  const test = useSelector(state => state.groups.singleGroup)
+  console.log(`*** test is: ***`, test)
+
   const singleGroup = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {});
   let organizerId;
   let organizerFirstName;
@@ -164,6 +171,7 @@ export default function EventDetails() {
   if (event.price !== undefined) {
     price = event.price;
   }
+  if (price === 0) price = 'FREE';
 
   ////////////// ONLINE / IN PERSON //////////////
 
@@ -252,7 +260,7 @@ export default function EventDetails() {
               <div className='event-detail-row event-detail-row-spacer'>
                 <div className='clock-icon-wrapper'>
                   <div className='icon-col'>
-                    ⏲
+                    🕒
                   </div>
                 </div>
                 <div className='start-end-text-col'>
@@ -267,10 +275,10 @@ export default function EventDetails() {
 
               <div className='event-detail-row event-detail-row-spacer'>
                 <div className='icon-col'>
-                  $
+                  💲
                 </div>
                 <div className='price-text-col'>
-                  {price}
+                  {typeof price === 'number' ? '$' : null}{price}
                 </div>
               </div>
 
@@ -285,6 +293,25 @@ export default function EventDetails() {
 
             </div>
 
+            <div className='event-admin-buttons-row'>
+              {hideAdminButtons ? null :
+                <div id="event-admin-buttons-div">
+                  <Link to={`/events/${eventId}/update`}>
+                    <button className='admin-button'>
+                      Update
+                    </button>
+                  </Link>
+                  <button className='admin-button'>
+                    Delete
+                  </button>
+                  {/* <EventDeleteModalButton
+                    buttonText="Delete"
+                    modalComponent={<EventDeleteModal eventId={eventId} />}
+                  /> */}
+                </div>
+              }
+
+            </div>
           </div>
         </div>
 
@@ -305,43 +332,3 @@ export default function EventDetails() {
     </>
   )
 }
-
-
-// <div className='event-detail-info'>
-
-// <div className='event-details-start-end-price-location'>
-
-//   <div className='event-detail-location'>
-//     {event.city}, {event.state}
-//   </div>
-//   <div className='event-detail-events-privacy'>
-//     # events · {event.privacy ? <span>Private</span> : <span>Public</span>}
-//   </div>
-
-// </div>
-
-// {hideJoinButton ? null :
-//   <div id="join-event-button-div">
-//     {/* <OpenModalButtonJoinEvent
-//       buttonText="Join this event"
-//       modalComponent={<JoinEventModal />} /> */}
-//   </div>
-// }
-
-// {hideAdminButtons ? null :
-//   <div id="admin-buttons-div">
-//     <button className='admin-button'>
-//       Create event
-//     </button>
-//     <Link to={`/events/${eventId}/update`}>
-//       <button className='admin-button'>
-//         Update
-//       </button>
-//     </Link>
-//     {/* <EventDeleteModalButton
-//       buttonText="Delete"
-//       modalComponent={<EventDeleteModal eventId={eventId} />}
-//     /> */}
-//   </div>
-// }
-// </div>

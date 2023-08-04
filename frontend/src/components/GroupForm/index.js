@@ -114,7 +114,7 @@ export default function GroupForm({ group, formType }) {
 
       try {
         const res = await dispatch(createGroupThunk(group)); // VS Code gives note about not needing 'await', but it IS needed here
-        console.log(`*** in form CREATE try, res is: ***`, res)
+        // console.log(`*** in form CREATE try, res is: ***`, res)
         if (res.id) {
           setErrors({});
           history.push(`/groups/${res.id}`);
@@ -122,9 +122,9 @@ export default function GroupForm({ group, formType }) {
           return res;
         }
       } catch (res) { // if exception in above code, run .catch()
-        console.log(`*** in form CREATE catch, res is: ***`, res) // TypeError: Failed to execute 'json' on 'Response': body stream already read
+        // console.log(`*** in form CREATE catch, res is: ***`, res) // TypeError: Failed to execute 'json' on 'Response': body stream already read
         const data = await res.json(); // get data from db
-        console.log(`*** in form CREATE catch, data is: ***`, data) // TypeError: Failed to execute 'json' on 'Response': body stream already read
+        // console.log(`*** in form CREATE catch, data is: ***`, data) // TypeError: Failed to execute 'json' on 'Response': body stream already read
         if (data && data.errors) { // if errors from db
           setErrors(data.errors); // setErrors
         }
@@ -134,7 +134,7 @@ export default function GroupForm({ group, formType }) {
 
       try {
         const res = await dispatch(updateGroupThunk(group)); // VS Code gives note about not needing 'await', but it IS needed here
-        console.log(`*** in form UPDATE try, res is: ***`, res)
+        // console.log(`*** in form UPDATE try, res is: ***`, res)
         if (res.id) {
           setErrors({});
           history.push(`/groups/${res.id}`);
@@ -142,9 +142,9 @@ export default function GroupForm({ group, formType }) {
           return res;
         }
       } catch (res) { // if exception in above code, run .catch()
-        console.log(`*** in form UPDATE catch, res is: ***`, res) // TypeError: Failed to execute 'json' on 'Response': body stream already read
+        // console.log(`*** in form UPDATE catch, res is: ***`, res) // TypeError: Failed to execute 'json' on 'Response': body stream already read
         const data = await res.json(); // get data from db
-        console.log(`*** in form UPDATE catch, data is: ***`, data) // TypeError: Failed to execute 'json' on 'Response': body stream already read
+        // console.log(`*** in form UPDATE catch, data is: ***`, data) // TypeError: Failed to execute 'json' on 'Response': body stream already read
         if (data && data.errors) { // if errors from db
           setErrors(data.errors); // setErrors
         }

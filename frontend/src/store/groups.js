@@ -95,6 +95,7 @@ export const getSingleGroupThunk = (groupId) => async (dispatch) => {
   if (res.ok) {
     const groupDetails = await res.json();
     dispatch(getSingleGroup(groupDetails));
+    // return groupDetails // 2023-08-03 tried adding return
   } else {
     const errors = await res.json();
     return errors;

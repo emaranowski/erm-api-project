@@ -503,19 +503,23 @@ const validateEvent = [
     check('type')
         .exists({ checkFalsy: true })
         .isIn(['Online', 'In person'])
-        .withMessage(`Type must be 'Online' or 'In Person'`),
+        .withMessage(`Type must be 'In Person' or 'Online'`),
     check('capacity')
         .exists({ checkFalsy: true })
         .isInt()
-        .withMessage(`Capacity must be an integer`),
+        .withMessage(`A number for capacity is required`),
     check('price')
         .exists({ checkFalsy: true })
         .isDecimal()
-        .withMessage(`Price is invalid`),
+        .withMessage(`A number for price is required ("0" is fine if it's free!)`), // changed on 2023-08-03 from 'Price is invalid'
     check('description')
         .exists({ checkFalsy: true })
         .notEmpty()
         .withMessage(`Description is required`),
+    check('description')
+        .exists({ checkFalsy: true })
+        .isLength({ min: 30 })
+        .withMessage(`Description must be at least 30 characters`),
     check('startDate')
         .exists({ checkFalsy: true })
         .isAfter(Date.parse(Date.now()))
@@ -831,7 +835,7 @@ const validatePageOrig = [
     // check('type')
     //     .exists({ checkFalsy: true })
     //     .isIn(['Online', 'In person'])
-    //     .withMessage(`Type must be 'Online' or 'In Person'`),
+    //     .withMessage(`Type must be 'In Person' or 'Online'`),
     // check('startDate')
     //     .exists({ checkFalsy: true })
     //     .isDate() // try to figure out how to use .isLatLong()

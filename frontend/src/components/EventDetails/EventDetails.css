@@ -131,6 +131,11 @@
 
 .location-text-col {}
 
+.event-admin-buttons-row {
+    margin-left: 230px;
+    margin-top: -55px;
+}
+
 .event-detail-lower-text-row {
     display: flex;
     flex-direction: column;
