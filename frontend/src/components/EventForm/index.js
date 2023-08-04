@@ -27,17 +27,41 @@ export default function EventForm({ event, formType }) {
   const [capacity, setCapacity] = useState(event?.type);
   const [price, setPrice] = useState(event?.price);
   const [description, setDescription] = useState(event?.description);
-  const [startDate, setStartDate] = useState(event?.startDate);
-  const [endDate, setEndDate] = useState(event?.endDate);
+  const [startDate, setStartDate] = useState(event?.startDate); // to/from db
+  const [endDate, setEndDate] = useState(event?.endDate); // to/from db
   const [url, setURL] = useState(event?.url);
   const [venueId, setVenueId] = useState(1); // 2023-08-03: hardcoding for now, since it's not part of MVP specs
 
+  // to/from HTML form
+  const [startDateHTML, setStartDateHTML] = useState(null);
+  const [startTimeHTML, setStartTimeHTML] = useState(null);
+  const [endDateHTML, setEndDateHTML] = useState(null);
+  const [endTimeHTML, setEndTimeHTML] = useState(null);
+
+  // disabling & errors
   const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState({});
 
   // submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // --- startDateHTML + startTimeHTML = startDate ("2024-11-19 20:00:00")
+    // console.log(`*** startDateHTML is ***`, startDateHTML) // str 2023-08-09
+    // console.log(`*** startTimeHTML is ***`, startTimeHTML) // str 10:36
+    const startDateTimeConcat = startDateHTML.concat(' ', startTimeHTML, ':00');
+    // console.log(`*** startDateTimeConcat is ***`, startDateTimeConcat)
+    setStartDate(startDateTimeConcat);
+    // console.log(`*** startDate for DB is ***`, startDate)
+
+
+    // --- endDateHTML + endTimeHTML = endDate ("2024-11-19 20:00:00")
+    // console.log(`*** endDateHTML is ***`, endDateHTML) // str 2023-08-22
+    // console.log(`*** endTimeHTML is ***`, endTimeHTML) // str 22:38
+    const endDateTimeConcat = endDateHTML.concat(' ', endTimeHTML, ':00');
+    // console.log(`*** endDateTimeConcat is ***`, endDateTimeConcat)
+    setEndDate(endDateTimeConcat);
+    // console.log(`*** endDate for DB is ***`, endDate)
 
     event = {
       ...event,
@@ -151,20 +175,6 @@ export default function EventForm({ event, formType }) {
           </div>
           {errors.type && (<div className="group-create-error-text">{errors.type}</div>)}
 
-          {/* <div className='create-group-form-text'>Is this group private or public?</div>
-          <div>
-            <select
-              className="input-spacer input-text"
-              onChange={(e) => setPrivacy(e.target.value)}
-              value={privacy}
-            >
-              <option key='(select one)' value='(select one)'>(select one)</option>
-              <option key='Private' value={true}>Private</option>
-              <option key='Public' value={false}>Public</option>
-            </select>
-          </div>
-          {errors.privacy && (<div className="group-create-error-text">{errors.privacy}</div>)} */}
-
           <div className='create-group-form-text'>What is the attendance capacity for your event?</div>
           <div>
             <span>
@@ -203,21 +213,30 @@ export default function EventForm({ event, formType }) {
           <div className='create-group-form-text'>When does your event start?</div>
           <div>
             <span>
-              <input
+              {/* <input
                 className="input-spacer input-text"
-                type="date"
+                size="26"
+                type="text"
                 name="startDate"
                 onChange={(e) => setStartDate(e.target.value)}
                 value={startDate}
+                placeholder="MM/DD/YYY HH:mm AM"
+              /> */}
+              <input
+                className="input-spacer input-text"
+                type="date"
+                name="startDateHTML"
+                onChange={(e) => setStartDateHTML(e.target.value)}
+                value={startDateHTML}
               />
             </span>
             <span>
               <input
                 className="input-spacer input-text"
                 type="time"
-                name="startTime"
-                onChange={(e) => setStartTime(e.target.value)}
-                value={startTime}
+                name="startTimeHTML"
+                onChange={(e) => setStartTimeHTML(e.target.value)}
+                value={startTimeHTML}
               />
             </span>
           </div>
@@ -226,22 +245,30 @@ export default function EventForm({ event, formType }) {
           <div className='create-group-form-text'>When does your event end?</div>
           <div>
             <span>
-              <input
+              {/* <input
                 className="input-spacer input-text"
-                type="date"
+                size="26"
+                type="text"
                 name="endDate"
                 onChange={(e) => setEndDate(e.target.value)}
                 value={endDate}
                 placeholder="MM/DD/YYY HH:mm PM"
+              /> */}
+              <input
+                className="input-spacer input-text"
+                type="date"
+                name="endDateHTML"
+                onChange={(e) => setEndDateHTML(e.target.value)}
+                value={endDateHTML}
               />
             </span>
             <span>
               <input
                 className="input-spacer input-text"
                 type="time"
-                name="endTime"
-                onChange={(e) => setEndTime(e.target.value)}
-                value={endTime}
+                name="endTimeHTML"
+                onChange={(e) => setEndTimeHTML(e.target.value)}
+                value={endTimeHTML}
               />
             </span>
           </div>
