@@ -495,27 +495,32 @@ export default function GroupDetails() {
 
         <div className='group-info-header'>Events ({`${eventsByGroupTotalNum}`} total)</div>
 
-        <div className='group-info-header'>Upcoming Events ({`${eventsByGroupUpcomingNum}`})</div>
 
-        <div>
-          {eventsByGroupUpcoming.map((event) => (
-            <div key={event.id}>
-              {/* {console.log(`*** event is: ***`, event)} */}
-              <DisplayCardEventMini event={event} />
+        {eventsByGroupUpcomingNum > 0 ?
+          <>
+            <div className='group-info-header'>Upcoming Events ({`${eventsByGroupUpcomingNum}`})</div>
+            <div>
+              {eventsByGroupUpcoming.map((event) => (
+                <div key={event.id}>
+                  <DisplayCardEventMini event={event} />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </>
+          : null}
 
-        <div className='group-info-header'>Past Events ({`${eventsByGroupPastNum}`})</div>
-
-        <div>
-          {eventsByGroupPast.map((event) => (
-            <div key={event.id}>
-              {/* {console.log(`*** event is: ***`, event)} */}
-              <DisplayCardEventMini event={event} />
+        {eventsByGroupPastNum > 0 ?
+          <>
+            <div className='group-info-header'>Past Events ({`${eventsByGroupPastNum}`})</div>
+            <div>
+              {eventsByGroupPast.map((event) => (
+                <div key={event.id}>
+                  <DisplayCardEventMini event={event} />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </>
+          : null}
 
         {/* <Link to={`/events/:eventId`}>
           <div className='event-card'>

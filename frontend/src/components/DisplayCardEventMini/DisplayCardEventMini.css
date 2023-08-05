@@ -1,4 +1,4 @@
-.group-card {
+.event-card-mini-card {
     width: 100%;
 
     border-bottom: 1px solid grey;
@@ -7,9 +7,15 @@
     margin: 20px 0px;
 
     display: flex;
+    flex-direction: column;
 }
 
-.group-card-img {
+.display-event-mini-row-1 {
+    display: flex;
+    flex-direction: row;
+}
+
+.event-card-mini-img {
     background-color: bisque;
     width: 200px;
     height: 180px;
@@ -17,46 +23,46 @@
     border-radius: 10px;
 }
 
-.group-img {
+.event-card-mini-img {
     background-color: bisque;
     width: 120px;
     height: 120px;
     margin-right: 15px;
 }
 
-.event-name {
+.event-card-mini-name {
     color: black;
     font-size: 22px;
     margin-bottom: 9px;
 }
 
-.group-location {
+.event-card-mini-location {
     font-size: 14px;
     font-weight: 200;
     color: rgb(123, 123, 123);
     margin-bottom: 5px;
 }
 
-.group-text {
+.event-card-mini-text {
     color: black;
     font-size: 14px;
     margin-bottom: 5px;
 }
 
-.group-num-of-events {
+.event-card-mini-num-of-events {
     font-size: 14px;
     font-weight: 200;
     color: rgb(123, 123, 123);
     margin-bottom: 5px;
 }
 
-.group-privacy {
+.event-card-mini-privacy {
     font-size: 14px;
     font-weight: 200;
     color: rgb(123, 123, 123);
 }
 
-.event-date-time {
+.event-card-mini-date-time {
     font-size: 14px;
     font-weight: 200;
     color: #087c8c;

@@ -1,12 +1,25 @@
 import { Link } from 'react-router-dom';
-// import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-// import { getAllGroupsThunk } from '../../store/groups';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSingleEventThunk } from '../../store/events';
+
 
 import './DisplayCardEventMini.css';
 
 export default function DisplayCardEventMini({ event }) {
+  const dispatch = useDispatch();
+  const eventId = event.id;
+  const singleEvent = useSelector(state => state.events.singleEvent);
 
+  // console.log(`***** singleEvent *****`, singleEvent);
+  let eventDescription;
+  if (singleEvent.id !== undefined && singleEvent.id !== null) {
+    eventDescription = singleEvent.description;
+  }
+  // console.log(`***** eventDescription *****`, eventDescription);
+
+
+  // const
   // console.log(`*** IN DisplayCardEventMini event is: ***`, event) // {}
   // ^^ {id: 1, venueId: 1, groupId: 1, name: 'Forest Park Hike', type: 'In person', …}
 
@@ -33,31 +46,43 @@ export default function DisplayCardEventMini({ event }) {
   // console.log(`*** dateStr is: ***`, dateStr) // str
   // console.log(`*** timeStr is: ***`, timeStr) // arr
 
+  useEffect(() => {
+    dispatch(getSingleEventThunk(eventId));
+  }, [])
+
   return (
     <>
       <Link to={`/events/${event.id}`}>
-        <div className='group-card'>
+        <div className='event-card-mini-card'>
 
-          {event.previewImage ? <div><img className='group-card-img' src={event.previewImage}></img></div> : ''}
+          <div className='display-event-mini-row-1'>
+            {event.previewImage ?
+              <div>
+                <img className='event-card-mini-img' src={event.previewImage}></img>
+              </div>
+              : null}
 
-          <div className='group-info'>
-            <div className='event-date-time'>
-              {/* [ YYY-MM-DD ] · [ time ] <br></br>
+            <div className='event-card-mini-info'>
+              <div className='event-date-time'>
+                {/* [ YYY-MM-DD ] · [ time ] <br></br>
               {event.startDate} */}
-              {startDateStr} · {startTimeStr}
-            </div>
+                {startDateStr} · {startTimeStr}
+              </div>
 
-            <div className='event-name'>
-              {event.name}
-            </div>
+              <div className='event-card-mini-name'>
+                {event.name}
+              </div>
 
-            <div className='group-location'>
-              {event.type === 'Online' ? 'Online' : null}
-              {event.type === 'In person' ? `${event.Venue.city}, ${event.Venue.state}` : null}
+              <div className='event-card-mini-location'>
+                {event.type === 'Online' ? 'Online' : null}
+                {event.type === 'In person' ? `${event.Venue.city}, ${event.Venue.state}` : null}
+              </div>
             </div>
+          </div>
 
-            <div className='group-text'>
-              {event.about}
+          <div className='display-event-mini-row-2'>
+            <div className='event-card-mini-text'>
+              {eventDescription}
             </div>
           </div>
 
