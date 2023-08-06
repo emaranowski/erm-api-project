@@ -90,9 +90,8 @@ nav {
     font-family: 'Gochi Hand', cursive;
     /* font-family: 'Itim', cursive; */
     /* font-family: 'Leckerli One', cursive; */
-    font-size: 1.7em;
-    letter-spacing: .025em;
-    line-height: .79em;
+    font-size: 2em;
+    letter-spacing: .01em;
 }
 
 /* .nav-button {

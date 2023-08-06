@@ -17,7 +17,7 @@ module.exports = {
     await Group.bulkCreate([
       {
         organizerId: 1, // prob correct syntax for FK val
-        name: 'Hikers',
+        name: 'PNW Hikers',
         about: 'A group of hikers who love getting outdoors.',
         type: 'In person', // may not be correct ENUM syntax
         privacy: false,

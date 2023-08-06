@@ -368,69 +368,73 @@ export default function GroupDetails() {
 
   return (
     <>
-      <div>
-        ⬅ <Link to='/groups'>Groups</Link>
-      </div>
+      <div className='group-detail-main-box'>
 
-      <div className='group-detail-card'>
-        <div>
-          {/* <div className='group-detail-img'>[ image ]</div> */}
+        <div className='group-detail-centering-box'>
 
-          {previewImageURL ? <img className='group-detail-img' src={previewImageURL}></img> : ''}
-
-          {/* <img className='group-detail-img' src={previewImageURL}></img> */}
-          {/* <div className='group-detail-img'> */}
-          {/* {previewImageURL} */}
-          {/* </div> */}
-        </div>
-        <div className='group-detail-info'>
-          <div className='group-info-header'>
-            {group.name}
-          </div>
-          <div className='group-detail-location'>
-            {group.city}, {group.state}
-          </div>
-          <div className='group-detail-events-privacy'>
-            # events · {group.privacy ? <span>Private</span> : <span>Public</span>}
-          </div>
-          <div className='group-detail-organized-by'>
-            Organized by: {organizerFirstName} {organizerLastName}
+          <div>
+            ⬅ <Link to='/groups'>Groups</Link>
           </div>
 
-          {hideJoinButton ? null :
-            <div id="join-group-button-div">
-              <OpenModalButtonJoinGroup
-                buttonText="Join this group"
-                modalComponent={<JoinGroupModal />} />
+          <div className='group-detail-card'>
+            <div>
+              {/* <div className='group-detail-img'>[ image ]</div> */}
+
+              {previewImageURL ? <img className='group-detail-img' src={previewImageURL}></img> : ''}
+
+              {/* <img className='group-detail-img' src={previewImageURL}></img> */}
+              {/* <div className='group-detail-img'> */}
+              {/* {previewImageURL} */}
+              {/* </div> */}
             </div>
-          }
+            <div className='group-detail-info'>
+              <div className='group-info-header'>
+                {group.name}
+              </div>
+              <div className='group-detail-location'>
+                {group.city}, {group.state}
+              </div>
+              <div className='group-detail-events-privacy'>
+                # events · {group.privacy ? <span>Private</span> : <span>Public</span>}
+              </div>
+              <div className='group-detail-organized-by'>
+                Organized by: {organizerFirstName} {organizerLastName}
+              </div>
 
-          {/* (POST /api/groups/:groupId/events) */}
+              {hideJoinButton ? null :
+                <div id="join-group-button-div">
+                  <OpenModalButtonJoinGroup
+                    buttonText="Join this group"
+                    modalComponent={<JoinGroupModal />} />
+                </div>
+              }
 
-          {hideAdminButtons ? null :
-            <div id="admin-buttons-div">
-              <Link to={`/groups/${groupId}/events/new`}>
-                <button className='admin-button'>
-                  Create event
-                </button>
-              </Link>
-              <Link to={`/groups/${groupId}/update`}>
-                <button className='admin-button'>
-                  Update
-                </button>
-              </Link>
-              {/* <button className='admin-button'>
+              {/* (POST /api/groups/:groupId/events) */}
+
+              {hideAdminButtons ? null :
+                <div id="admin-buttons-div">
+                  <Link to={`/groups/${groupId}/events/new`}>
+                    <button className='admin-button'>
+                      Create event
+                    </button>
+                  </Link>
+                  <Link to={`/groups/${groupId}/update`}>
+                    <button className='admin-button'>
+                      Update
+                    </button>
+                  </Link>
+                  {/* <button className='admin-button'>
                 Delete
               </button> */}
-              <GroupDeleteModalButton
-                buttonText="Delete"
-                modalComponent={<GroupDeleteModal groupId={groupId} />}
-              />
-            </div>
-          }
+                  <GroupDeleteModalButton
+                    buttonText="Delete"
+                    modalComponent={<GroupDeleteModal groupId={groupId} />}
+                  />
+                </div>
+              }
 
 
-          {/* {sessionUser ? (
+              {/* {sessionUser ? (
             <>
               <div id="join-group-button-div">
                 <OpenModalButtonJoinGroup
@@ -445,7 +449,7 @@ export default function GroupDetails() {
           )} */}
 
 
-          {/* {!sessionUser ? (
+              {/* {!sessionUser ? (
             <>
               <div className='how-it-works-header-link-inactive small-link-bold-inactive'>
                 Start a new group
@@ -461,7 +465,7 @@ export default function GroupDetails() {
             </>
           )} */}
 
-          {/*
+              {/*
           {!sessionUser ? (
             <>
               <Link to="/groups/new">
@@ -480,49 +484,52 @@ export default function GroupDetails() {
 
 
 
-        </div >
-      </div >
+            </div >
+          </div >
 
-      <div className='group-info-box'>
-
-        <div className='group-info-header'>Organizer</div>
-        <div className='group-organizer-name'>{organizerFirstName} {organizerLastName}</div>
-
-        <div className='group-info-header'>What we're about</div>
-        <div className='group-info-text'>
-          {group.about}
-        </div>
-
-        <div className='group-info-header'>Events ({`${eventsByGroupTotalNum}`} total)</div>
+          <div className='group-info-box'>
 
 
-        {eventsByGroupUpcomingNum > 0 ?
-          <>
-            <div className='group-info-header'>Upcoming Events ({`${eventsByGroupUpcomingNum}`})</div>
-            <div>
-              {eventsByGroupUpcoming.map((event) => (
-                <div key={event.id}>
-                  <DisplayCardEventMini event={event} />
-                </div>
-              ))}
+
+            <div className='group-info-header'>Organizer</div>
+            <div className='group-organizer-name'>{organizerFirstName} {organizerLastName}</div>
+
+            <div className='group-info-header'>What we're about</div>
+            <div className='group-info-text'>
+              {group.about}
             </div>
-          </>
-          : null}
 
-        {eventsByGroupPastNum > 0 ?
-          <>
-            <div className='group-info-header'>Past Events ({`${eventsByGroupPastNum}`})</div>
-            <div>
-              {eventsByGroupPast.map((event) => (
-                <div key={event.id}>
-                  <DisplayCardEventMini event={event} />
-                </div>
-              ))}
+            <div className='total-events-header'>
+              Events ({`${eventsByGroupTotalNum}`} total)
             </div>
-          </>
-          : null}
 
-        {/* <Link to={`/events/:eventId`}>
+            {eventsByGroupUpcomingNum > 0 ?
+              <>
+                <div className='group-info-header'>Upcoming Events ({`${eventsByGroupUpcomingNum}`})</div>
+                <div>
+                  {eventsByGroupUpcoming.map((event) => (
+                    <div key={event.id}>
+                      <DisplayCardEventMini event={event} />
+                    </div>
+                  ))}
+                </div>
+              </>
+              : null}
+
+            {eventsByGroupPastNum > 0 ?
+              <>
+                <div className='group-info-header'>Past Events ({`${eventsByGroupPastNum}`})</div>
+                <div>
+                  {eventsByGroupPast.map((event) => (
+                    <div key={event.id}>
+                      <DisplayCardEventMini event={event} />
+                    </div>
+                  ))}
+                </div>
+              </>
+              : null}
+
+            {/* <Link to={`/events/:eventId`}>
           <div className='event-card'>
             <div className='event-card-top'>
               <div className='event-img'>
@@ -547,6 +554,10 @@ export default function GroupDetails() {
             </div>
           </div>
         </Link> */}
+
+          </div>
+
+        </div>
 
       </div>
     </>
