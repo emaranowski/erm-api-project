@@ -222,7 +222,7 @@ export default function EventDetails() {
     <>
       <div className='event-detail-main-box'>
 
-        <div className='event-detail-centering-box'>
+        <div className='event-detail-centering-child'>
 
           {/* HEADER */}
 
@@ -303,10 +303,13 @@ export default function EventDetails() {
 
                 </div>
 
+                {/* (PUT /api/groups/:groupId/events) */}
+
                 <div className='event-admin-buttons-row'>
                   {hideAdminButtons ? null :
                     <div id="event-admin-buttons-div">
-                      <Link to={`/events/${eventId}/update`}>
+                      {/* <Link to={`/events/${eventId}/update`}> */}
+                      <Link to={`/groups/${groupId}/events/${eventId}/update`}>
                         <button className='admin-button'>
                           Update
                         </button>

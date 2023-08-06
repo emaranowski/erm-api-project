@@ -5,7 +5,7 @@
     align-items: center;
 }
 
-.event-detail-centering-box {
+.event-detail-centering-child {
     width: 70%;
 }
 
@@ -63,7 +63,7 @@
 .event-group-date-price-location-col {
     display: flex;
     flex-direction: column;
-    width: 400px;
+    width: 40%;
 }
 
 .event-group-mini-card-row {
@@ -143,7 +143,7 @@
 .location-text-col {}
 
 .event-admin-buttons-row {
-    margin-left: 230px;
+    margin-left: 125px;
     margin-top: -55px;
 }
 

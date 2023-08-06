@@ -6,8 +6,8 @@ const GET_ALL_EVENTS = "events/GET_ALL_EVENTS";
 const GET_SINGLE_EVENT = "events/GET_SINGLE_EVENT";
 const CREATE_EVENT = "events/CREATE_EVENT";
 const CREATE_EVENT_IMAGE = "events/CREATE_EVENT_IMAGE";
-
-
+const UPDATE_EVENT = "events/UPDATE_EVENT";
+const UPDATE_EVENT_IMAGE = "events/UPDATE_EVENT_IMAGE";
 const DELETE_EVENT = "events/DELETE_EVENT";
 
 ////////////// Action Creators: //////////////
@@ -37,6 +37,20 @@ const createEvent = (event) => {
 const createEventImage = (image) => {
   return {
     type: CREATE_EVENT_IMAGE,
+    image
+  };
+};
+
+const updateEvent = (event) => {
+  return {
+    type: UPDATE_EVENT,
+    event
+  };
+};
+
+const updateEventImage = (image) => {
+  return {
+    type: UPDATE_EVENT_IMAGE,
     image
   };
 };
@@ -151,6 +165,72 @@ export const createEventThunk = (event) => async (dispatch) => {
 
       dispatch(createEventImage(imageForStore));
     }
+
+    return data;
+
+  } else {
+    // console.log(`*** in thunk RES NOT OK ***`)
+    const errors = await res.json();
+    // console.log(`*** in thunk RES NOT OK -- errors is: ***`, errors)
+    return errors;
+  };
+};
+
+// (PUT /api/events/:eventId)
+////////////// Update Event
+export const updateEventThunk = (event) => async (dispatch) => {
+  const { venueId, name, type, capacity, price, description, startDate, endDate, url, eventId } = event;
+  const preview = true;
+
+  const res = await csrfFetch(`/api/events/${eventId}`, {
+    method: "PUT",
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      venueId,
+      name,
+      type,
+      capacity,
+      price,
+      description,
+      startDate,
+      endDate,
+    }),
+  });
+
+  if (res.ok) {
+    // console.log(`*** in res.ok ***`)
+
+    const data = await res.json(); // data is event's obj { id: 4, ... } // need eventId (assigned by db)
+    // console.log(`*** in res.ok -- data is: ***`, data) // event's obj { id: 4, ... }
+    dispatch(updateEvent(data));
+
+    // const eventId = data.id;
+    // // console.log(`*** in res.ok -- eventId is: ***`, eventId)
+    // const imageRes = await csrfFetch(`/api/events/${eventId}/images`, {
+    //   method: "POST",
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({
+    //     eventId,
+    //     url,
+    //     preview,
+    //   }),
+    // });
+    // // console.log(`*** in thunk res.ok -- imageRes is: ***`, imageRes)
+    // if (imageRes.ok) {
+    //   // console.log(`*** in imageRes.ok -- imageRes is: ***`, imageRes)
+    //   const image = await imageRes.json(); // image is eventImage obj
+    //   // const imageId = image.id;
+    //   // console.log(`*** in imageRes.ok -- image is: ***`, image)
+    //   // console.log(`*** in imageRes.ok -- imageId is: ***`, imageId)
+    //   const imageForStore = {
+    //     id: image.id,
+    //     eventId: eventId,
+    //     url: image.url,
+    //     preview: image.preview
+    //   }
+    //   // console.log(`*** in imageRes.ok -- imageForStore is: ***`, imageForStore) //
+    //   dispatch(updateEventImage(imageForStore));
+    // }
 
     return data;
 
