@@ -220,114 +220,122 @@ export default function EventDetails() {
 
   return (
     <>
-      {/* HEADER */}
+      <div className='event-detail-main-box'>
 
-      <div className='event-detail-header'>
-        <div className='event-breadcrumb-link'>
-          ⬅ <Link to='/events'>Events</Link>
-        </div>
-        <div className='event-info-header'>
-          {event.name}
-        </div>
-        <div className='event-hosted-by'>
-          Hosted by: {organizerFirstName} {organizerLastName}
-        </div>
-      </div>
+        <div className='event-detail-centering-box'>
 
-      <div className='event-detail-box'>
+          {/* HEADER */}
 
-        {/* UPPER GRAPHIC ROW */}
-
-        <div className='event-detail-upper-graphic-row'>
-          <div className='event-img-col'>
-            {previewImageURL ? <img className='event-detail-img' src={previewImageURL}></img> : ''}
-          </div>
-
-          <div className='event-group-date-price-location-col'>
-
-            <Link to={`/groups/${groupId}`}>
-              <div className='event-group-mini-card-row'>
-                <div className='event-group-mini-image-col'>
-                  {groupPreviewImageURL ? <img className='event-detail-group-img' src={groupPreviewImageURL}></img> : ''}
-                </div>
-                <div className='event-group-mini-name-visibility-col'>
-                  <div className='event-group-mini-name-row'>
-                    {groupName}
-                  </div>
-                  <div className='event-group-mini-visibility-row'>
-                    {groupVisbility}
-                  </div>
-                </div>
-              </div>
-            </Link>
-
-            <div className='event-date-price-location-row'>
-
-              <div className='event-detail-row event-detail-row-spacer'>
-                <div className='clock-icon-wrapper'>
-                  <div className='icon-col'>
-                    🕒
-                  </div>
-                </div>
-                <div className='start-end-text-col'>
-                  <div className='start-end-text-row'>
-                    START <span className='event-date-time'>{startDateStr} · {startTimeStr}</span>
-                  </div>
-                  <div className='start-end-text-row'>
-                    END <span className='event-date-time'>{endDateStr} · {endTimeStr}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className='event-detail-row event-detail-row-spacer'>
-                <div className='icon-col'>
-                  💲
-                </div>
-                <div className='price-text-col'>
-                  {typeof price === 'number' ? '$' : null}{price}
-                </div>
-              </div>
-
-              <div className='event-detail-row'>
-                <div className='icon-col'>
-                  📍
-                </div>
-                <div className='location-text-col'>
-                  {onlineOrInPerson}
-                </div>
-              </div>
-
+          <div className='event-detail-header'>
+            <div className='event-breadcrumb-link'>
+              ⬅ <Link to='/events'>Events</Link>
             </div>
-
-            <div className='event-admin-buttons-row'>
-              {hideAdminButtons ? null :
-                <div id="event-admin-buttons-div">
-                  <Link to={`/events/${eventId}/update`}>
-                    <button className='admin-button'>
-                      Update
-                    </button>
-                  </Link>
-                  <EventDeleteModalButton
-                    buttonText="Delete"
-                    modalComponent={<EventDeleteModal eventId={eventId} />}
-                  />
-                </div>
-              }
-
+            <div className='event-info-header'>
+              {event.name}
+            </div>
+            <div className='event-hosted-by'>
+              Hosted by: {organizerFirstName} {organizerLastName}
             </div>
           </div>
-        </div>
 
-        {/* LOWER TEXT ROW */}
+          <div className='event-detail-box'>
 
-        <div className='event-detail-lower-text-row'>
-          <div className='event-info-header'>
-            Description
+            {/* UPPER GRAPHIC ROW */}
+
+            <div className='event-detail-upper-graphic-row'>
+              <div className='event-img-col'>
+                {previewImageURL ? <img className='event-detail-img' src={previewImageURL}></img> : ''}
+              </div>
+
+              <div className='event-group-date-price-location-col'>
+
+                <Link to={`/groups/${groupId}`}>
+                  <div className='event-group-mini-card-row'>
+                    <div className='event-group-mini-image-col'>
+                      {groupPreviewImageURL ? <img className='event-detail-group-img' src={groupPreviewImageURL}></img> : ''}
+                    </div>
+                    <div className='event-group-mini-name-visibility-col'>
+                      <div className='event-group-mini-name-row'>
+                        {groupName}
+                      </div>
+                      <div className='event-group-mini-visibility-row'>
+                        {groupVisbility}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+
+                <div className='event-date-price-location-row'>
+
+                  <div className='event-detail-row event-detail-row-spacer'>
+                    <div className='clock-icon-wrapper'>
+                      <div className='icon-col'>
+                        🕒
+                      </div>
+                    </div>
+                    <div className='start-end-text-col'>
+                      <div className='start-end-text-row'>
+                        START <span className='event-date-time'>{startDateStr} · {startTimeStr}</span>
+                      </div>
+                      <div className='start-end-text-row'>
+                        END <span className='event-date-time'>{endDateStr} · {endTimeStr}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className='event-detail-row event-detail-row-spacer'>
+                    <div className='icon-col'>
+                      💲
+                    </div>
+                    <div className='price-text-col'>
+                      {typeof price === 'number' ? '$' : null}{price}
+                    </div>
+                  </div>
+
+                  <div className='event-detail-row'>
+                    <div className='icon-col'>
+                      📍
+                    </div>
+                    <div className='location-text-col'>
+                      {onlineOrInPerson}
+                    </div>
+                  </div>
+
+                </div>
+
+                <div className='event-admin-buttons-row'>
+                  {hideAdminButtons ? null :
+                    <div id="event-admin-buttons-div">
+                      <Link to={`/events/${eventId}/update`}>
+                        <button className='admin-button'>
+                          Update
+                        </button>
+                      </Link>
+                      <EventDeleteModalButton
+                        buttonText="Delete"
+                        modalComponent={<EventDeleteModal eventId={eventId} />}
+                      />
+                    </div>
+                  }
+
+                </div>
+              </div>
+            </div>
+
+            {/* LOWER TEXT ROW */}
+
+            <div className='event-detail-lower-text-row'>
+              <div className='event-info-header'>
+                Description
+              </div>
+
+              <div className='event-info-text'>
+                {desc}
+              </div>
+            </div>
+
           </div>
 
-          <div className='event-info-text'>
-            {desc}
-          </div>
         </div>
 
       </div>
