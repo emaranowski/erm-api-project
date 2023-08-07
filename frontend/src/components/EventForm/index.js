@@ -204,7 +204,7 @@ export default function EventForm({ event, formType }) {
                 name="price"
                 onChange={(e) => setPrice(e.target.value)}
                 value={price}
-                placeholder={`Type "0" if it's free!`}
+                placeholder={`0`}
               />
             </span>
           </div>
@@ -333,7 +333,7 @@ export default function EventForm({ event, formType }) {
           className={disabled ? "create-group-form-button-disabled" : "create-group-form-button"}
           disabled={disabled}
         >
-          {formType === 'Create Event' ? 'Create event' : 'Update event'}
+          {formType === 'Create Event' ? 'Create Event' : 'Update Event'}
         </button>
 
       </form>

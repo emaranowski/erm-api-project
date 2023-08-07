@@ -511,7 +511,7 @@ const validateEvent = [
     check('price')
         .exists({ checkFalsy: true })
         .isDecimal()
-        .withMessage(`A number for price is required ("0" is fine if it's free!)`), // changed on 2023-08-03 from 'Price is invalid'
+        .withMessage(`A number for price is required (type "0" if it's free!)`), // changed on 2023-08-03 from 'Price is invalid'
     check('description')
         .exists({ checkFalsy: true })
         .notEmpty()
