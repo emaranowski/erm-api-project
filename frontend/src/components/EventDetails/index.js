@@ -310,7 +310,7 @@ export default function EventDetails() {
                     <div id="event-admin-buttons-div">
                       {/* <Link to={`/events/${eventId}/update`}> */}
                       <Link to={`/groups/${groupId}/events/${eventId}/update`}>
-                        <button className='admin-button'>
+                        <button className='event-admin-button'>
                           Update
                         </button>
                       </Link>

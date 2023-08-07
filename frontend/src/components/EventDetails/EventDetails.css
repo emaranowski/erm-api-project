@@ -32,7 +32,7 @@
 .event-detail-box {
     display: flex;
     flex-direction: column;
-    background-color: rgb(233, 233, 233);
+    /* background-color: rgb(233, 233, 233); */
 }
 
 .event-detail-upper-graphic-row {
@@ -54,7 +54,7 @@
 
 .event-detail-group-img {
     background-color: bisque;
-    width: 70px;
+    width: 60px;
     height: 55px;
     margin-right: 15px;
     border-radius: 10px;
@@ -63,18 +63,19 @@
 .event-group-date-price-location-col {
     display: flex;
     flex-direction: column;
-    width: 40%;
+    width: 55%;
 }
 
 .event-group-mini-card-row {
     display: flex;
     flex-direction: row;
-    padding: 15px;
+    padding: 10px 15px 25px 15px;
     background-color: white;
-    border-radius: 10px;
+    /* border-radius: 10px; */
     border-top: 10px;
     margin-top: 15px;
     height: 55px;
+    border-bottom: 1px solid grey;
 }
 
 .event-group-mini-image-col {
@@ -104,7 +105,7 @@
     padding: 15px;
     background-color: white;
     border-radius: 10px;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 .event-detail-row-spacer {
@@ -142,8 +143,20 @@
 
 .location-text-col {}
 
+.event-admin-button {
+    color: #FFFFFF;
+    background-color: #212121;
+    border: none;
+    border-radius: 5px;
+    margin-right: 7px;
+    margin-top: 12px;
+    padding: 8px 11px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
 .event-admin-buttons-row {
-    margin-left: 125px;
+    margin-left: 155px;
     margin-top: -55px;
 }
 
@@ -161,82 +174,3 @@
     color: black;
     margin-bottom: 250px;
 }
-
-
-
-
-/* .event-detail-box {
-    margin: 0px 10px;
-    display: flex;
-    justify-content: space-around;
-}
-
-.event-detail-card {
-    width: 100%;
-
-    border-bottom: 1px solid grey;
-
-    padding-bottom: 20px;
-    margin: 20px 0px;
-
-    display: flex;
-}
-
-.event-detail-location {
-    font-size: 14px;
-    font-weight: 200;
-    color: rgb(123, 123, 123);
-    margin-bottom: 5px;
-}
-
-.event-detail-text {
-    color: black;
-    font-size: 14px;
-    margin-bottom: 5px;
-}
-
-.event-detail-events-privacy {
-    font-size: 14px;
-    font-weight: 200;
-    color: rgb(123, 123, 123);
-    margin-bottom: 5px;
-}
-
-#join-group-button-div {
-    margin-top: 86px;
-}
-
-#admin-buttons-div {
-    margin-top: 78px;
-}
-
-.admin-button {
-    color: #FFFFFF;
-    background-color: #212121;
-    border: none;
-    border-radius: 5px;
-    margin-right: 13px;
-    margin-top: 13px;
-    padding: 8px 11px;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.admin-button:hover {
-    color: #FFFFFF;
-    background-color: #707070;
-    cursor: pointer;
-}
-
-.event-organizer-name {
-    font-size: 14px;
-    font-weight: 200;
-    color: rgb(123, 123, 123);
-    margin-bottom: 15px;
-}
-
-.event-info-box {
-    margin-bottom: 30px;
-}
-
-*/
