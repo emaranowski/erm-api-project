@@ -18,7 +18,12 @@ function HomePage({ isLoaded }) {
       </div> */}
 
       <div id="home-banner">
-        <div>The people platform—<br></br>Where interests become<br></br>friendships</div>
+        <div>
+          The people platform—<br></br>Where interests become<br></br>friendships
+        </div>
+        <div id='home-banner-subtext'>
+          Connect with your community while doing the things you love
+        </div>
         {!sessionUser ?
           <OpenModalButtonSignupHome
             buttonText="Join MeetBuds"
@@ -75,20 +80,20 @@ function HomePage({ isLoaded }) {
                 <>
                   <Link to="/groups/new">
                     <div className='how-it-works-header-link small-link-bold'>
-                      Start a new group
+                      Start a group
                     </div>
                   </Link>
                 </>
               ) : (
                 <>
                   <div className='how-it-works-header-link-inactive small-link-bold-inactive'>
-                    Start a new group
+                    Start a group
                   </div>
                 </>
               )}
 
               <div className='how-it-works-col-text'>
-                Create your own group and build a community
+                Create your own group and build community
               </div>
             </span>
           </div>

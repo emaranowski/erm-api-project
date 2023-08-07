@@ -79,6 +79,13 @@ light grey:
     margin: 18px 0px 8px 0px;
 }
 
+#home-banner-subtext {
+    font-size: 18px;
+    font-weight: 200;
+    margin-top: 20px;
+    margin-right: 300px;
+}
+
 #join-button {
     color: white;
     font-size: 17px;
