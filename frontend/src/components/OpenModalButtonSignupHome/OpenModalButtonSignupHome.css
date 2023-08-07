@@ -1,7 +1,7 @@
 #join-button-home {
     color: white;
     font-size: 17px;
-    background-color: #e8245c;
+    background-color: #087c8c;
     border: none;
     margin-top: 34px;
     padding: 9px 12px 9px 12px;
@@ -10,6 +10,6 @@
 }
 
 #join-button-home:hover {
-    background-color: #f4507f;
+    background-color: #098b9d;
     cursor: pointer;
 }

@@ -71,12 +71,19 @@ light grey:
 /* HOME BANNER */
 
 #home-banner {
-    color: white;
-    background-color: rgb(73, 61, 61);
+    color: 212121;
+    /* background-color: rgb(73, 61, 61); */
     font-size: 28px;
     width: auto;
-    padding: 60px 20px 60px 80px;
-    margin: 18px 0px 8px 0px;
+    padding: 50px 0px 50px 90px;
+    margin: 18px 0px 0px 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#home-banner-infographic {
+    font-size: 125px;
 }
 
 #home-banner-subtext {
@@ -299,7 +306,7 @@ light grey:
 .how-it-works-section-box {
     display: flex;
     justify-content: space-evenly;
-    padding: 10px 0px 0px 0px;
+    padding: 10px 0px 25px 0px;
 }
 
 .how-it-works-join-button-box {

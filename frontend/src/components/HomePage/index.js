@@ -18,18 +18,23 @@ function HomePage({ isLoaded }) {
       </div> */}
 
       <div id="home-banner">
-        <div>
-          The people platform—<br></br>Where interests become<br></br>friendships
+        <div id='home-banner-text'>
+          <div>
+            The people platform—<br></br>Where interests become<br></br>friendships
+          </div>
+          <div id='home-banner-subtext'>
+            Connect with your community <br></br>while doing the things you love
+          </div>
+          {/* {!sessionUser ?
+            <OpenModalButtonSignupHome
+              buttonText="Join MeetBuds"
+              modalComponent={<SignupFormModal />}
+            />
+            : null} */}
         </div>
-        <div id='home-banner-subtext'>
-          Connect with your community while doing the things you love
+        <div id='home-banner-infographic'>
+          🙂
         </div>
-        {!sessionUser ?
-          <OpenModalButtonSignupHome
-            buttonText="Join MeetBuds"
-            modalComponent={<SignupFormModal />}
-          />
-          : null}
       </div>
 
 
