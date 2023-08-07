@@ -8,6 +8,8 @@ function LoginFormDemo() {
   const dispatch = useDispatch();
   const [credential, setCredential] = useState("DemoUser1");
   const [password, setPassword] = useState("password1");
+
+  const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
@@ -19,6 +21,8 @@ function LoginFormDemo() {
     if (password.length < 6) errsObj.password = "Password must be at least 6 characters"
 
     setErrors(errsObj);
+
+    if (Object.values(errors).length) setDisabled(true);
   }, [credential, password])
 
   const handleSubmit = (e) => {
@@ -74,7 +78,13 @@ function LoginFormDemo() {
             </div>
           )}
 
-          <button id="modal-log-in-button" type="submit">Log In</button>
+          <button
+            id={disabled ? "modal-log-in-button-disabled" : "modal-log-in-button"}
+            type="submit"
+            disabled={disabled}
+          >
+            Log In
+          </button>
         </form>
       </div>
     </>

@@ -9,17 +9,14 @@ function LoginFormModal() {
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
 
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(true);
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
   // disable button
   useEffect(() => {
-    if (!credential.length) setDisabled(true);
-    if (!password.length) setDisabled(true);
-
-    if (credential.length &&
-      password.length) setDisabled(false);
+    if (credential.length >= 4 && password.length <= 6) setDisabled(false);
+    if (credential.length < 4 || password.length < 6) setDisabled(true);
   }, [credential, password]);
 
   // validations
@@ -83,7 +80,6 @@ function LoginFormModal() {
           )}
 
           <button
-            // id="modal-log-in-button"
             id={disabled ? "modal-log-in-button-disabled" : "modal-log-in-button"}
             type="submit"
             disabled={disabled}
