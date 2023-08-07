@@ -107,14 +107,10 @@ export default function GroupForm({ group, formType }) {
       groupId,
     }
 
-    // console.log(`*** in form, group is: ***`, group)
-
-    // refactored to match below
     if (formType === 'Create Group') {
 
       try {
         const res = await dispatch(createGroupThunk(group)); // VS Code gives note about not needing 'await', but it IS needed here
-        // console.log(`*** in form CREATE try, res is: ***`, res)
         if (res.id) {
           setErrors({});
           history.push(`/groups/${res.id}`);
@@ -122,9 +118,7 @@ export default function GroupForm({ group, formType }) {
           return res;
         }
       } catch (res) { // if exception in above code, run .catch()
-        // console.log(`*** in form CREATE catch, res is: ***`, res) // TypeError: Failed to execute 'json' on 'Response': body stream already read
         const data = await res.json(); // get data from db
-        // console.log(`*** in form CREATE catch, data is: ***`, data) // TypeError: Failed to execute 'json' on 'Response': body stream already read
         if (data && data.errors) { // if errors from db
           setErrors(data.errors); // setErrors
         }
@@ -134,7 +128,6 @@ export default function GroupForm({ group, formType }) {
 
       try {
         const res = await dispatch(updateGroupThunk(group)); // VS Code gives note about not needing 'await', but it IS needed here
-        // console.log(`*** in form UPDATE try, res is: ***`, res)
         if (res.id) {
           setErrors({});
           history.push(`/groups/${res.id}`);
@@ -142,43 +135,12 @@ export default function GroupForm({ group, formType }) {
           return res;
         }
       } catch (res) { // if exception in above code, run .catch()
-        // console.log(`*** in form UPDATE catch, res is: ***`, res) // TypeError: Failed to execute 'json' on 'Response': body stream already read
         const data = await res.json(); // get data from db
-        // console.log(`*** in form UPDATE catch, data is: ***`, data) // TypeError: Failed to execute 'json' on 'Response': body stream already read
         if (data && data.errors) { // if errors from db
           setErrors(data.errors); // setErrors
         }
       };
     }
-
-    // // most basic version -- still need to refactor to match below
-    // if (formType === 'Create Group') {
-    //   const createdGroup = await dispatch(createGroupThunk(group))
-    //   group = createdGroup;
-    // } else if (formType === 'Update Group') {
-    //   const updatedGroup = await dispatch(updateGroupThunk(group))
-    //   group = updatedGroup;
-    // }
-
-    // ////// SEEMS FULLY WORKING
-    // ////// redirects if no errors; otherwise, displays errors
-    // try {
-    //   const res = await dispatch(createGroupThunk(group)); // VS Code gives note about not needing 'await', but it IS needed here
-    //   console.log(`*** in form try, res is: ***`, res)
-    //   if (res.id) {
-    //     setErrors({});
-    //     history.push(`/groups/${res.id}`);
-    //   } else {
-    //     return res;
-    //   }
-    // } catch (res) { // if exception in above code, run .catch()
-    //   console.log(`*** in form catch, res is: ***`, res) // TypeError: Failed to execute 'json' on 'Response': body stream already read
-    //   const data = await res.json(); // get data from db
-    //   console.log(`*** in form catch, data is: ***`, data) // TypeError: Failed to execute 'json' on 'Response': body stream already read
-    //   if (data && data.errors) { // if errors from db
-    //     setErrors(data.errors); // setErrors
-    //   }
-    // };
 
   };
 
@@ -188,7 +150,7 @@ export default function GroupForm({ group, formType }) {
 
         <div className='create-group-form-section'>
           <div className='form-top-header'>
-            {formType === 'Create Group' ? 'Start a new group' : 'Update your group'}
+            {formType === 'Create Group' ? 'Start a New Group' : 'Update Your Group'}
           </div>
         </div>
 
@@ -328,7 +290,7 @@ export default function GroupForm({ group, formType }) {
           className={disabled ? "create-group-form-button-disabled" : "create-group-form-button"}
           disabled={disabled}
         >
-          {formType === 'Create Group' ? 'Create group' : 'Update group'}
+          {formType === 'Create Group' ? 'Create Group' : 'Update Group'}
         </button>
 
         {/* <button

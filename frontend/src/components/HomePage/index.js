@@ -80,14 +80,14 @@ function HomePage({ isLoaded }) {
                 <>
                   <Link to="/groups/new">
                     <div className='how-it-works-header-link small-link-bold'>
-                      Start a group
+                      Start a new group
                     </div>
                   </Link>
                 </>
               ) : (
                 <>
                   <div className='how-it-works-header-link-inactive small-link-bold-inactive'>
-                    Start a group
+                    Start a new group
                   </div>
                 </>
               )}
