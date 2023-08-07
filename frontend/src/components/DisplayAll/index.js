@@ -96,7 +96,7 @@ export default function DisplayAll({ displayType }) {
                 </span>
               </div>
               <div className='events-groups-subhead'>
-                Groups on MeetBuds
+                Groups in MeetBuds
               </div>
             </div>
             : null
@@ -125,7 +125,7 @@ export default function DisplayAll({ displayType }) {
                 </Link>
               </div>
               <div className='events-groups-subhead'>
-                Events on MeetBuds
+                Events in MeetBuds
               </div>
             </div>
             : null
@@ -134,7 +134,6 @@ export default function DisplayAll({ displayType }) {
           {displayType === 'Events' ?
             allEventsArrDESC.map((event) => (
               <div key={event.id}>
-                {/* {console.log(`*** event is: ***`, event)} */}
                 <DisplayCardEvent event={event} />
               </div>
             ))

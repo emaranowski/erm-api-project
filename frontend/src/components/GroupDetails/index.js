@@ -395,7 +395,7 @@ export default function GroupDetails() {
                 {group.city}, {group.state}
               </div>
               <div className='group-detail-events-privacy'>
-                # events · {group.privacy ? <span>Private</span> : <span>Public</span>}
+                {eventsByGroupTotalNum === 1 ? `${eventsByGroupTotalNum} event` : `${eventsByGroupTotalNum} events`} · {group.privacy ? <span>Private</span> : <span>Public</span>}
               </div>
               <div className='group-detail-organized-by'>
                 Organized by: {organizerFirstName} {organizerLastName}
