@@ -10,7 +10,7 @@ function JoinGroupModal() {
   return (
     <>
       <div className="feature-coming-soon">
-        Feature coming soon...
+        Feature coming soon
       </div>
     </>
   );
