@@ -145,13 +145,36 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res) => 
     //         { validate: true });
     // };
 
+    /////////////////////////////
+    let refEvent = await Event.findOne({
+        order: [['id', 'DESC']],
+    });
+
+    // console.log(`***** refEvent *****`, refEvent);
+    !refEvent ? refEvent = { dataValues: { id: 1 } } : refEvent;
+
+    // const refEventId = refEvent.dataValues.id;
+    const refEventIdPlusOne = 1 + refEvent.dataValues.id;
+    /////////////////////////////
+
     await Event.bulkCreate([{
-        venueId, groupId, name, type, capacity, price, description, startDate, endDate
+        id: refEventIdPlusOne,
+        venueId,
+        groupId,
+        name,
+        type,
+        capacity,
+        price,
+        description,
+        startDate,
+        endDate
     }], { validate: true });
 
-    const createdGroupEvent = await Event.findOne({ // to get createdGroupEvent.id
-        where: { venueId, groupId, name, type, capacity, price, description, startDate, endDate }
-    });
+    // const createdGroupEvent = await Event.findOne({ // to get createdGroupEvent.id
+    //     where: { venueId, groupId, name, type, capacity, price, description, startDate, endDate }
+    // });
+
+    const createdGroupEvent = await Event.findByPk(refEventIdPlusOne);
 
     // const eventId = createdGroupEvent.id;
     // await Attendance.bulkCreate([{
@@ -1191,9 +1214,13 @@ router.post('/', requireAuth, validateGroup, async (req, res) => {
     const userId = user.dataValues.id;
     const { name, about, type, privacy, city, state } = req.body;
 
-    const refGroup = await Group.findOne({
+
+    let refGroup = await Group.findOne({
         order: [['id', 'DESC']],
     });
+
+    // console.log(`***** refGroup *****`, refGroup);
+    !refGroup ? refGroup = { dataValues: { id: 1 } } : refGroup;
 
     // const refGroupId = refGroup.dataValues.id;
     const refGroupIdPlusOne = 1 + refGroup.dataValues.id;
@@ -1204,6 +1231,7 @@ router.post('/', requireAuth, validateGroup, async (req, res) => {
 
     await Group.bulkCreate([
         {
+            id: refGroupIdPlusOne, /////////// added
             organizerId: userId,
             name,
             about,

@@ -1,4 +1,33 @@
-# API Project: Meetup Clone
+# Meetup Clone
+
+## Intro
+
+The project is a light clone of Meetup, with features for groups that can host events.
+
+Users can view, create, update, and delete groups (including adding group images upon group creation).
+
+Groups include information on group name, organizer name, location, visibility (public/private), description, and number of events (total, upcoming, and past).
+
+Groups can be made by any user. The user that creates the group is its organizer.
+
+Users can view, create, update, and delete events for a group (including adding event images upon event creation).
+
+Events include information on event name, host name, hosting group, start date and time, end date and time, price, type (in person/online), description.
+
+Events can be made by the organizer or any co-hosts of the group that hosts the event.
+
+## Technologies Used
+
+Backend: Express router, and Seqeulize to build the local database using SQLite.
+
+Frontend: React and Redux.
+
+Languages: JavaScript, HTML, and CSS.
+
+Deployment: Render (using PostgreSQL).
+
+![Alt text](./images/meetbuds-homepage.png)
+
 
 ## Database Schema Design
 

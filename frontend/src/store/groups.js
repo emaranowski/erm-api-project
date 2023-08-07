@@ -329,58 +329,59 @@ const initialState = { // 'groups' slice holds obj with:
 }
 
 export default function groupsReducer(state = initialState, action) { // groupReducer must return groups slice of state
-  let newState = { ...state };
-
   switch (action.type) {
 
-    case GET_ALL_GROUPS:
+    case GET_ALL_GROUPS: {
+      const newState = { ...state, allGroups: {} };
       action.groups.forEach(group => {
         newState.allGroups[group.id] = group;
       });
       return newState;
+    }
 
-    case GET_SINGLE_GROUP:
+    case GET_SINGLE_GROUP: {
+      const newState = { ...state, singleGroup: {} };
       newState.singleGroup = action.group;
       return newState;
+    }
 
-    case CREATE_GROUP:
+    case CREATE_GROUP: {
+      const newState = { ...state };
       newState.allGroups[action.group.id] = action.group;
       return newState;
+    }
 
-    case CREATE_GROUP_IMAGE:
-      // console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup: ***`, newState.singleGroup) // group obj {}
-      // console.log(`**************`)
-      // console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup.GroupImages1: ***`, newState.singleGroup.GroupImages) // undefined
-      newState.singleGroup.GroupImages = [];
-      // console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup.GroupImages2: ***`, newState.singleGroup.GroupImages) // []
-      newState.singleGroup.GroupImages.push(action.image);
-      // console.log(`*** in case CREATE_GROUP_IMAGE -- newState.singleGroup.GroupImages3: ***`, newState.singleGroup.GroupImages) // arr of image objs [{ id: 4, ...}]
-      // console.log(action.image)
-      return newState;
-
-    case UPDATE_GROUP:
-      newState.allGroups[action.group.id] = action.group;
-      return newState;
-
-    case UPDATE_GROUP_IMAGE:
+    case CREATE_GROUP_IMAGE: {
+      const newState = { ...state, };
       newState.singleGroup.GroupImages = [];
       newState.singleGroup.GroupImages.push(action.image);
       return newState;
+    }
 
-    // case UPDATE_GROUP_IMAGE:
-    //   newState.singleGroup.GroupImages = [];
-    //   newState.singleGroup.GroupImages[0] = action.image;
-    //   return newState;
+    case UPDATE_GROUP: {
+      const newState = { ...state };
+      newState.allGroups[action.group.id] = action.group;
+      return newState;
+    }
 
-    case DELETE_GROUP:
+    case UPDATE_GROUP_IMAGE: {
+      const newState = { ...state };
+      newState.singleGroup.GroupImages = [];
+      newState.singleGroup.GroupImages.push(action.image);
+      return newState;
+    }
+
+    case DELETE_GROUP: {
+      const newState = { ...state };
       delete newState.allGroups[action.groupId];
-      // delete newState.singleGroup...CREATE_GROUP.at. // need JS to check if singleGroup.id === action.groupId?
       return newState;
+    }
 
-    default:
-      return state
+    default: {
+      return state;
+    }
   }
-}
+};
 
 ////////////// NOTES: //////////////
 

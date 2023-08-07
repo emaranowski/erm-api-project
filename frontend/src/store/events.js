@@ -48,12 +48,12 @@ const updateEvent = (event) => {
   };
 };
 
-const updateEventImage = (image) => {
-  return {
-    type: UPDATE_EVENT_IMAGE,
-    image
-  };
-};
+// const updateEventImage = (image) => {
+//   return {
+//     type: UPDATE_EVENT_IMAGE,
+//     image
+//   };
+// };
 
 const deleteEvent = (eventId) => {
   return {
@@ -98,7 +98,6 @@ export const getSingleEventThunk = (eventId) => async (dispatch) => {
   if (res.ok) {
     const eventDetails = await res.json();
     await dispatch(getSingleEvent(eventDetails));
-    // return eventDetails; // 2023-08-03 tried adding return
     return eventDetails;
   } else {
     const errors = await res.json();
@@ -236,9 +235,9 @@ export const updateEventThunk = (event) => async (dispatch) => {
     return data;
 
   } else {
-    console.log(`*** in thunk RES NOT OK ***`)
+    // console.log(`*** in thunk RES NOT OK ***`)
     const errors = await res.json();
-    console.log(`*** in thunk RES NOT OK -- errors is: ***`, errors)
+    // console.log(`*** in thunk RES NOT OK -- errors is: ***`, errors)
     return errors;
   };
 };
@@ -254,11 +253,11 @@ export const deleteEventThunk = (eventId) => async (dispatch) => {
   if (res.ok) {
     const data = await res.json();
     dispatch(deleteEvent(eventId));
-    console.log(`*** in delete thunk, data is: ***`, data) // {message: 'Successfully deleted'}
+    // console.log(`*** in delete thunk, data is: ***`, data) // {message: 'Successfully deleted'}
     return data;
   } else {
     const errors = await res.json();
-    console.log(`*** in delete thunk, errors is: ***`, errors) //
+    // console.log(`*** in delete thunk, errors is: ***`, errors) //
     return errors;
   }
 };
@@ -272,36 +271,49 @@ const initialState = { // 'events' slice holds obj with:
 };
 
 export default function eventsReducer(state = initialState, action) { // eventsReducer must return events slice of state
-  let newState = { ...state };
-
   switch (action.type) {
 
-    case GET_ALL_EVENTS:
-      // console.log(`*** action.events is: ***`, action.events) // looks correct
+    case GET_ALL_EVENTS: {
+      const newState = { ...state, allEvents: {} };
       action.events.forEach(event => {
         newState.allEvents[event.id] = event;
       });
-      // console.log(`*** newState is: ***`, newState) // looks correct
       return newState;
+    }
 
-    case GET_SINGLE_EVENT:
+    case GET_SINGLE_EVENT: {
+      const newState = { ...state, singleEvent: {} };
       newState.singleEvent = action.event;
       return newState;
+    }
 
-    case CREATE_EVENT:
+    case CREATE_EVENT: {
+      const newState = { ...state };
       newState.allEvents[action.event.id] = action.event;
       return newState;
+    }
 
-    case CREATE_EVENT_IMAGE:
+    case CREATE_EVENT_IMAGE: {
+      const newState = { ...state };
       newState.singleEvent.EventImages = [];
       newState.singleEvent.EventImages.push(action.image);
       return newState;
+    }
 
-    case DELETE_EVENT:
+    case UPDATE_EVENT: {
+      const newState = { ...state };
+      newState.allEvents[action.event.id] = action.event;
+      return newState;
+    }
+
+    case DELETE_EVENT: {
+      const newState = { ...state };
       delete newState.allEvents[action.eventId];
       return newState;
+    }
 
-    default:
-      return state
+    default: {
+      return state;
+    }
   }
 };
