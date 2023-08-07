@@ -26,8 +26,24 @@ Languages: JavaScript, HTML, and CSS.
 
 Deployment: Render (using PostgreSQL).
 
+## Landing Page
+
 ![Alt text](./images/meetbuds-homepage.png)
 
+## Launch Instructions
+
+1. Clone this repo.
+
+2. In the top-level directory, run `npm i -D`.
+
+3. In the backend directory, run `npm i -D`, then run:
+`npx dotenv sequelize db:migrate && npx dotenv sequelize db:seed:all`.
+
+4. In the frontend directory, run `npm i -D`.
+
+5. In the backend directory, run `npm start`.
+
+6. In the frontend directory, run `npm start`.
 
 ## Database Schema Design
 
