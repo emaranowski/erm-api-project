@@ -32,18 +32,21 @@ Deployment: Render (using PostgreSQL).
 
 ## Launch Instructions
 
-1. Clone this repo.
+- Clone this repo.
 
-2. In the top-level directory, run `npm i -D`.
+- In the root directory, run `npm i -D`.
 
-3. In the backend directory, run `npm i -D`, then run:
-`npx dotenv sequelize db:migrate && npx dotenv sequelize db:seed:all`.
+- In the backend directory, run `npm i -D`.
 
-4. In the frontend directory, run `npm i -D`.
+- In the backend, create a __.env__ file modeled after __.env.example__, editing any details as desired, and adding your own JWT_SECRET.
 
-5. In the backend directory, run `npm start`.
+- In the backend, run migrations and seeders: `npx dotenv sequelize db:migrate && npx dotenv sequelize db:seed:all`. If needed, undo with: `npx dotenv sequelize db:seed:undo:all && npx dotenv sequelize db:migrate:undo:all`.
 
-6. In the frontend directory, run `npm start`.
+- In the backend directory, run `npm start`.
+
+- In the frontend directory, run `npm i -D`.
+
+- In the frontend directory, run `npm start`.
 
 ## Database Schema Design
 
