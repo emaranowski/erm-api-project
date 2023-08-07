@@ -10,53 +10,28 @@ import './DisplayAll.css';
 export default function DisplayAll({ displayType }) {
   const dispatch = useDispatch();
 
-  const groupsStateArr = Object.values(
-    useSelector((state) => (state.groups ? state.groups : {}))
-  ); // ret arr
-  const groupsStateKeys = Object.keys(
-    useSelector((state) => (state.groups ? state.groups : {}))
-  ); // ret arr // 0: allGroups, 1: singleGroup
+  const allGroups = useSelector((state) => (state.groups.allGroups));
 
-  const allGroups = groupsStateArr[0];
+  // const allGroups = groupsStateArr[0]; // {}
+
+  console.log(`***** allGroups *****`, allGroups);
+
   const allGroupsArr = Object.values(allGroups)
 
-  const state = useSelector(state => state)
-  const stateEventsSlice = useSelector(state => state.events)
-
   const allEvents = useSelector(state => state.events.allEvents)
-  // console.log(`*** allEvents is: ***`, allEvents) // normalized obj -- { 1: {id: 1, ...}, 2: {id: 2, ...}, 3: {id: 3, ...} }
-  // ^ each obj includes startDate
   const allEventsArr = Object.values(allEvents)
-  // console.log(`*** allEventsArr is: ***`, allEventsArr) // arr --[ 0: {id: 1, ...}, 1: {id: 2, ...}, 2: {id: 3, ...} ]
-  // ^ each ele/obj includes startDate -- like allEventsArr[0].startDate
 
-  // console.log(`***** allEventsArr *****`, allEventsArr); // arr of Event objs
-  // console.log(`***** allEventsArr is Array *****`, Array.isArray(allEventsArr)); // TRUE is array
-  // allEventsArr.forEach(eventObj => {
-  //   console.log(`***** eventObj.startDate typeof *****`, typeof eventObj.startDate); // string form
-  //   console.log(`***** eventObj.startDate *****`, eventObj.startDate);
-  //   console.log(`**********`)
-  //   console.log(`***** eventObj.startDate typeof *****`, typeof Date.parse(eventObj.startDate)); // number form
-  //   console.log(`***** eventObj.startDate typeof *****`, Date.parse(eventObj.startDate)); //
-  //   console.log(`**********`)
-  // });
-
-  // // use number form --> Date.parse(eventObj.startDate)
-  // // created ordered array
-  let startDateNumsUnordered = [];
-  let allEventsArrDESC = [];
+  const startDateNumsUnordered = [];
+  const allEventsArrDESC = [];
   if (allEventsArr[0] !== undefined && allEventsArr[0] !== null) {
 
     allEventsArr.forEach(eventObj => {
       const startDateNum = Date.parse(eventObj.startDate);
       startDateNumsUnordered.push(startDateNum);
     });
-    // console.log(`***** startDateNumsUnordered *****`, startDateNumsUnordered);
 
     let startDateNumsASC = startDateNumsUnordered.toSorted();
-    // console.log(`***** startDateNumsASC *****`, startDateNumsASC);
     let startDateNumsDESC = startDateNumsASC.toReversed();
-    // console.log(`***** startDateNumsDESC *****`, startDateNumsDESC);
 
     for (let i = 0; i < startDateNumsDESC.length; i++) {
       const startDateNumDESC = startDateNumsDESC[i];
@@ -69,9 +44,6 @@ export default function DisplayAll({ displayType }) {
       }
     }
   };
-
-  // console.log(`***** startDateNumsUnordered *****`, startDateNumsUnordered);
-  // console.log(`***** allEventsArrDESC *****`, allEventsArrDESC);
 
   useEffect(() => {
     dispatch(getAllGroupsThunk());
@@ -101,7 +73,6 @@ export default function DisplayAll({ displayType }) {
             </div>
             : null
           }
-
           {displayType === 'Groups' ?
             allGroupsArr.map((group) => (
               <div key={group.id}>
@@ -110,7 +81,6 @@ export default function DisplayAll({ displayType }) {
             ))
             : null
           }
-
 
           {displayType === 'Events' ?
             <div className="events-groups-header-box">
@@ -130,10 +100,10 @@ export default function DisplayAll({ displayType }) {
             </div>
             : null
           }
-
           {displayType === 'Events' ?
             allEventsArrDESC.map((event) => (
               <div key={event.id}>
+
                 <DisplayCardEvent event={event} />
               </div>
             ))
@@ -141,9 +111,7 @@ export default function DisplayAll({ displayType }) {
           }
 
         </div>
-      </div>
+      </div >
     </>
   )
 }
-
-// NOTE 2023-08-04: changed allEventsArr.map to allEventsArrDESC.map

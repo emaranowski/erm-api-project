@@ -97,8 +97,9 @@ export const getSingleEventThunk = (eventId) => async (dispatch) => {
 
   if (res.ok) {
     const eventDetails = await res.json();
-    dispatch(getSingleEvent(eventDetails));
+    await dispatch(getSingleEvent(eventDetails));
     // return eventDetails; // 2023-08-03 tried adding return
+    return eventDetails;
   } else {
     const errors = await res.json();
     return errors;

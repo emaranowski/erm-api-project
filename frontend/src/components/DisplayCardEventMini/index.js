@@ -16,22 +16,12 @@ export default function DisplayCardEventMini({ event }) {
     eventDescription = singleEvent.description;
   }
 
-  const startDateTime = event.startDate;
+  const startDateTime = event.startDate; // startDateTime is string
   const startDateTimeArr = startDateTime.split('');
-
-  let startDateArr = [];
-  let startTimeArr = [];
-
-  for (let i = 0; i < 10; i++) {
-    startDateArr.push(startDateTimeArr[i]);
-  }
-
-  for (let i = 11; i < 16; i++) {
-    startTimeArr.push(startDateTimeArr[i]);
-  }
-
-  let startDateStr = startDateArr.join('');
-  let startTimeStr = startTimeArr.join('');
+  const startDateArr = startDateTimeArr.slice(0, 10);
+  const startTimeArr = startDateTimeArr.slice(11, 16);
+  const startDateStr = startDateArr.join('');
+  const startTimeStr = startTimeArr.join('');
 
   useEffect(() => {
     dispatch(getSingleEventThunk(eventId));
