@@ -19,10 +19,12 @@ function HomePage({ isLoaded }) {
 
       <div id="home-banner">
         <div>The people platform—<br></br>Where interests become<br></br>friendships</div>
-        <OpenModalButtonSignupHome
-          buttonText="Join MeetBuds"
-          modalComponent={<SignupFormModal />}
-        />
+        {!sessionUser ?
+          <OpenModalButtonSignupHome
+            buttonText="Join MeetBuds"
+            modalComponent={<SignupFormModal />}
+          />
+          : null}
       </div>
 
 
@@ -92,10 +94,12 @@ function HomePage({ isLoaded }) {
           </div>
 
           <div className="how-it-works-join-button-box">
-            <OpenModalButtonSignupHome
-              buttonText="Join MeetBuds"
-              modalComponent={<SignupFormModal />}
-            />
+            {!sessionUser ?
+              <OpenModalButtonSignupHome
+                buttonText="Join MeetBuds"
+                modalComponent={<SignupFormModal />}
+              />
+              : null}
           </div>
 
         </div>
