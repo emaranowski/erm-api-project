@@ -23,14 +23,14 @@ export default function DisplayCardEvent({ event }) {
     const fetchEvents = async () => {
       const event = await dispatch(getSingleEventThunk(eventId))
       setIsLoaded(true);
-      console.log(`****** event ******`, event)
+      // console.log(`****** event ******`, event)
       setSingleEventState(event);
     }
     fetchEvents();
   }, [dispatch, eventId]);
 
   useEffect(() => {
-    console.log(eventId)
+    // console.log(eventId)
   }, [eventId])
 
   useEffect(() => {
@@ -39,7 +39,6 @@ export default function DisplayCardEvent({ event }) {
 
   return (
     <>
-
       {isLoaded && (
         <>
           <Link to={`/events/${event.id}`}>
@@ -70,7 +69,6 @@ export default function DisplayCardEvent({ event }) {
 
               <div className='display-event-mini-row-2'>
                 <div className='event-card-mini-text'>
-                  {/* {eventDescription} */}
                   {singleEventState?.id ? <span>{singleEventState.description}</span> : null}
                 </div>
               </div>
@@ -79,7 +77,6 @@ export default function DisplayCardEvent({ event }) {
           </Link>
         </>
       )}
-
     </>
   )
 };

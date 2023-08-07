@@ -11,6 +11,7 @@ import JoinGroupModal from '../../components/JoinGroupModal';
 import GroupDeleteModalButton from '../GroupDeleteModalButton';
 import GroupDeleteModal from '../GroupDeleteModal';
 
+import DisplayCardEvent from '../DisplayCardEvent';
 import DisplayCardEventMini from '../DisplayCardEventMini';
 
 import './GroupDetails.css';
@@ -509,7 +510,7 @@ export default function GroupDetails() {
                 <div>
                   {eventsByGroupUpcoming.map((event) => (
                     <div key={event.id}>
-                      <DisplayCardEventMini event={event} />
+                      <DisplayCardEvent event={event} />
                     </div>
                   ))}
                 </div>
@@ -522,7 +523,7 @@ export default function GroupDetails() {
                 <div>
                   {eventsByGroupPast.map((event) => (
                     <div key={event.id}>
-                      <DisplayCardEventMini event={event} />
+                      <DisplayCardEvent event={event} />
                     </div>
                   ))}
                 </div>
