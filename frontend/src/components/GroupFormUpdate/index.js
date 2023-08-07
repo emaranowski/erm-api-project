@@ -9,13 +9,9 @@ export default function GroupFormUpdate() {
     const { groupId } = useParams();
     // const sessionUser = useSelector(state => state.session.user);
     const session = useSelector(state => state.session);
-    // console.log(`*** session is: ***`, session)
 
     const group = useSelector(state => state.groups.singleGroup);
     const organizerId = group.organizerId;
-
-    // console.log(`*** sessionUser.id is: ***`, sessionUser.id)
-    // console.log(`*** organizerId is: ***`, organizerId)
 
     useEffect(() => {
         dispatch(getSingleGroupThunk(groupId));

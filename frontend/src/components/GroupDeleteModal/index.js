@@ -12,7 +12,6 @@ function GroupDeleteModal({ groupId }) {
   const history = useHistory();
   const { closeModal } = useModal();
   // const { groupId } = useParams();
-  console.log(`****** groupId is : ******`, groupId)
 
   const [errors, setErrors] = useState('');
 
@@ -33,7 +32,6 @@ function GroupDeleteModal({ groupId }) {
     // successfully deletes, but does not close modal
     // try {
     //   const res = await dispatch(deleteGroupThunk(groupId)); // VS Code gives note about not needing 'await', but it IS needed here
-    //   console.log(`*** in group DELETE modal try, res is: ***`, res)
     //   if (res.message === 'Successfully deleted') {
     //     setErrors({});
     //     closeModal();
@@ -42,9 +40,7 @@ function GroupDeleteModal({ groupId }) {
     //     return res;
     //   }
     // } catch (res) { // if exception in above code, run .catch()
-    //   console.log(`*** in group DELETE modal catch, res is: ***`, res) // TypeError: Failed to execute 'json' on 'Response': body stream already read
     //   const data = await res.json(); // get data from db
-    //   console.log(`*** in group DELETE modal catch, data is: ***`, data) // TypeError: Failed to execute 'json' on 'Response': body stream already read
     //   if (data && data.errors) { // if errors from db
     //     setErrors(data.errors); // setErrors
     //   }
@@ -55,16 +51,13 @@ function GroupDeleteModal({ groupId }) {
 
     // try {
     //   const res = await dispatch(deleteGroupThunk(groupId)); // VS Code gives note about not needing 'await', but it IS needed here
-    //   console.log(`*** in group DELETE modal try, res is: ***`, res)
     //   if (res.message === 'Successfully deleted') {
     //     history.push(`/groups/`);
     //   } else {
     //     return res;
     //   }
     // } catch (res) { // if exception in above code, run .catch()
-    //   console.log(`*** in group DELETE modal catch, res is: ***`, res) // TypeError: Failed to execute 'json' on 'Response': body stream already read
     //   const data = await res.json(); // get data from db
-    //   console.log(`*** in group DELETE modal catch, data is: ***`, data) // TypeError: Failed to execute 'json' on 'Response': body stream already read
     //   if (data && data.errors) { // if errors from db
     //     setErrors(data.errors); // setErrors
     //   }

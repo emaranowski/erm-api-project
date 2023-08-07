@@ -68,19 +68,9 @@ export const getAllGroupsThunk = () => async (dispatch) => {
     method: 'GET'
   });
 
-  // console.log(`*** res is: ***`, res) // type: res?
 
   if (res.ok) {
     const groups = await res.json();
-
-    // console.log(`*** groups obj is: ***`, groups) // obj, w/ Groups key
-    // console.log(`*** groups.Groups is: ***`, groups.Groups) // arr of all 3 groups
-    // console.log(`*** dispatch is: ***`, dispatch(getAllGroups(groups.Groups)))
-    // ^ returns obj w/ keys: type, groups: []
-
-    // console.log(`*** in GET ALL groups RES.OK, groups is: ***`, groups) // obj -- { Groups: [ 0: { id: 1, ... }, 1: { id: 2, ... } ] }
-    // console.log(`*** in GET ALL groups RES.OK, groups.Groups is: ***`, groups.Groups) // arr -- [ 0: { id: 1, ... }, 1: { id: 2, ... } ]
-
 
     return dispatch(getAllGroups(groups.Groups)); // groups.Groups is arr
   } else {
@@ -120,13 +110,9 @@ export const createGroupThunk = (group) => async (dispatch) => {
   });
 
   if (res.ok) {
-    // console.log(`*** in res.ok ***`)
 
     const data = await res.json(); // data is group's obj { id: 4, ... } // need groupId (assigned by db)
     const groupId = data.id;
-
-    // console.log(`*** in res.ok -- data is: ***`, data) // group's obj { id: 4, ... }
-    // console.log(`*** in res.ok -- groupId is: ***`, groupId) // 4
 
     dispatch(createGroup(data));
 
@@ -139,14 +125,10 @@ export const createGroupThunk = (group) => async (dispatch) => {
         preview,
       }),
     });
-    // console.log(`*** in thunk res.ok -- imageRes is: ***`, imageRes) // Response obj {}
 
     if (imageRes.ok) {
-      // console.log(`*** in imageRes.ok -- imageRes is: ***`, imageRes) // Response obj {}
       const image = await imageRes.json(); // image is groupImage obj
       // const imageId = image.id;
-      // console.log(`*** in imageRes.ok -- image is: ***`, image) //
-      // console.log(`*** in imageRes.ok -- imageId is: ***`, imageId) //
 
       const imageForStore = {
         id: image.id,
@@ -154,7 +136,6 @@ export const createGroupThunk = (group) => async (dispatch) => {
         url: image.url,
         preview: image.preview
       }
-      // console.log(`*** in imageRes.ok -- imageForStore is: ***`, imageForStore) //
 
       dispatch(createGroupImage(imageForStore));
     }
@@ -162,9 +143,7 @@ export const createGroupThunk = (group) => async (dispatch) => {
     return data;
 
   } else {
-    console.log(`*** in thunk RES NOT OK ***`)
     const errors = await res.json();
-    console.log(`*** in thunk RES NOT OK -- errors is: ***`, errors)
     return errors;
   };
 };
@@ -187,13 +166,10 @@ export const updateGroupThunk = (group) => async (dispatch) => {
   });
 
   if (res.ok) {
-    // console.log(`*** in res.ok ***`)
 
     const data = await res.json(); // data is group's obj { id: 4, ... } // need groupId (assigned by db)
     const groupId = data.id;
 
-    // console.log(`*** in res.ok -- data is: ***`, data) // group's obj { id: 4, ... }
-    // console.log(`*** in res.ok -- groupId is: ***`, groupId) // 4
 
     dispatch(updateGroup(data));
 
@@ -206,14 +182,10 @@ export const updateGroupThunk = (group) => async (dispatch) => {
         preview,
       }),
     });
-    // console.log(`*** in thunk res.ok -- imageRes is: ***`, imageRes) // Response obj {}
 
     if (imageRes.ok) {
-      // console.log(`*** in imageRes.ok -- imageRes is: ***`, imageRes) // Response obj {}
       const image = await imageRes.json(); // image is groupImage obj
       // const imageId = image.id;
-      // console.log(`*** in imageRes.ok -- image is: ***`, image) //
-      // console.log(`*** in imageRes.ok -- imageId is: ***`, imageId) //
 
       const imageForStore = {
         id: image.id,
@@ -221,7 +193,6 @@ export const updateGroupThunk = (group) => async (dispatch) => {
         url: image.url,
         preview: image.preview
       }
-      // console.log(`*** in imageRes.ok -- imageForStore is: ***`, imageForStore) //
 
       dispatch(updateGroupImage(imageForStore));
     }
@@ -229,9 +200,7 @@ export const updateGroupThunk = (group) => async (dispatch) => {
     return data;
 
   } else {
-    console.log(`*** in thunk RES NOT OK ***`)
     const errors = await res.json();
-    console.log(`*** in thunk RES NOT OK -- errors is: ***`, errors)
     return errors;
   };
 };
@@ -246,11 +215,9 @@ export const deleteGroupThunk = (groupId) => async (dispatch) => {
   if (res.ok) {
     const data = await res.json();
     dispatch(deleteGroup(groupId));
-    console.log(`*** in delete thunk, data is: ***`, data) // {message: 'Successfully deleted'}
     return data;
   } else {
     const errors = await res.json();
-    console.log(`*** in delete thunk, errors is: ***`, errors) //
     return errors;
   }
 };
@@ -258,7 +225,6 @@ export const deleteGroupThunk = (groupId) => async (dispatch) => {
 
 // ORIG WORKING COPY -- DO NOT EDIT
 // export const createGroupThunk = (group) => async (dispatch) => {
-//   // console.log(`*** group is: ***`, group) // 'group' DOES PRINT
 
 //   // 'privacy' does not match 'private' key in db ????
 //   // const private = privacy; // gives err: private is a reserved word in strict mode
@@ -277,21 +243,13 @@ export const deleteGroupThunk = (groupId) => async (dispatch) => {
 //     }),
 //   });
 
-//   // console.log(`*** res is: ***`, res)
-//   // console.log(`*** res.body is: ***`, res.body)
-
 //   if (res.ok) {
-//     // console.log(`*** in res.ok ***`)
 //     const data = await res.json(); // need id assigned in backend database
-//     // console.log(`*** in res.ok -- data is: ***`, data)
-//     // console.log(`*** group is: ***`, group)
 //     dispatch(createGroup(data)); // removed .group
 //     return data; // changed from res to data
 
 //   } else {
-//     console.log(`*** in RES NOT OK ***`)
 //     const errors = await res.json();
-//     console.log(`*** errors is: ***`, errors)
 //     return errors;
 //   };
 // };
@@ -303,14 +261,9 @@ export const deleteGroupThunk = (groupId) => async (dispatch) => {
 //     method: 'GET'
 //   });
 
-//   // console.log(`*** res is: ***`, res) // type: res?
-
 //   if (res.ok) {
 //     const groups = await res.json();
 
-//     // console.log(`*** groups obj is: ***`, groups) // obj, w/ Groups key
-//     // console.log(`*** groups.Groups is: ***`, groups.Groups) // arr of all 3 groups
-//     // console.log(`*** dispatch is: ***`, dispatch(getAllGroups(groups.Groups)))
 //     // ^ returns obj w/ keys: type, groups: []
 
 //     return dispatch(getAllGroups(groups.Groups));

@@ -129,8 +129,6 @@ export default function GroupForm({ group, formType }) {
         }
       } catch (res) { // if exception in above code, run .catch()
         const data = await res.json(); // get data from db
-        console.log(`***** res *****`, res);
-        console.log(`***** data *****`, data);
         if (data && data.errors) { // if errors from db
           setErrors(data.errors); // setErrors
         }

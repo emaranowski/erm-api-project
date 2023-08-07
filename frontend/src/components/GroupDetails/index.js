@@ -29,31 +29,17 @@ export default function GroupDetails() {
     useSelector((state) => (state.groups ? state.groups : {}))
   ); // ret arr // 0: allGroups, 1: singleGroup
 
-  // console.log(`*** groupsStateArr is: ***`, groupsStateArr)
-  // console.log(`*** groupsStateKeys is: ***`, groupsStateKeys)
-  // console.log(`*** allGroups is: ***`, allGroups)
-  // console.log(`*** allGroupsArr is: ***`, allGroupsArr)
-
   // const singleGroup = groupsStateArr[1]; // obj
   // // const singleGroupArr = Object.values(singleGroup)
 
   // const group = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {});
 
-  // console.log(`*** group is: ***`, group)
-  // console.log(`*** singleGroup is: ***`, singleGroup) //
-
   // const singleGroupImagesArr = groupsStateArr[1].GroupImages; // [ {imageObj} ]
-  // // console.log(`*** singleGroupImagesArr is: ***`, singleGroupImagesArr)
 
   // const previewImagesArr = singleGroupImagesArr.filter(imageObj => {
   //   return imageObj.preview === true;
   // });
   // const previewImageURL = previewImagesArr[0].url;
-
-  // console.log(`*** previewImagesArr is: ***`, previewImagesArr) //
-  // console.log(`*** previewImageURL is: ***`, previewImageURL) //
-  // console.log(`*** singleGroup is: ***`, singleGroup)
-  // console.log(`*** singleGroupArr is: ***`, singleGroupArr)
 
 
   // WORKING -- V1
@@ -65,9 +51,6 @@ export default function GroupDetails() {
   //   previewImageURL = groupImages[0].url;
   // }
 
-  // console.log(`*** group is: ***`, group)
-  // console.log(`*** groupImages is: ***`, groupImages)
-  // console.log(`*** previewImageURL is: ***`, previewImageURL)
 
   // WORKING -- V2 -- used until 2023-08-02
   const group = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
@@ -83,20 +66,12 @@ export default function GroupDetails() {
     previewImageURL = previewImages[previewImages.length - 1].url;
   }
 
-  // console.log(`*** group is: ***`, group)
-  // console.log(`*** groupImages is: ***`, groupImages)
-  // console.log(`*** previewImages is: ***`, previewImages)
-  // console.log(`*** previewImageURL is: ***`, previewImageURL)
 
   // // new on 2023-08-02
   // const group = useSelector(state => state.groups.allGroups[groupId]);
   // const previewImageURL = useSelector(state => state.groups.allGroups[groupId].previewImage);
 
-  // // console.log(`*** thisGroup is: ***`, thisGroup)
 
-
-
-  // console.log(`*** typeof allEvents['1'] === 'object' ***`, typeof allEvents['1'] === 'object')
 
   // if (typeof allEvents['1'] === 'object') { }
   ///////////////////////////
@@ -125,11 +100,6 @@ export default function GroupDetails() {
   // const groupPreviewImages = groupImages.filter(image => { // [{}]
   //   return image.preview === true;
   // })
-
-  // console.log(`*** group is: ***`, group)
-  // console.log(`*** groupImages is: ***`, groupImages)
-  // console.log(`*** groupPreviewImages is: ***`, groupPreviewImages)
-  // console.log(`*** previewImage is: ***`, previewImage)
 
 
   // // Current user must be "host" or "co-host" of Group that Event belongs to
@@ -168,8 +138,6 @@ export default function GroupDetails() {
   const organizer = singleGroup.Organizer;
   // const organizerFirstName = singleGroup.Organizer.firstName;
   // const organizerLastName = singleGroup.Organizer.lastName;
-  // console.log(`*** singleGroup is: ***`, singleGroup)
-  // console.log(`*** organizer is: ***`, organizer)
   // if (Object.values(organizer).length) {
   //   const organizerFirstName = singleGroup.Organizer.firstName;
   //   const organizerLastName = singleGroup.Organizer.lastName;
@@ -182,10 +150,7 @@ export default function GroupDetails() {
     organizerLastName = singleGroup.Organizer.lastName;
   }
 
-  // console.log(`*** organizerFirstName is: ***`, organizerFirstName)
-  // console.log(`*** organizerLastName is: ***`, organizerLastName)
   // const allGroups = useSelector(state => state.groups.allGroups ? state.groups.allGroups : {}); // {}
-  // console.log(`*** allGroups is: ***`, allGroups)
   // useEffect(() => {
   //   dispatch(getAllUsersThunk());
   // }, [dispatch]);
@@ -199,7 +164,6 @@ export default function GroupDetails() {
   // if logged in and did not create group, 'JOIN' BUTTON should display
 
   // const sessionUser = useSelector(state => state.session.user);
-  // console.log(`*** sessionUser is: ***`, sessionUser)
   // logged out: sessionUser === null
   // logged in: sessionUser === {id: 1, firstName: 'FirstNameOne', lastName: 'LastNameOne', email: 'demo1@demo.com', username: 'DemoUser1'}
 
@@ -241,8 +205,6 @@ export default function GroupDetails() {
   // // if user is logged in and created group, 'JOIN' BUTTON should hide
   // const currUser = useSelector(state => state.session ? state.session : {}); // {}
   // const currUserId = useSelector(state => state.session.user.id ? state.session.user.id : {}); // {}
-  // console.log(`*** currUser is: ***`, currUser)
-  // console.log(`*** currUserId is: ***`, currUserId)
 
   // let hideJoinButton = true;
   // if (currUserId !== organizerId) hideJoinButton = false;
@@ -261,8 +223,6 @@ export default function GroupDetails() {
   // const currUser = useSelector(state => state.session ? state.session : {}); // {}
   // const currUserIdOrig = useSelector(state => state.session.user.id ? state.session.user.id : {}); // {}
 
-  // console.log(`*** currUser is: ***`, currUser)
-  // console.log(`*** currUserId is: ***`, currUserId)
 
   // let currUserId;
   // if (typeof currUserIdOrig === 'number') {
@@ -360,12 +320,6 @@ export default function GroupDetails() {
     };
 
   };
-  // console.log(`**** eventsByGroupUpcoming ****`, eventsByGroupUpcoming)
-  // console.log(`**** eventsByGroupUpcomingNum ****`, eventsByGroupUpcomingNum)
-
-  // console.log(`**** eventsByGroupPast ****`, eventsByGroupPast)
-  // console.log(`**** eventsByGroupPastNum ****`, eventsByGroupPastNum)
-
 
   return (
     <>

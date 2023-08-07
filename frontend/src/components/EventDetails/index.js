@@ -49,8 +49,6 @@ export default function EventDetails() {
   };
 
   // const group = useSelector(state => state)
-  // console.log(`*** IN EVENT DETAILS group is: ***`, group)
-
 
   // useEffect(() => {
   //   dispatch(getSingleEventThunk(eventId));
@@ -87,7 +85,6 @@ export default function EventDetails() {
 
   ////////////// HOST NAME (GROUP ORGANIZER NAME) //////////////
   const singleGroup = useSelector(state => state.groups.singleGroup);
-  console.log(`*** singleGroup is: ***`, singleGroup)
   let organizerId;
   let organizerFirstName;
   let organizerLastName;
@@ -106,17 +103,12 @@ export default function EventDetails() {
 
   ////////////// GROUP IMAGE //////////////
   const allGroups = useSelector(state => state.groups.allGroups);
-  console.log(`*** allGroups is: ***`, allGroups)
   let groupPreviewImageURL;
   if (Object.values(allGroups).length) {
     if (allGroups[groupId] !== undefined) {
       groupPreviewImageURL = allGroups[groupId].previewImage;
     }
   }
-
-  // console.log(`*** allGroups[groupId] is: ***`, allGroups[groupId])
-  // console.log(`*** allGroups[groupId].previewImage is: ***`, allGroups[groupId].previewImage) //
-
 
   ////////////// GROUP NAME //////////////
   let groupName;

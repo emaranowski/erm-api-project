@@ -13,7 +13,6 @@ const DELETE_EVENT = "events/DELETE_EVENT";
 ////////////// Action Creators: //////////////
 
 const getAllEvents = (events) => {
-  // console.log(`*** in getAllEvents events is: ***`, events) // EVENTS IS REACHING HERE
   return {
     type: GET_ALL_EVENTS,
     events
@@ -70,19 +69,9 @@ export const getAllEventsThunk = () => async (dispatch) => {
     method: 'GET'
   });
 
-  // console.log(`*** in GET ALL EVENTS THUNK, res is: ***`, res) // Res obj
-
   if (res.ok) {
     const events = await res.json();
     const eventsArr = events.Events;
-
-    // console.log(`*** in GET ALL EVENTS RES.OK, events is: ***`, events) // obj -- { Events: [ 0: { id: 1, ... }, 1: { id: 2, ... } ] }
-    // console.log(`*** in GET ALL EVENTS RES.OK, eventsArr is: ***`, eventsArr) // arr -- [ 0: { id: 1, ... }, 1: { id: 2, ... } ]
-
-    // console.log(`*** events obj is: ***`, events) // obj, w/ Events key
-    // console.log(`*** events.Events is: ***`, events.Events) // arr of all 3 events
-    // console.log(`*** dispatch is: ***`, dispatch(getAllEvents(events.Events)))
-    // ^ returns obj w/ keys: type, events: []
 
     return dispatch(getAllEvents(eventsArr));
   } else {
@@ -127,13 +116,9 @@ export const createEventThunk = (event) => async (dispatch) => {
   });
 
   if (res.ok) {
-    // console.log(`*** in res.ok ***`)
 
     const data = await res.json(); // data is event's obj { id: 4, ... } // need eventId (assigned by db)
     const eventId = data.id;
-
-    // console.log(`*** in res.ok -- data is: ***`, data) // event's obj { id: 4, ... }
-    // console.log(`*** in res.ok -- eventId is: ***`, eventId) // 4
 
     dispatch(createEvent(data));
 
@@ -146,14 +131,10 @@ export const createEventThunk = (event) => async (dispatch) => {
         preview,
       }),
     });
-    // console.log(`*** in thunk res.ok -- imageRes is: ***`, imageRes) // Response obj {}
 
     if (imageRes.ok) {
-      // console.log(`*** in imageRes.ok -- imageRes is: ***`, imageRes) // Response obj {}
       const image = await imageRes.json(); // image is eventImage obj
       // const imageId = image.id;
-      // console.log(`*** in imageRes.ok -- image is: ***`, image) //
-      // console.log(`*** in imageRes.ok -- imageId is: ***`, imageId) //
 
       const imageForStore = {
         id: image.id,
@@ -161,7 +142,6 @@ export const createEventThunk = (event) => async (dispatch) => {
         url: image.url,
         preview: image.preview
       }
-      // console.log(`*** in imageRes.ok -- imageForStore is: ***`, imageForStore) //
 
       dispatch(createEventImage(imageForStore));
     }
@@ -169,9 +149,7 @@ export const createEventThunk = (event) => async (dispatch) => {
     return data;
 
   } else {
-    // console.log(`*** in thunk RES NOT OK ***`)
     const errors = await res.json();
-    // console.log(`*** in thunk RES NOT OK -- errors is: ***`, errors)
     return errors;
   };
 };
@@ -198,14 +176,11 @@ export const updateEventThunk = (event) => async (dispatch) => {
   });
 
   if (res.ok) {
-    // console.log(`*** in res.ok ***`)
 
     const data = await res.json(); // data is event's obj { id: 4, ... } // need eventId (assigned by db)
-    // console.log(`*** in res.ok -- data is: ***`, data) // event's obj { id: 4, ... }
     dispatch(updateEvent(data));
 
     // const eventId = data.id;
-    // // console.log(`*** in res.ok -- eventId is: ***`, eventId)
     // const imageRes = await csrfFetch(`/api/events/${eventId}/images`, {
     //   method: "POST",
     //   headers: { 'Content-Type': 'application/json' },
@@ -215,29 +190,22 @@ export const updateEventThunk = (event) => async (dispatch) => {
     //     preview,
     //   }),
     // });
-    // // console.log(`*** in thunk res.ok -- imageRes is: ***`, imageRes)
     // if (imageRes.ok) {
-    //   // console.log(`*** in imageRes.ok -- imageRes is: ***`, imageRes)
     //   const image = await imageRes.json(); // image is eventImage obj
     //   // const imageId = image.id;
-    //   // console.log(`*** in imageRes.ok -- image is: ***`, image)
-    //   // console.log(`*** in imageRes.ok -- imageId is: ***`, imageId)
     //   const imageForStore = {
     //     id: image.id,
     //     eventId: eventId,
     //     url: image.url,
     //     preview: image.preview
     //   }
-    //   // console.log(`*** in imageRes.ok -- imageForStore is: ***`, imageForStore) //
     //   dispatch(updateEventImage(imageForStore));
     // }
 
     return data;
 
   } else {
-    // console.log(`*** in thunk RES NOT OK ***`)
     const errors = await res.json();
-    // console.log(`*** in thunk RES NOT OK -- errors is: ***`, errors)
     return errors;
   };
 };
@@ -253,11 +221,9 @@ export const deleteEventThunk = (eventId) => async (dispatch) => {
   if (res.ok) {
     const data = await res.json();
     dispatch(deleteEvent(eventId));
-    // console.log(`*** in delete thunk, data is: ***`, data) // {message: 'Successfully deleted'}
     return data;
   } else {
     const errors = await res.json();
-    // console.log(`*** in delete thunk, errors is: ***`, errors) //
     return errors;
   }
 };

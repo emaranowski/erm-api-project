@@ -17,7 +17,6 @@ function EventDeleteModal({ eventId }) {
   if (singleGroup.id !== undefined && singleGroup.id !== null) {
     groupId = singleGroup.id;
   };
-  // console.log(`****** groupId is : ******`, groupId);
 
   const [errors, setErrors] = useState('');
 

@@ -150,7 +150,6 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res) => 
         order: [['id', 'DESC']],
     });
 
-    // console.log(`***** refEvent *****`, refEvent);
     !refEvent ? refEvent = { dataValues: { id: 1 } } : refEvent;
 
     // const refEventId = refEvent.dataValues.id;
@@ -219,15 +218,6 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res) => 
 
     // // const hostOrCoHost = [];
     // allMemberships.forEach(membership => {
-    //     // console.log('////////////////////////////////')
-    //     // console.log(`***** membership.status:`)
-    //     // console.log(membership.status)
-    //     // console.log('////////////////////////////////')
-
-    //     // console.log('////////////////////////////////')
-    //     // console.log(`***** groupId:`)
-    //     // console.log(groupId)
-    //     // console.log('////////////////////////////////')
 
     //     if (membership.userId === currUserId &&
     //         (membership.status === 'host' || membership.status === 'co-host')
@@ -264,23 +254,9 @@ router.get('/:groupId/members', async (req, res) => {
     const allMemberships = await Membership.findAll({ where: { groupId: groupId } });
     const allUsers = await User.findAll();
 
-    // console.log('////////////////////////////////')
-    // console.log(`***** allMemberships:`)
-    // console.log(allMemberships)
-    // console.log('////////////////////////////////')
-
     // create hostOrCoHost
     const hostOrCoHost = [];
     allMemberships.forEach(membership => {
-        // console.log('////////////////////////////////')
-        // console.log(`***** membership.status:`)
-        // console.log(membership.status)
-        // console.log('////////////////////////////////')
-
-        // console.log('////////////////////////////////')
-        // console.log(`***** groupId:`)
-        // console.log(groupId)
-        // console.log('////////////////////////////////')
 
         if (membership.userId === currUserId &&
             (membership.status === 'host' || membership.status === 'co-host')
@@ -288,11 +264,6 @@ router.get('/:groupId/members', async (req, res) => {
             hostOrCoHost.push(membership.status)
         }
     });
-
-    // console.log('////////////////////////////////')
-    // console.log(`***** hostOrCoHost:`)
-    // console.log(hostOrCoHost)
-    // console.log('////////////////////////////////')
 
     // If user IS host/co-host, show members w/ status: host, co-host, member, pending
     if (hostOrCoHost.length === 1) {
@@ -302,11 +273,6 @@ router.get('/:groupId/members', async (req, res) => {
             const user = allUsers.filter(user => {
                 return user.id === member.dataValues.userId;
             });
-
-            // console.log('////////////////////////////////')
-            // console.log(`***** user:`)
-            // console.log(user)
-            // console.log('////////////////////////////////')
 
             const memberObj = {
                 id: member.id,
@@ -378,17 +344,7 @@ router.get('/:groupId/events', async (req, res) => {
 
     group.Events.forEach(event => {
 
-        // console.log('////////////////////////////////')
-        // console.log(`***** event:`)
-        // console.log(event)
-        // console.log('////////////////////////////////')
-
         const { id, groupId, venueId, name, type, startDate, endDate } = event.dataValues;
-
-        // console.log('////////////////////////////////')
-        // console.log(`***** event.dataValues:`)
-        // console.log(name)
-        // console.log('////////////////////////////////')
 
         // create totalAttending
         let totalAttending;
@@ -406,17 +362,6 @@ router.get('/:groupId/events', async (req, res) => {
         if (eventImages.length === 0) previewImageVal = null;
         if (eventImages.length > 0) previewImageVal = eventImages[0].url;
 
-
-        // console.log('////////////////////////////////')
-        // console.log(`***** allEventImages:`)
-        // console.log(allEventImages)
-        // console.log('////////////////////////////////')
-
-
-        // console.log('////////////////////////////////')
-        // console.log(`***** event.dataValues.id:`)
-        // console.log(event.dataValues.id)
-        // console.log('////////////////////////////////')
 
         // create groupObj
         const groupObj = {
@@ -437,11 +382,6 @@ router.get('/:groupId/events', async (req, res) => {
             city: eventVenue[0].city,
             state: eventVenue[0].state
         };
-
-        // console.log('////////////////////////////////')
-        // console.log(`***** eventVenue:`)
-        // console.log(eventVenue)
-        // console.log('////////////////////////////////')
 
         const eventObj = {
             id,
@@ -555,11 +495,6 @@ router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res) => 
     //     }
     // ); // maybe come back and make more elegant by doing Op.in for status 'host' or 'co-host'
 
-    // console.log('////////////////////////////////')
-    // console.log(`***** userIsCoHost:`)
-    // console.log(userIsCoHost)
-    // console.log('////////////////////////////////')
-
     // // COME BACK TO THIS
     // if (!(currUserId === group.organizerId) && !userIsCoHost) { // if either is false
     //     res.status(403);
@@ -628,34 +563,14 @@ router.get('/:groupId/venues', requireAuth, async (req, res) => {
         return res.json({ message: `Group couldn't be found` });
     };
 
-    // console.log('////////////////////////////////')
-    // console.log(`***** group:`)
-    // console.log(group)
-    // console.log('////////////////////////////////')
-
     // 1st approach: was ONLY getting venue(s) already existing in seed data
     // const groupVenuesArrOrig = group.dataValues.Venues;
 
     // 2nd approach: gets ALL of group's venues, including those added after seed data
     const groupVenuesArrOrig = await Venue.findAll({ where: { groupId: groupId } });
 
-    console.log('////////////////////////////////')
-    console.log(`***** groupVenuesArrOrig:`)
-    console.log(groupVenuesArrOrig)
-    console.log('////////////////////////////////')
-
     let allGroupVenuesObj = { Venues: [] };
     groupVenuesArrOrig.forEach(venue => {
-
-        // console.log('////////////////////////////////')
-        // console.log(`***** groupVenue:`)
-        // console.log(groupVenue)
-        // console.log('////////////////////////////////')
-
-        // console.log('////////////////////////////////')
-        // console.log(`***** groupVenue.dataValues.address:`)
-        // console.log(groupVenue.dataValues.address)
-        // console.log('////////////////////////////////')
 
         const { id, groupId, address, city, state, lat, lng } = venue.dataValues;
 
@@ -764,11 +679,6 @@ router.post('/:groupId/membership', requireAuth, async (req, res) => {
     const existingMembership = await Membership.findOne({
         where: { userId: currUserId, groupId: groupId }
     });
-
-    // console.log('////////////////////////////////')
-    // console.log(`***** existingMembership:`)
-    // console.log(existingMembership.status)
-    // console.log('////////////////////////////////')
 
     if (!existingMembership) {
         await Membership.bulkCreate([{
@@ -1075,12 +985,6 @@ router.put('/:groupId/membership', requireAuth, async (req, res) => {
     let coHost = false;
     if (currentUserMembership.status === 'co-host') coHost = true;
 
-    // console.log('////////////////////////////////')
-    // console.log(`***** membership.status:`)
-    // console.log(membership.status)
-    // console.log('////////////////////////////////')
-    // return res.json({ message: `test` });
-
     if (membership.status === 'pending' && status === 'member' && !host && !coHost) {
 
         res.status(403);
@@ -1128,17 +1032,7 @@ router.put('/:groupId/membership', requireAuth, async (req, res) => {
         };
         res.status(200);
         return res.json(membershipObj);
-
     }
-
-    // else {
-    //     // return res.json({ message: `test` });
-    // }
-
-    // console.log('////////////////////////////////')
-    // console.log(`***** hostOrCoHost:`)
-    // console.log(hostOrCoHost)
-    // console.log('////////////////////////////////')
 });
 
 
@@ -1218,16 +1112,9 @@ router.post('/', requireAuth, validateGroup, async (req, res) => {
     let refGroup = await Group.findOne({
         order: [['id', 'DESC']],
     });
-
-    // console.log(`***** refGroup *****`, refGroup);
     !refGroup ? refGroup = { dataValues: { id: 1 } } : refGroup;
-
     // const refGroupId = refGroup.dataValues.id;
     const refGroupIdPlusOne = 1 + refGroup.dataValues.id;
-
-    // console.log(`*** refGroup is: ***`, refGroup)
-    // console.log(`*** refGroupId is: ***`, refGroupId)
-    // console.log(`*** refGroupIdPlusOne is: ***`, refGroupIdPlusOne)
 
     await Group.bulkCreate([
         {
@@ -1296,12 +1183,7 @@ router.post('/', requireAuth, validateGroup, async (req, res) => {
     //     }
     // });
 
-    // console.log(`*** createdGroup is: ***`, createdGroup) // Group { dataValues: {id: 4, organizerId: 1, etc..} }
-    // console.log(`*** createdGroup.dataValues is: ***`, createdGroup.dataValues) // {id: 4, organizerId: 1, etc..}
-    // console.log(`*** createdGroup.dataValues.id is: ***`, createdGroup.dataValues.id) // 4
-
     const createdGroupObj = createdGroup.dataValues;
-    // console.log(`*** createdGroupObj is: ***`, createdGroupObj) // {id: 4, organizerId: 1, etc..}
 
     const createdGroupId = createdGroup.dataValues.id; // added '.dataValues' on 2023-08-01
     await Membership.bulkCreate([
@@ -1387,11 +1269,6 @@ router.post('/', requireAuth, validateGroup, async (req, res) => {
 router.get('/current', requireAuth, async (req, res) => {
     const { user } = req; // pull user from req
 
-    // console.log('////////////////////////////////')
-    // console.log(`***** user:`)
-    // console.log(user)
-    // console.log('////////////////////////////////')
-
     // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
     // but if 'requireAuth' didn't work, this would be a failsafe/backup
     if (!user) {
@@ -1402,11 +1279,6 @@ router.get('/current', requireAuth, async (req, res) => {
     let allGroupsObj = { Groups: [] };
 
     const currUserId = user.dataValues.id;
-
-    // console.log('////////////////////////////////')
-    // console.log(`***** currUserId:`)
-    // console.log(currUserId)
-    // console.log('////////////////////////////////')
 
     const groupsOrig = await Group.findAll({
         // where: { organizerId: currUserId }, // this was limiting to only groups meeting this condition
@@ -1421,23 +1293,12 @@ router.get('/current', requireAuth, async (req, res) => {
         groups.push(group.toJSON()); // convert to JSON
     });
 
-    // console.log('////////////////////////////////')
-    // console.log(`***** groupsOrig:`)
-    // console.log(groupsOrig)
-    // console.log('////////////////////////////////')
-
-
     // 1. get all Memberships
     // 2. get Memberships where: { userId: currUserId }
     // 3. get groupId for each Membership where: { userId: currUserId }
     // 4. for each group, get count of Memberships with that groupId (numMembers)
 
     groups.forEach(group => {
-
-        // console.log('////////////////////////////////')
-        // console.log(`***** group.Memberships:`)
-        // console.log(group.Memberships)
-        // console.log('////////////////////////////////')
 
         // 1. create + add numMembers
         membershipsArr = group.Memberships;
@@ -1446,9 +1307,7 @@ router.get('/current', requireAuth, async (req, res) => {
 
         // 2. create + add previewImage
         group.GroupImages.forEach(image => {
-            // console.log(image.preview)
             if (image.preview === true) {
-                // console.log(image)
                 group.previewImage = image.url;
             };
         });
@@ -1462,11 +1321,6 @@ router.get('/current', requireAuth, async (req, res) => {
             const id = membership.userId;
             allUserIdsInGroupMemberships.push(id);
         });
-
-        // console.log('////////////////////////////////')
-        // console.log(`***** allUserIdsInGroupMemberships:`)
-        // console.log(allUserIdsInGroupMemberships)
-        // console.log('////////////////////////////////')
 
         if (allUserIdsInGroupMemberships.includes(currUserId)) {
             // 3. add group to allGroupsObj
@@ -1610,9 +1464,7 @@ router.get('/', async (req, res) => {
 
         // 2. create + add previewImage
         group.GroupImages.forEach(image => {
-            // console.log(image.preview)
             if (image.preview === true) {
-                // console.log(image)
                 group.previewImage = image.url;
             };
         });
@@ -1780,9 +1632,7 @@ module.exports = router;
 
 //         // 2. create + add previewImage
 //         group.GroupImages.forEach(image => {
-//             // console.log(image.preview)
 //             if (image.preview === true) {
-//                 // console.log(image)
 //                 group.previewImage = image.url;
 //             };
 //         });
@@ -1954,11 +1804,6 @@ module.exports = router;
 // router.get('/current', requireAuth, async (req, res) => {
 //     const { user } = req; // pull user from req
 
-//     // console.log('////////////////////////////////')
-//     // console.log(`***** user:`)
-//     // console.log(user)
-//     // console.log('////////////////////////////////')
-
 //     // this 'if (!user)' will not run, since 'requireAuth' will catch any reqs lacking authentication
 //     // but if 'requireAuth' didn't work, this would be a failsafe/backup
 //     if (!user) {
@@ -1969,11 +1814,6 @@ module.exports = router;
 //     let allGroupsObj = { Groups: [] };
 
 //     const currUserId = user.dataValues.id;
-
-//     // console.log('////////////////////////////////')
-//     // console.log(`***** currUserId:`)
-//     // console.log(currUserId)
-//     // console.log('////////////////////////////////')
 
 //     const groupsOrig = await Group.findAll({
 //         // where: { organizerId: currUserId }, // this was limiting to only groups meeting this condition
@@ -1988,23 +1828,12 @@ module.exports = router;
 //         groups.push(group.toJSON()); // convert to JSON
 //     });
 
-//     // console.log('////////////////////////////////')
-//     // console.log(`***** groupsOrig:`)
-//     // console.log(groupsOrig)
-//     // console.log('////////////////////////////////')
-
-
 //     // 1. get all Memberships
 //     // 2. get Memberships where: { userId: currUserId }
 //     // 3. get groupId for each Membership where: { userId: currUserId }
 //     // 4. for each group, get count of Memberships with that groupId (numMembers)
 
 //     groups.forEach(group => {
-
-//         // console.log('////////////////////////////////')
-//         // console.log(`***** group.Memberships:`)
-//         // console.log(group.Memberships)
-//         // console.log('////////////////////////////////')
 
 //         // 1. create + add numMembers
 //         membershipsArr = group.Memberships;
@@ -2013,9 +1842,7 @@ module.exports = router;
 
 //         // 2. create + add previewImage
 //         group.GroupImages.forEach(image => {
-//             // console.log(image.preview)
 //             if (image.preview === true) {
-//                 // console.log(image)
 //                 group.previewImage = image.url;
 //             };
 //         });
@@ -2029,11 +1856,6 @@ module.exports = router;
 //             const id = membership.userId;
 //             allUserIdsInGroupMemberships.push(id);
 //         });
-
-//         // console.log('////////////////////////////////')
-//         // console.log(`***** allUserIdsInGroupMemberships:`)
-//         // console.log(allUserIdsInGroupMemberships)
-//         // console.log('////////////////////////////////')
 
 //         if (allUserIdsInGroupMemberships.includes(currUserId)) {
 //             // 3. add group to allGroupsObj
@@ -2052,11 +1874,6 @@ module.exports = router;
 // router.get('/current', async (req, res) => {
 //     const { user } = req; // pull user from req
 
-//     // console.log('////////////////////////////////')
-//     // console.log(`***** user:`)
-//     // console.log(user)
-//     // console.log('////////////////////////////////')
-
 //     if (!user) {
 //         res.status(404); // change to client-side error code
 //         return res.json({ message: `No user is currently logged in` });
@@ -2065,11 +1882,6 @@ module.exports = router;
 //     let allGroupsObj = { Groups: [] };
 
 //     const currUserId = user.dataValues.id;
-
-//     // console.log('////////////////////////////////')
-//     // console.log(`***** currUserId:`)
-//     // console.log(currUserId)
-//     // console.log('////////////////////////////////')
 
 //     const groupsOrig = await Group.findAll({
 //         // where: { organizerId: currUserId }, // this was limiting to only groups meeting this condition
@@ -2084,23 +1896,12 @@ module.exports = router;
 //         groups.push(group.toJSON()); // convert to JSON
 //     });
 
-//     // console.log('////////////////////////////////')
-//     // console.log(`***** groupsOrig:`)
-//     // console.log(groupsOrig)
-//     // console.log('////////////////////////////////')
-
-
 //     // 1. get all Memberships
 //     // 2. get Memberships where: { userId: currUserId }
 //     // 3. get groupId for each Membership where: { userId: currUserId }
 //     // 4. for each group, get count of Memberships with that groupId (numMembers)
 
 //     groups.forEach(group => {
-
-//         console.log('////////////////////////////////')
-//         console.log(`***** group.Memberships:`)
-//         console.log(group.Memberships)
-//         console.log('////////////////////////////////')
 
 //         // if (group.Membership.userId === currUserId) {
 
@@ -2111,9 +1912,7 @@ module.exports = router;
 
 //         // 2. create + add previewImage
 //         group.GroupImages.forEach(image => {
-//             // console.log(image.preview)
 //             if (image.preview === true) {
-//                 // console.log(image)
 //                 group.previewImage = image.url;
 //             };
 //         });
@@ -2263,9 +2062,7 @@ module.exports = router;
 
 //     groupsList.forEach(group => {
 //         group.GroupImages.forEach(image => {
-//             // console.log(image.preview)
 //             if (image.preview === true) {
-//                 // console.log(image)
 //                 group.previewImage = image.url
 //             }
 //         })
@@ -2295,9 +2092,7 @@ module.exports = router;
 
 //     gamesList.forEach(game => {
 //         game.Images.forEach(image => {
-//             // console.log(image.bannerImage)
 //             if (image.bannerImage === true) {
-//                 // console.log(image)
 //                 game.bannerImage = image.url
 //             }
 //         })
@@ -2327,9 +2122,7 @@ module.exports = router;
 //     groups.forEach(group => {
 
 //         group.GroupImages.forEach(image => {
-//             // console.log(image.preview)
 //             if (image.preview === true) {
-//                 // console.log(image)
 //                 group.previewImage = image.url
 //             }
 //         })
@@ -2384,7 +2177,6 @@ module.exports = router;
 //         // })
 
 //         // const img = imgs[0];
-//         // console.log(`img: `, img)
 
 //         // const previewImgUrl = ''; // not done
 //         const groupObj = {
@@ -2455,14 +2247,7 @@ module.exports = router;
 
 //         const memsArr = allMembershipsArr.filter(membership => {
 //             return membership.groupId === group.id;
-//             // console.log(membership.groupId === group.id);
-//             // console.log(membership.groupId);
-//             // console.log(group.id);
 //         });
-
-//         // console.log('');
-//         // console.log(memsArr);
-//         // console.log('');
 
 //         // const membersCount = Membership.count({ // ret arr of objs
 //         //     where: {
@@ -2654,10 +2439,6 @@ module.exports = router;
 //     let coHost = false;
 //     if (currentUserMembership.status === 'co-host') coHost = true;
 
-//     // console.log('////////////////////////////////')
-//     // console.log(`***** membership.status:`)
-//     // console.log(membership.status)
-//     // console.log('////////////////////////////////')
 //     // return res.json({ message: `test` });
 
 //     if (membership.status === 'pending' && status === 'member' && !host && !coHost) {
@@ -2711,9 +2492,4 @@ module.exports = router;
 //     } else {
 //         // return res.json({ message: `test` });
 //     }
-
-//     // console.log('////////////////////////////////')
-//     // console.log(`***** hostOrCoHost:`)
-//     // console.log(hostOrCoHost)
-//     // console.log('////////////////////////////////')
 // });

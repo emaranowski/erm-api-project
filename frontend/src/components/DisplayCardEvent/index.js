@@ -23,18 +23,15 @@ export default function DisplayCardEvent({ event }) {
     const fetchEvents = async () => {
       const event = await dispatch(getSingleEventThunk(eventId))
       setIsLoaded(true);
-      // console.log(`****** event ******`, event)
       setSingleEventState(event);
     }
     fetchEvents();
   }, [dispatch, eventId]);
 
   useEffect(() => {
-    // console.log(eventId)
   }, [eventId])
 
   useEffect(() => {
-    // console.log(`****** singleEvent ******`, singleEvent)
   }, [singleEvent])
 
   return (

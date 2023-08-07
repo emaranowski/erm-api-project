@@ -93,13 +93,8 @@ export const logout = () => async (dispatch) => {
 //     method: 'GET'
 //   });
 
-//   // console.log(`*** res is: ***`, res) // type: res?
-
 //   if (res.ok) {
 //     const users = await res.json();
-
-//     // console.log(`*** users obj is: ***`, users) // obj, w/ Users key
-//     // console.log(`*** users.Users is: ***`, users.Users) // arr of all 3 users
 
 //     return dispatch(getAllUsers(users.Users));
 

@@ -14,8 +14,6 @@ export default function DisplayAll({ displayType }) {
 
   // const allGroups = groupsStateArr[0]; // {}
 
-  console.log(`***** allGroups *****`, allGroups);
-
   const allGroupsArr = Object.values(allGroups)
 
   const allEvents = useSelector(state => state.events.allEvents)

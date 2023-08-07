@@ -23,17 +23,9 @@ export default function DisplayCardGroup({ group }) {
     numEvents = eventsByThisGroup.length;
   };
 
-  // console.log(`*** IN DISPLAY CARD displayType is: ***`, displayType)
-  // console.log(`*** IN DISPLAY CARD group is: ***`, group)
-
-
-  // // console.log(`*** group.previewImage is: ***`, group.previewImage);
 
   // const groupPulled = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
   // const groupPulledImages = group.GroupImages;
-
-  // console.log(`*** groupPulled is: ***`, groupPulled);
-  // console.log(`*** groupPulledImages is: ***`, groupPulledImages);
 
 
   // let previewImageURL;
@@ -59,11 +51,6 @@ export default function DisplayCardGroup({ group }) {
   //     // previewImageURL = previewImages[0].url; // orig
   //     previewImageURL = previewImages[previewImages.length - 1].url;
   //   }
-
-  //   // console.log(`*** group is: ***`, group)
-  //   // console.log(`*** groupImages is: ***`, groupImages)
-  //   // console.log(`*** previewImages is: ***`, previewImages)
-  //   console.log(`*** previewImageURL is: ***`, previewImageURL)
   // }
 
   return (

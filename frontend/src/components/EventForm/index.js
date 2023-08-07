@@ -28,7 +28,6 @@ export default function EventForm({ event, formType }) {
   const [url, setURL] = useState('');
   const [venueId, setVenueId] = useState(1); // 2023-08-03: hardcoding for now, since it's not part of MVP specs
 
-  // console.log(`****** event ******`, event) //
   // if (event.EventImages.length[0]) {
   //   setURL(event.EventImages[0].url);
   // };
@@ -89,7 +88,6 @@ export default function EventForm({ event, formType }) {
 
       try {
         const res = await dispatch(createEventThunk(event)); // VS Code gives note about not needing 'await', but it IS needed here
-        // console.log(`*** in event form create TRY, RES is: ***`, res)
         if (res.id) {
           setErrors({});
           history.push(`/events/${res.id}`);
@@ -97,9 +95,7 @@ export default function EventForm({ event, formType }) {
           return res;
         }
       } catch (res) { // if exception in above code, run .catch()
-        // console.log(`*** in event form create CATCH, RES is: ***`, res) // TypeError: Failed to execute 'json' on 'Response': body stream already read
         const data = await res.json(); // get data from db
-        // console.log(`*** in event form create CATCH, DATA is: ***`, data) // TypeError: Failed to execute 'json' on 'Response': body stream already read
         if (data && data.errors) { // if errors from db
           setErrors(data.errors); // setErrors
         }
@@ -109,7 +105,6 @@ export default function EventForm({ event, formType }) {
 
       try {
         const res = await dispatch(updateEventThunk(event)); // VS Code gives note about not needing 'await', but it IS needed here
-        // console.log(`*** in form UPDATE try, res is: ***`, res)
         if (res.id) {
           setErrors({});
           history.push(`/events/${res.id}`);
@@ -117,9 +112,7 @@ export default function EventForm({ event, formType }) {
           return res;
         }
       } catch (res) { // if exception in above code, run .catch()
-        // console.log(`*** in form UPDATE CATCH, RES is: ***`, res) // TypeError: Failed to execute 'json' on 'Response': body stream already read
         const data = await res.json(); // get data from db
-        // console.log(`*** in form UPDATE CATCH, DATA is: ***`, data) // TypeError: Failed to execute 'json' on 'Response': body stream already read
         if (data && data.errors) { // if errors from db
           setErrors(data.errors); // setErrors
         }

@@ -7,11 +7,6 @@ const { check } = require('express-validator'); // validates req.body
 const { handleValidationErrors } = require('../../utils/validation'); // validates req.body
 const router = express.Router();
 
-// console.log('////////////////////////////////')
-// console.log(`***** venue:`)
-// console.log(venue)
-// console.log('////////////////////////////////')
-
 
 
 
@@ -158,12 +153,6 @@ router.delete('/:eventId/attendance', requireAuth, async (req, res) => {
         return res.json({ message: `Forbidden: Only the User or organizer may delete an Attendance` });
     };
 
-    // console.log('////////////////////////////////')
-    // console.log(`attendance:`)
-    // console.log(attendance)
-    // console.log('////////////////////////////////')
-    // return res.json({ message: 'test' });
-
     await attendance.destroy();
 
     res.status(200);
@@ -232,11 +221,6 @@ router.delete('/:eventId', requireAuth, async (req, res) => {
             message: `Forbidden: User must be a group's organizer or co-host to delete its events.`
         });
     };
-
-    // console.log('////////////////////////////////')
-    // console.log(`***** hostOrCoHost:`)
-    // console.log(hostOrCoHost)
-    // console.log('////////////////////////////////')
 
     await event.destroy();
 
@@ -428,11 +412,6 @@ router.post('/:eventId/attendance', requireAuth, async (req, res) => {
 //         where: { userId: currUserId, eventId: eventId }
 //     });
 
-//     // console.log('////////////////////////////////')
-//     // console.log(`***** existingAttendance:`)
-//     // console.log(existingAttendance.status)
-//     // console.log('////////////////////////////////')
-
 //     if (!existingAttendance) {
 //         await Attendance.bulkCreate([{
 //             userId: currUserId,
@@ -603,12 +582,6 @@ router.put('/:eventId/attendance', requireAuth, async (req, res) => {
             userId,
             status
         };
-
-        // console.log('////////////////////////////////')
-        // console.log(`***** attandanceObj:`)
-        // console.log(attandanceObj)
-        // console.log('////////////////////////////////')
-        // return res.json({ test: `test` });
 
         res.status(200);
         return res.json(attandanceObj);
@@ -879,14 +852,6 @@ router.get('/', validatePageAndSize, async (req, res) => {
     // `GET /?page=hello&size=world`
     // should return items 1-20
 
-    // FEEDBACK
-    // SHOULD BE FIXED NOW?
-    // when request does not specify page & size,
-    // should assume default vals,
-    // or display all data.
-
-
-
     // eventsOrig is arr of Event objs
     // const eventsOrig = await Event.findAll({ // tried adding order clause on 2023-08-04
     //     // order: [['startDate', 'DESC']], // wasn't working, prob because startDate is stored as date obj in DB?
@@ -899,31 +864,6 @@ router.get('/', validatePageAndSize, async (req, res) => {
     //     offset: (page - 1) * size,
     //     limit: size,
     // });
-
-    // THIS IS DRAFT LOGIC FROM 2023-08-04
-    // ENDED UP SORTING ON FRONTEND
-    // // console.log(`***** eventsOrig *****`, eventsOrig); // arr of Event objs
-    // // console.log(`***** eventsOrig is Array *****`, Array.isArray(eventsOrig)); // TRUE is array
-    // eventsOrig.forEach(eventObj => {
-    //     // console.log(`***** eventObj.dataValues.startDate typeof *****`, typeof eventObj.dataValues.startDate); // object form
-    //     console.log(`***** eventObj.dataValues.startDate *****`, eventObj.dataValues.startDate);
-    //     console.log(`**********`)
-    //     // console.log(`***** eventObj.dataValues.startDate typeof *****`, typeof Date.parse(eventObj.dataValues.startDate)); // number form
-    //     console.log(`***** eventObj.dataValues.startDate typeof *****`, Date.parse(eventObj.dataValues.startDate)); //
-    //     console.log(`**********`)
-    // });
-
-    // // use number form --> Date.parse(eventObj.dataValues.startDate)
-    // // created ordered array
-    // const eventsOrigDESC = [];
-    // let startDateNumToCompare = Date.parse(eventsOrig[0].dataValues.startDate);
-    // console.log(`***** date obj form *****`, eventsOrig[0].dataValues.startDate);
-    // console.log(`***** startDateNumToCompare *****`, startDateNumToCompare);
-    // // eventsOrig.forEach(eventObj => {
-    // //     const startDateNum = Date.parse(eventObj.dataValues.startDate);
-    // // });
-
-
 
     const eventsOrig = await Event.findAll({ // ORIG
         include: [
@@ -981,16 +921,6 @@ router.get('/', validatePageAndSize, async (req, res) => {
                 state: venue.state
             }
         };
-
-        // console.log('////////////////////////////////')
-        // console.log(`***** group:`)
-        // console.log(group)
-        // console.log('////////////////////////////////')
-
-        // console.log('////////////////////////////////')
-        // console.log(`***** venue:`)
-        // console.log(venue)
-        // console.log('////////////////////////////////')
 
         event.Group = {
             id: group.id,
@@ -1098,10 +1028,6 @@ module.exports = router;
 //         return res.json({ message: `Successfully deleted attendance from event` });
 //     }
 
-//     console.log('////////////////////////////////')
-//     console.log(`***** allAttendance:`)
-//     console.log(allAttendance)
-//     console.log('////////////////////////////////')
 //     return res.json({ message: 'test' });
 
 //     // Error: Attendance does not exist for this User
@@ -1204,16 +1130,6 @@ module.exports = router;
 //                 state: venue.state
 //             }
 //         };
-
-//         // console.log('////////////////////////////////')
-//         // console.log(`***** group:`)
-//         // console.log(group)
-//         // console.log('////////////////////////////////')
-
-//         // console.log('////////////////////////////////')
-//         // console.log(`***** venue:`)
-//         // console.log(venue)
-//         // console.log('////////////////////////////////')
 
 //         event.Group = {
 //             id: group.id,
