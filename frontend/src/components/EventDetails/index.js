@@ -30,6 +30,7 @@ export default function EventDetails() {
   const event = useSelector(state => state.events.singleEvent ? state.events.singleEvent : {}); // {}
   const eventImages = useSelector(state => state.events.singleEvent.EventImages ? state.events.singleEvent.EventImages : []); // {}
 
+
   let previewImageURL;
   let previewImages;
   if (eventImages.length) {
@@ -280,7 +281,7 @@ export default function EventDetails() {
                       💲
                     </div>
                     <div className='price-text-col'>
-                      {typeof price === 'number' ? '$' : null}{price}
+                      {typeof price === 'number' ? '$' : null}{price === '0' ? 'FREE' : price}
                     </div>
                   </div>
 
