@@ -18,8 +18,8 @@ module.exports = {
       {
         venueId: 1,
         groupId: 1,
-        name: 'Forest Park Hike (2011 Sep)',
-        description: 'A shady hike through Forest Park.',
+        name: 'Sandy River Hike (2011 Sep)',
+        description: 'A realxed hike alongside the Sandy River.',
         type: 'In person',
         capacity: 100,
         price: 5,
@@ -40,8 +40,8 @@ module.exports = {
       {
         venueId: 2,
         groupId: 2,
-        name: 'First Sunday Potluck (2011 Aug)',
-        description: 'A cozy potluck. Bring your best culinary inventions!',
+        name: 'Lunch Fundraiser (2011 Aug)',
+        description: 'Special lunch fundraiser -- please bring your favorite dish!',
         type: 'In person',
         capacity: 15,
         price: 5.75,
@@ -63,7 +63,7 @@ module.exports = {
         venueId: null, // changed from 3 to null
         groupId: 3,
         name: 'Mox Board Game Night (2011 Jul)',
-        description: 'Wednesday night board games at Mox Boarding House.',
+        description: 'A fun night of board games at Mox Boarding House.',
         type: 'Online',
         capacity: 30,
         price: 0,
@@ -73,8 +73,8 @@ module.exports = {
       {
         venueId: null, // changed from 3 to null
         groupId: 3,
-        name: 'Mox Board Game Night (2025 Jul)',
-        description: 'Wednesday night board games at Mox Boarding House.',
+        name: 'Board Game Happy Hour (2025 Jul)',
+        description: 'Board games, drinks, and snacks at Mox Boarding House.',
         type: 'Online',
         capacity: 30,
         price: 0,

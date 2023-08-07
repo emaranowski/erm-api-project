@@ -15,7 +15,7 @@ module.exports = {
     await EventImage.bulkCreate([
       {
         eventId: 1,
-        url: 'https://res.cloudinary.com/dragonspell/images/w_800,h_480,dpr_auto,fl_progressive:steep,f_auto/w_800,h_480/v1623257541/www.travelportland.com/cropped-mktg-20192106-Forest-Park-0004-scaled-1/cropped-mktg-20192106-Forest-Park-0004-scaled-1.jpg',
+        url: 'https://www.portland.gov/sites/default/files/styles/facebook/public/2020-04/forest-park-trail.jpg?itok=MAHuf4Xx',
         preview: true
       },
       {
@@ -30,12 +30,12 @@ module.exports = {
       },
       {
         eventId: 4,
-        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Eat_Alberta_Potluck_%287072671637%29.jpg/640px-Eat_Alberta_Potluck_%287072671637%29.jpg',
+        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Korean_potluck.jpg/2560px-Korean_potluck.jpg',
         preview: true
       },
       {
         eventId: 5,
-        url: 'https://cdn11.bigcommerce.com/s-7eepw5u9z2/product_images/uploaded_images/pdxdining1.jpg',
+        url: 'https://cdn11.bigcommerce.com/s-7eepw5u9z2/product_images/uploaded_images/mox-seattle.png',
         preview: true
       },
       {

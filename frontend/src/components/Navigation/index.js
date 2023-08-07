@@ -1,18 +1,17 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import * as sessionActions from '../../store/session';
-import { NavLink, Link, useHistory } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import ProfileButton from './ProfileButton';
+import * as sessionActions from '../../store/session';
 import OpenModalButton from '../OpenModalButton';
+import OpenModalButtonLoginDemo from '../OpenModalButtonLoginDemo';
 import OpenModalButtonLogin from '../OpenModalButtonLogin';
 import OpenModalButtonSignup from '../OpenModalButtonSignup';
+import ProfileButton from './ProfileButton';
+import LoginFormModalDemo from '../LoginFormModalDemo';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
 import './Navigation.css';
-
-import OpenModalButtonLoginDemo from '../OpenModalButtonLoginDemo';
-import LoginFormModalDemo from '../LoginFormModalDemo';
 
 function Navigation({ isLoaded }) {
   const dispatch = useDispatch();
@@ -27,12 +26,6 @@ function Navigation({ isLoaded }) {
 
     history.push(`/`);
   };
-
-  // ORIG WORKING
-  // const logout = (e) => {
-  //   e.preventDefault();
-  //   dispatch(sessionActions.logout());
-  // };
 
   return (
     <>
@@ -49,7 +42,6 @@ function Navigation({ isLoaded }) {
             English
           </button> */}
 
-
           {sessionUser ? (
             <>
               <NavLink exact to="/groups/new" style={{ textDecoration: 'none' }}>
@@ -58,13 +50,7 @@ function Navigation({ isLoaded }) {
                 </span>
               </NavLink>
             </>
-          ) : (
-            <>
-              {/* <span className='nav-grey-link-inactive'>
-                Start a new group
-              </span> */}
-            </>
-          )}
+          ) : (<></>)}
 
           <OpenModalButtonLoginDemo
             buttonText="Log in as Demo User"
@@ -94,22 +80,10 @@ function Navigation({ isLoaded }) {
             </>
           )}
 
-          {/* <button id="nav-log-in-button" className='nav-button'>
-            Log in
-          </button>
-
-          <button id="nav-sign-up-button" className='nav-button'>
-            Sign up
-          </button> */}
-
-          {/* <span>
-            {isLoaded && (<ProfileButton user={sessionUser} />)}
-          </span> */}
-
         </span>
       </nav>
     </>
   );
-}
+};
 
 export default Navigation;
