@@ -25,8 +25,13 @@ export default function EventForm({ event, formType }) {
   const [description, setDescription] = useState(event?.description);
   const [startDate, setStartDate] = useState(event?.startDate); // to/from db
   const [endDate, setEndDate] = useState(event?.endDate); // to/from db
-  const [url, setURL] = useState(event?.EventImages[0].url);
+  const [url, setURL] = useState('');
   const [venueId, setVenueId] = useState(1); // 2023-08-03: hardcoding for now, since it's not part of MVP specs
+
+  // console.log(`****** event ******`, event) //
+  // if (event.EventImages.length[0]) {
+  //   setURL(event.EventImages[0].url);
+  // };
 
   // parse out startDateDB/startTimeDB from DB format, in order to auto-fill form
   const startDateTimeDBArr = startDate.split('');
