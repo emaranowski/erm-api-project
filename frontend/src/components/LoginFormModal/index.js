@@ -53,6 +53,12 @@ function LoginFormModal() {
 
         <form onSubmit={handleSubmit}>
 
+          {errors.credential && (
+            <div className="log-in-error-text">
+              {errors.credential}
+            </div>
+          )}
+
           <label className="modal-log-in-label">
             <br></br>Username or Email<br></br>
             <input
@@ -72,12 +78,6 @@ function LoginFormModal() {
               required
             />
           </label>
-
-          {errors.credential && (
-            <div className="log-in-error-text">
-              {errors.credential}
-            </div>
-          )}
 
           <button
             id={disabled ? "modal-log-in-button-disabled" : "modal-log-in-button"}

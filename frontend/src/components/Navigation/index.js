@@ -52,10 +52,14 @@ function Navigation({ isLoaded }) {
             </>
           ) : (<></>)}
 
-          <OpenModalButtonLoginDemo
-            buttonText="Log in as Demo User"
-            modalComponent={<LoginFormModalDemo />}
-          />
+          {!sessionUser ? (
+            <>
+              <OpenModalButtonLoginDemo
+                buttonText="Log in as Demo User"
+                modalComponent={<LoginFormModalDemo />}
+              />
+            </>
+          ) : (<></>)}
 
           {sessionUser ? (
             <>
