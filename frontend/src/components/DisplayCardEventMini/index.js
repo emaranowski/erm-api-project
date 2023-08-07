@@ -11,23 +11,13 @@ export default function DisplayCardEventMini({ event }) {
   const eventId = event.id;
   const singleEvent = useSelector(state => state.events.singleEvent);
 
-  // console.log(`***** singleEvent *****`, singleEvent);
   let eventDescription;
   if (singleEvent.id !== undefined && singleEvent.id !== null) {
     eventDescription = singleEvent.description;
   }
-  // console.log(`***** eventDescription *****`, eventDescription);
 
-
-  // const
-  // console.log(`*** IN DisplayCardEventMini event is: ***`, event) // {}
-  // ^^ {id: 1, venueId: 1, groupId: 1, name: 'Forest Park Hike', type: 'In person', …}
-
-  const startDateTime = event.startDate; // startDateTime is string
+  const startDateTime = event.startDate;
   const startDateTimeArr = startDateTime.split('');
-
-  // console.log(`*** startDateTime is: ***`, startDateTime) // str
-  // console.log(`*** startDateTimeArr is: ***`, startDateTimeArr) // arr
 
   let startDateArr = [];
   let startTimeArr = [];
@@ -42,9 +32,6 @@ export default function DisplayCardEventMini({ event }) {
 
   let startDateStr = startDateArr.join('');
   let startTimeStr = startTimeArr.join('');
-
-  // console.log(`*** dateStr is: ***`, dateStr) // str
-  // console.log(`*** timeStr is: ***`, timeStr) // arr
 
   useEffect(() => {
     dispatch(getSingleEventThunk(eventId));
