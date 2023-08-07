@@ -71,8 +71,8 @@ function ProfileButton({ user }) {
         {user ? (
           <>
             <div id="dropdown-user-hello">Hello, {user.firstName}</div>
-            <div className="dropdown-user-info">• {user.username}</div>
-            <div className="dropdown-user-info">• {user.firstName} {user.lastName}</div>
+            {/* <div className="dropdown-user-info">• {user.username}</div> */}
+            {/* <div className="dropdown-user-info">• {user.firstName} {user.lastName}</div> */}
             <div className="dropdown-user-info">• {user.email}</div>
             <div>
               <button onClick={viewGroups} className="dropdown-button">
