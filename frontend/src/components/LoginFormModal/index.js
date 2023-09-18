@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import * as sessionActions from "../../store/session"; // sessionActions is obj
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { useModal } from "../../context/Modal";
+import * as sessionActions from "../../store/session"; // sessionActions is obj
 import "./LoginForm.css";
 
-function LoginFormModal() {
+export default function LoginFormModal() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
 
@@ -43,6 +45,21 @@ function LoginFormModal() {
           setErrors(data.errors);
         }
       });
+  };
+
+  const handleDemoUser = async (e) => {
+    e.preventDefault();
+    setErrors({});
+    const credential = 'DemoUser1'
+    const password = 'password1'
+    return dispatch(sessionActions.login({ credential, password }))
+      .then(closeModal)
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
+      })
   };
 
   return (
@@ -87,9 +104,12 @@ function LoginFormModal() {
             Log In
           </button>
         </form>
+        <div>
+          <button id='demo-user-btn' onClick={handleDemoUser}>
+            Log in as demo user
+          </button>
+        </div>
       </div>
     </>
   );
-}
-
-export default LoginFormModal;
+};
