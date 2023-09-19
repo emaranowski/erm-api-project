@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import OpenModalButtonSignupHome from '../OpenModalButtonSignupHome';
+import OpenModalButton from '../OpenModalButton';
 import SignupFormModal from '../SignupFormModal';
 import './HomePage.css';
 
@@ -19,18 +20,23 @@ function HomePage({ isLoaded }) {
 
       <div id="home-banner">
         <div id='home-banner-text'>
-          <div>
-            The people platform—<br></br>Where interests become<br></br>friendships
+          <div id='home-banner-main-text'>
+            The people place—where<br></br>interests become connections
           </div>
           <div id='home-banner-subtext'>
-            Connect with your community <br></br>while doing the things you love
+            Whatever you're into, from reading and hiking to skill sharing and networking,
+            thousands of people share it on MeetBuds. Find events happening every day—sign up to join.
           </div>
-          {/* {!sessionUser ?
-            <OpenModalButtonSignupHome
-              buttonText="Join MeetBuds"
-              modalComponent={<SignupFormModal />}
-            />
-            : null} */}
+          {!sessionUser ?
+
+            <span id='home-banner-signup-btn'>
+              <OpenModalButton
+                buttonText="Join MeetBuds"
+                modalComponent={<SignupFormModal />}
+              />
+            </span>
+
+            : null}
         </div>
         <div id='home-banner-infographic'>
           🙂
@@ -38,7 +44,7 @@ function HomePage({ isLoaded }) {
       </div>
 
 
-      <div id="homepage-content-box">
+      <div id="home-content-box">
 
         <div className="how-it-works-box">
 
