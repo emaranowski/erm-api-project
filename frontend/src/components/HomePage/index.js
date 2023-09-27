@@ -39,13 +39,10 @@ function HomePage({ isLoaded }) {
             : null}
         </div>
 
-        {/* <div id='home-banner-infographic'> */}
-        {/* 🙂 */}
         <img
           id='home-banner-image'
           src="/MeetBuds-banner.png"
         />
-        {/* </div> */}
 
       </div>
 
