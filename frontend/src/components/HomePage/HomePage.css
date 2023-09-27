@@ -79,7 +79,7 @@ light grey:
     /* margin: 18px 0px 0px 0px; */
     display: flex;
     flex-direction: row;
-    /* flex-wrap: wrap; */
+    flex-wrap: wrap;
     align-items: center;
 }
 
@@ -87,7 +87,7 @@ light grey:
     display: flex;
     flex-direction: column;
     gap: 20px;
-    max-width: 53.5%;
+    max-width: 60%;
 }
 
 #home-banner-main-text {
@@ -95,7 +95,6 @@ light grey:
     font-weight: 900;
     letter-spacing: -1px;
     line-height: 120%;
-    /* max-width: 70%; */
 }
 
 #home-banner-infographic {
@@ -107,6 +106,7 @@ light grey:
 #home-banner-image {
     margin-top: -6px;
     width: 27.9%;
+    z-index: -1;
 }
 
 #home-banner-subtext {
@@ -115,7 +115,8 @@ light grey:
     line-height: 150%;
     margin-right: 300px;
     min-width: 600px;
-    max-width: 600px;
+    /* max-width: 600px; */
+    min-width: 80%;
 }
 
 #home-banner-signup-btn button {
