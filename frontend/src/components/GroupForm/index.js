@@ -139,7 +139,7 @@ export default function GroupForm({ group, formType }) {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form id='group-form' onSubmit={handleSubmit}>
 
         <div className='create-group-form-section'>
           <div className='form-top-header'>

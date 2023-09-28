@@ -127,7 +127,7 @@ export default function EventForm({ event, formType }) {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form id='event-form' onSubmit={handleSubmit}>
 
         <div className='create-group-form-section'>
           <div className='form-top-header'>
