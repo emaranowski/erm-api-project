@@ -118,12 +118,14 @@ export default function Footer() {
               <a href="https://emaranowski.com" target="_blank" rel="noopener noreferrer">
                 <span id='footer-dev-name'>Erica Maranowski</span>
               </a>
-              <a href="https://www.linkedin.com/in/erica-maranowski/" target="_blank" rel="noopener noreferrer">
-                <i class="fa-brands fa-linkedin"></i>
-              </a>
-              <a href="https://github.com/emaranowski" target="_blank" rel="noopener noreferrer">
-                <i class="fa-brands fa-github" id='github-icon'></i>
-              </a>
+              <span id='footer-dev-icons'>
+                <a href="https://www.linkedin.com/in/erica-maranowski/" target="_blank" rel="noopener noreferrer">
+                  <i class="fa-brands fa-linkedin"></i>
+                </a>
+                <a href="https://github.com/emaranowski" target="_blank" rel="noopener noreferrer">
+                  <i class="fa-brands fa-github" id='github-icon'></i>
+                </a>
+              </span>
             </div>
           </div>
         </div>
