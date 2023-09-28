@@ -87,26 +87,34 @@ export default function Footer() {
             <div className="footer-links-col-header">
               Discover
             </div>
-            <Link to="/groups">
-              <div className='footer-link'>
-                Groups
-              </div>
-            </Link>
-            <Link to="/events">
-              <div className='footer-link'>
-                Events
-              </div>
-            </Link>
+            <div className='footer-link-box'>
+              <Link to="/groups">
+                <span className='footer-link-text'>
+                  Groups
+                </span>
+              </Link>
+            </div>
+            <div className='footer-link-box'>
+              <Link to="/events">
+                <span className='footer-link-text'>
+                  Events
+                </span>
+              </Link>
+            </div>
           </div>
           <div id="footer-links-col-3">
             <div className="footer-links-col-header">
               MeetBuds
             </div>
-            <Link to="/">
-              <div className='footer-link'>
-                Home
-              </div>
-            </Link>
+
+            <div className='footer-link-box'>
+              <Link to="/">
+                <span className='footer-link-text'>
+                  Home
+                </span>
+              </Link>
+            </div>
+
             {/* <div className='footer-link'>About</div> */}
             {/* <div className='footer-link'>Blog</div> */}
           </div>
