@@ -1,6 +1,28 @@
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import OpenModalButton from '../OpenModalButton';
+import SignupFormModal from '../SignupFormModal';
+import LoginFormModal from '../LoginFormModal';
+import * as sessionActions from '../../store/session';
 import './Footer.css';
 
-function Footer() {
+export default function Footer() {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const sessionUser = useSelector(state => state.session.user);
+
+  const goToGroupsForm = (e) => {
+    e.preventDefault();
+    history.push(`/groups/new`);
+  };
+
+  const logout = (e) => {
+    e.preventDefault();
+    dispatch(sessionActions.logout());
+    history.push(`/`);
+  };
 
   return (
     <>
@@ -10,9 +32,27 @@ function Footer() {
           <span id="create-group-text">
             Create your own MeetBuds group.
           </span>
-          <button id="get-started-button">
+          {/* <button id="get-started-button">
             Get Started
-          </button>
+          </button> */}
+          {!sessionUser ? (
+            <>
+              <span className='footer-get-started-btn'>
+                <OpenModalButton
+                  buttonText="Get Started"
+                  modalComponent={<LoginFormModal />}
+                />
+              </span>
+            </>
+          ) : (
+            <>
+              <span className='footer-get-started-btn'>
+                <button onClick={goToGroupsForm}>
+                  Get Started
+                </button>
+              </span>
+            </>
+          )}
         </div>
 
         <div id="footer-links-box">
@@ -20,94 +60,91 @@ function Footer() {
             <div className="footer-links-col-header">
               Your Account
             </div>
-            <div className='footer-link'>Sign Up</div>
-            <div className='footer-link'>Log In</div>
-            {/* <div className='footer-link'>Help</div> */}
-            {/* <div className='footer-link'>Become an Affiliate</div> */}
+            {!sessionUser ? (
+              <>
+                <div className='footer-signup-login-btn'>
+                  <OpenModalButton
+                    buttonText="Sign Up"
+                    modalComponent={<SignupFormModal />}
+                  />
+                </div>
+                <div className='footer-signup-login-btn'>
+                  <OpenModalButton
+                    buttonText="Log In"
+                    modalComponent={<LoginFormModal />}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className='footer-link' onClick={logout}>
+                  Log out
+                </div>
+              </>
+            )}
           </div>
           <div id="footer-links-col-2">
             <div className="footer-links-col-header">
               Discover
             </div>
-            <div className='footer-link'>Groups</div>
-            <div className='footer-link'>Events</div>
-            {/* <div className='footer-link'>Calendar</div> */}
-            {/* <div className='footer-link'>Topics</div> */}
-            {/* <div className='footer-link'>Cities</div> */}
-            {/* <div className='footer-link'>Online Events</div> */}
-            {/* <div className='footer-link'>Local Guides</div> */}
-            {/* <div className='footer-link'>Make Friends</div> */}
+            <Link to="/groups">
+              <div className='footer-link'>
+                Groups
+              </div>
+            </Link>
+            <Link to="/events">
+              <div className='footer-link'>
+                Events
+              </div>
+            </Link>
           </div>
           <div id="footer-links-col-3">
             <div className="footer-links-col-header">
               MeetBuds
             </div>
-            <div className='footer-link'>Home</div>
+            <Link to="/">
+              <div className='footer-link'>
+                Home
+              </div>
+            </Link>
             {/* <div className='footer-link'>About</div> */}
             {/* <div className='footer-link'>Blog</div> */}
-            {/* <div className='footer-link'>Meetup Pro</div> */}
-            {/* <div className='footer-link'>Careers</div> */}
-            {/* <div className='footer-link'>Apps</div> */}
-            {/* <div className='footer-link'>Podcast</div> */}
+          </div>
+          <div id="footer-links-col-4">
+            <div className="footer-links-col-header">
+              Reach the developer
+            </div>
+            <div id='footer-dev-name-and-links'>
+              <a href="https://emaranowski.com" target="_blank" rel="noopener noreferrer">
+                <span id='footer-dev-name'>Erica Maranowski</span>
+              </a>
+              <span id='footer-dev-icons'>
+                <a href="https://www.linkedin.com/in/erica-maranowski/" target="_blank" rel="noopener noreferrer">
+                  <i class="fa-brands fa-linkedin"></i>
+                </a>
+                <a href="https://github.com/emaranowski" target="_blank" rel="noopener noreferrer">
+                  <i class="fa-brands fa-github" id='github-icon'></i>
+                </a>
+              </span>
+            </div>
           </div>
         </div>
 
-        <div id="follow-us-box">
-          <div id="follow-us-header">
-            Follow Us
-          </div>
-
-          <div id="follow-us-cols">
-            <span id="follow-us-col-1">
-              <span className="follow-us-icon">
-                fb
-              </span>
-              <span className="follow-us-icon">
-                tw
-              </span>
-              <span className="follow-us-icon">
-                yt
-              </span>
-              <span className="follow-us-icon">
-                ig
-              </span>
-              <span className="follow-us-icon">
-                tk
-              </span>
-            </span>
-
-            <span id="follow-us-col-2">
-              <button className="follow-us-button">
-                Google Play
-              </button>
-              <button className="follow-us-button">
-                App Store
-              </button>
-            </span>
-          </div>
-        </div>
-
-
-        <div id="copyright-terms-box">
-          <span id='main-copyright-terms-link'>
-            @ 2023 MeetBuds
-          </span>
-          <span className='copyright-terms-link'>
-            Terms of Service
-          </span>
-          <span className='copyright-terms-link'>
-            Privacy Policy
-          </span>
-          <span className='copyright-terms-link'>
-            Cookie Policy
-          </span>
-          <span className='copyright-terms-link'>
-            Help
+        <div id="copyright-and-tech-box">
+          <span className='footer-copyright-and-tech'>@ 2023 MeetBuds</span>
+          <span id='footer-tech'>
+            <span className='footer-copyright-and-tech'>Technologies Used:</span>
+            <span className='footer-copyright-and-tech'>React</span>
+            <span className='footer-copyright-and-tech'>Redux</span>
+            <span className='footer-copyright-and-tech'>Sequelize</span>
+            <span className='footer-copyright-and-tech'>SQL</span>
+            <span className='footer-copyright-and-tech'>PostgreSQL</span>
+            <span className='footer-copyright-and-tech'>JS</span>
+            <span className='footer-copyright-and-tech'>HTML</span>
+            <span className='footer-copyright-and-tech'>CSS</span>
           </span>
         </div>
       </div>
     </>
   );
-}
-
-export default Footer;
+};

@@ -16,12 +16,14 @@ light grey:
 
 #footer {
     background-color: #212121;
-    padding: 0px 25px 0px 18px;
+    margin-top: 200px;
+    padding: 0px 70px;
 }
 
 #create-group-box {
-    padding: 25px 0px 25px 0px;
-    border-bottom: 1px solid #C5C4C4;
+    padding: 27px 0px;
+    margin-bottom: 3px;
+    border-bottom: .4px solid #afafaf;
 }
 
 #create-group-text {
@@ -30,7 +32,7 @@ light grey:
     font-size: 16px;
 }
 
-#get-started-button {
+.footer-get-started-btn button {
     color: #FFFFFF;
     background-color: #212121;
     border: 2px solid #FFFFFF;
@@ -41,7 +43,7 @@ light grey:
     font-weight: 600;
 }
 
-#get-started-button:hover {
+.footer-get-started-btn button:hover {
     color: #000000;
     background-color: #FFFFFF;
     border: 2px solid #000000;
@@ -55,7 +57,22 @@ light grey:
 #footer-links-box {
     padding: 25px 0px 25px 0px;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.footer-signup-login-btn button {
+    color: #C5C4C4;
+    font-size: 14px;
+    font-weight: 200;
+    background-color: #212121;
+    margin-top: 10px;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+}
+
+.footer-signup-login-btn button:hover {
+    color: #FFFFFF;
 }
 
 .footer-links-col-header {
@@ -66,74 +83,83 @@ light grey:
 .footer-link {
     color: #C5C4C4;
     font-size: 14px;
-    padding-top: 10px;
+    margin-top: 10px;
     font-weight: 200;
 }
 
 .footer-link:hover {
     color: #FFFFFF;
-    font-size: 14px;
-    padding-top: 10px;
     cursor: pointer;
 }
 
-#follow-us-box {
-    padding: 25px 0px 25px 0px;
+#footer-dev-name-and-links {
+    padding-top: 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 14px;
 }
 
-#follow-us-header {
-    color: #F6F7F8;
-    font-size: 15.5px;
+#footer-dev-name {
+    color: #C5C4C4;
+    font-size: 19.55px;
+    font-weight: 100;
+    transition: color .7s;
 }
 
-#follow-us-cols {
+#footer-dev-name:hover {
+    color: #FFFFFF;
+}
+
+#footer-dev-name-and-links i {
+    color: #C5C4C4;
+    font-size: 24.5px;
+    transition: color .7s;
+}
+
+#github-icon {
+    border-radius: 50px;
+}
+
+#footer-dev-name-and-links i:hover {
+    color: #FFFFFF;
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.3);
+}
+
+#copyright-and-tech-box {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 2px;
-}
-
-.follow-us-icon {
-    color: #D9D9D9;
-    padding: 0em 3.2em 0em 0em;
-}
-
-.follow-us-icon:hover {
-    cursor: pointer;
-}
-
-.follow-us-button {
-    color: white;
-    background-color: black;
-    border: 1px solid #C5C4C4;
-    border-radius: 5px;
-    margin-left: 24px;
-    padding: 9px 12px 9px 12px;
-    font-size: 15.5px;
-}
-
-.follow-us-button:hover {
-    cursor: pointer;
-}
-
-#copyright-terms-box {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+    gap: 20px;
     padding: 30px 0px 40px 0px;
     font-size: 13px;
 }
 
-#main-copyright-terms-link {
+#footer-dev-icons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+
+#footer-tech {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.footer-copyright-and-tech {
     color: #FFFFFF;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 200;
     padding: 0em 1.9em 0em 0em;
 }
 
 .copyright-terms-link {
     color: #C5C4C4;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 200;
     padding: 0em 1.9em 0em 0em;
 }
