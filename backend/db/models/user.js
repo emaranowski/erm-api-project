@@ -8,10 +8,48 @@ module.exports = (sequelize, DataTypes) => {
 
       // one user/organizer hasMany groups
       // one group belongsTo one user/organizer
-      // User.hasMany(
-      //   models.Group,
-      //   // { foreignKey: 'currentTeamId' }
-      //   { foreignKey: 'organizerId' } // may need to alias? like.. { foreignKey: 'currentTeamId', as: 'TeamRoster' }
+      User.hasMany(
+        models.Group,
+        { foreignKey: 'organizerId', onDelete: 'CASCADE', hooks: true } // may need to alias? like.. { foreignKey: 'currentTeamId', as: 'TeamRoster' }
+      );
+
+      // one membership belongsTo one user
+      // one user hasMany memberships
+      User.hasMany(
+        models.Membership,
+        { foreignKey: 'userId', onDelete: 'CASCADE', hooks: true }
+      );
+
+      // one user hasMany attendances
+      // one attendance belongsTo one user
+      User.hasMany(
+        models.Attendance,
+        { foreignKey: 'userId', onDelete: 'CASCADE', hooks: true }
+      );
+
+      // one user belongsToMany groups ?
+      // one group belongsToMany users ?
+      User.belongsToMany(
+        models.Group,
+        {
+          through: models.Membership,
+          foreignKey: 'userId',
+          otherKey: 'groupId'
+        }
+      );
+
+      // BUG HERE when both commented in
+      // ?
+      // many-to-many: events-to-users, via attendances?
+      // one event belongsToMany users
+      // one user belongsToMany events
+      // User.belongsToMany(
+      //   models.Event,
+      //   {
+      //     through: models.Attendance,
+      //     foreignKey: 'userId',
+      //     otherKey: 'eventId'
+      //   }
       // );
 
     }
@@ -48,7 +86,10 @@ module.exports = (sequelize, DataTypes) => {
       username: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        // unique: true,
+        unique: {
+          msg: 'User with that username already exists'
+        },
         validate: {
           len: [4, 30],
           isNotEmail(value) {
@@ -61,7 +102,10 @@ module.exports = (sequelize, DataTypes) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        // unique: true,
+        unique: {
+          msg: 'User with that email already exists'
+        },
         validate: {
           len: [3, 256],
           isEmail: true

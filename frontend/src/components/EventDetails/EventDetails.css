@@ -1,0 +1,176 @@
+.event-detail-main-box {
+    margin: 0px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.event-detail-centering-child {
+    width: 70%;
+}
+
+.event-detail-header {
+    margin-bottom: 5px;
+}
+
+.event-breadcrumb-link {
+    margin-bottom: 5px;
+}
+
+.event-info-header {
+    color: black;
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+.event-hosted-by {
+    font-size: 14px;
+    font-weight: 200;
+    color: rgb(123, 123, 123);
+}
+
+.event-detail-box {
+    display: flex;
+    flex-direction: column;
+    /* background-color: rgb(233, 233, 233); */
+}
+
+.event-detail-upper-graphic-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.event-img-col {
+    margin-top: 15px;
+}
+
+.event-detail-img {
+    background-color: bisque;
+    width: 250px;
+    height: 220px;
+    margin-right: 15px;
+    border-radius: 10px;
+}
+
+.event-detail-group-img {
+    background-color: bisque;
+    width: 60px;
+    height: 55px;
+    margin-right: 15px;
+    border-radius: 10px;
+}
+
+.event-group-date-price-location-col {
+    display: flex;
+    flex-direction: column;
+    width: 55%;
+}
+
+.event-group-mini-card-row {
+    display: flex;
+    flex-direction: row;
+    padding: 10px 15px 25px 15px;
+    background-color: white;
+    /* border-radius: 10px; */
+    border-top: 10px;
+    margin-top: 15px;
+    height: 55px;
+    border-bottom: 1px solid grey;
+}
+
+.event-group-mini-image-col {
+    margin-right: 10px;
+}
+
+.event-group-mini-name-visibility-col {}
+
+.event-group-mini-name-row {
+    font-size: 14px;
+    font-weight: 200;
+    color: black;
+}
+
+.event-group-mini-visibility-row {
+    font-size: 14px;
+    font-weight: 200;
+    color: rgb(123, 123, 123);
+}
+
+.event-date-price-location-row {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    font-weight: 200;
+    color: rgb(123, 123, 123);
+    padding: 15px;
+    background-color: white;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.event-detail-row-spacer {
+    margin-bottom: 10px;
+}
+
+.event-detail-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.clock-icon-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.icon-col {
+    width: 15px;
+    text-align: center;
+    padding-right: 10px;
+}
+
+.event-date-time {
+    font-size: 14px;
+    font-weight: 200;
+    color: #087c8c;
+}
+
+.start-end-text-col {}
+
+.start-end-text-row {}
+
+
+.price-text-col {}
+
+.location-text-col {}
+
+.event-admin-button {
+    color: #FFFFFF;
+    background-color: #212121;
+    border: none;
+    border-radius: 5px;
+    margin-right: 7px;
+    margin-top: 12px;
+    padding: 8px 11px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.event-admin-buttons-row {
+    margin-left: 155px;
+    margin-top: -55px;
+}
+
+.event-detail-lower-text-row {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.event-info-header {}
+
+.event-info-text {
+    font-size: 14px;
+    font-weight: 200;
+    color: black;
+    margin-bottom: 250px;
+}

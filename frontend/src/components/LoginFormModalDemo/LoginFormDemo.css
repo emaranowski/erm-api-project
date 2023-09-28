@@ -1,0 +1,50 @@
+#modal-log-in-form-box {
+    padding: 30px 100px 50px 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border-radius: 3em;
+}
+
+#modal-log-in-form-header {
+    font-size: 29px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 3em;
+}
+
+.modal-log-in-label {
+    font-size: 14.5px;
+    font-weight: 300;
+}
+
+#modal-log-in-button {
+    margin-top: 40px;
+
+    color: white;
+    font-size: 17px;
+    background-color: #087c8c;
+    border: none;
+
+    padding: 9px 10px 9px 10px;
+    border-radius: .4em;
+
+    font-weight: 200;
+}
+
+#modal-log-in-button:hover {
+    background-color: #098b9d;
+    cursor: pointer;
+}
+
+.log-in-error-text {
+    color: rgba(255, 0, 0, 0.778);
+    font-size: 14px;
+    font-weight: 200;
+    margin-top: 15px;
+}

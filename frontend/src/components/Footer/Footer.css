@@ -1,0 +1,148 @@
+/*
+// also good: "fa-solid fa-user"
+logo pink:
+// #e63a6a
+dark blue:
+// #00798a
+light blue:
+// #008fa3
+dark red:
+// #610c24
+dark grey:
+// #212121
+light grey:
+// #e6e6e6
+*/
+
+#footer {
+    background-color: #212121;
+    padding: 0px 25px 0px 18px;
+}
+
+#create-group-box {
+    padding: 25px 0px 25px 0px;
+    border-bottom: 1px solid #C5C4C4;
+}
+
+#create-group-text {
+    color: #F6F7F8;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+#get-started-button {
+    color: #FFFFFF;
+    background-color: #212121;
+    border: 2px solid #FFFFFF;
+    border-radius: 5px;
+    margin-left: 17px;
+    padding: 9px 12px 9px 12px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+#get-started-button:hover {
+    color: #000000;
+    background-color: #FFFFFF;
+    border: 2px solid #000000;
+    border-radius: 5px;
+    margin-left: 17px;
+    padding: 9px 12px 9px 12px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#footer-links-box {
+    padding: 25px 0px 25px 0px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.footer-links-col-header {
+    color: #F6F7F8;
+    font-size: 15.5px;
+}
+
+.footer-link {
+    color: #C5C4C4;
+    font-size: 14px;
+    padding-top: 10px;
+    font-weight: 200;
+}
+
+.footer-link:hover {
+    color: #FFFFFF;
+    font-size: 14px;
+    padding-top: 10px;
+    cursor: pointer;
+}
+
+#follow-us-box {
+    padding: 25px 0px 25px 0px;
+}
+
+#follow-us-header {
+    color: #F6F7F8;
+    font-size: 15.5px;
+}
+
+#follow-us-cols {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2px;
+}
+
+.follow-us-icon {
+    color: #D9D9D9;
+    padding: 0em 3.2em 0em 0em;
+}
+
+.follow-us-icon:hover {
+    cursor: pointer;
+}
+
+.follow-us-button {
+    color: white;
+    background-color: black;
+    border: 1px solid #C5C4C4;
+    border-radius: 5px;
+    margin-left: 24px;
+    padding: 9px 12px 9px 12px;
+    font-size: 15.5px;
+}
+
+.follow-us-button:hover {
+    cursor: pointer;
+}
+
+#copyright-terms-box {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 30px 0px 40px 0px;
+    font-size: 13px;
+}
+
+#main-copyright-terms-link {
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 200;
+    padding: 0em 1.9em 0em 0em;
+}
+
+.copyright-terms-link {
+    color: #C5C4C4;
+    font-size: 14px;
+    font-weight: 200;
+    padding: 0em 1.9em 0em 0em;
+}
+
+.copyright-terms-link:hover {
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+/* MEDIA QUERIES */
+
+@media screen and (max-width: 700px) {}

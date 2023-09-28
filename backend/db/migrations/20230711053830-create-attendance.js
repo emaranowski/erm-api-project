@@ -1,5 +1,6 @@
 'use strict';
 
+
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA; // define schema in options obj
@@ -8,44 +9,35 @@ if (process.env.NODE_ENV === 'production') {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Groups', {
+
+    options.tableName = 'Attendances';
+    await queryInterface.createTable(options, {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      organizerId: {
+      eventId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { // add ref to organizerId/userId in migration only
-          model: 'Users', // table name, so plural
+        references: {
+          model: 'Events',
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE'
       },
-      name: {
-        type: Sequelize.STRING,
+      userId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-        unique: true // automatically adds index
+        references: {
+          model: 'Users',
+          key: 'id'
+        },
+        onDelete: 'CASCADE'
       },
-      about: {
-        type: Sequelize.TEXT,
-        allowNull: false,
-      },
-      type: {
-        type: Sequelize.ENUM('outdoors', 'food', 'board games'),
-        allowNull: false,
-      },
-      private: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-      },
-      city: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      state: {
-        type: Sequelize.STRING,
+      status: {
+        type: Sequelize.ENUM('attending', 'pending'),
         allowNull: false,
       },
       createdAt: {
@@ -59,9 +51,12 @@ module.exports = {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
+
   },
   async down(queryInterface, Sequelize) {
-    options.tableName = 'Groups';
-    return queryInterface.dropTable(options);
+
+    options.tableName = 'Attendances';
+    await queryInterface.dropTable(options);
+
   }
 };

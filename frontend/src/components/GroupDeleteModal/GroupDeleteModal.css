@@ -1,0 +1,56 @@
+.confirm-delete-header {
+    font-size: 20px;
+}
+
+.confirm-delete-text {
+    font-size: 16px;
+    margin: 20px 0px;
+}
+
+.group-delete-modal {
+    padding: 100px 100px 100px 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border-radius: 3em;
+
+    font-size: 17px;
+    font-weight: 400;
+}
+
+.admin-button-delete-red {
+    color: #FFFFFF;
+    background-color: #b21111;
+    border: none;
+    border-radius: 5px;
+    margin-top: 13px;
+    padding: 8px 11px;
+    font-size: 14px;
+    font-weight: 600;
+    width: 200px;
+}
+
+.admin-button-delete-red:hover {
+    color: #FFFFFF;
+    background-color: #dc1e1e;
+    cursor: pointer;
+}
+
+.admin-button-delete {
+    color: #FFFFFF;
+    background-color: #212121;
+    border: none;
+    border-radius: 5px;
+    margin-top: 30px;
+    padding: 8px 11px;
+    font-size: 14px;
+    font-weight: 600;
+    width: 200px;
+}
+
+.admin-button-delete:hover {
+    color: #FFFFFF;
+    background-color: #707070;
+    cursor: pointer;
+}

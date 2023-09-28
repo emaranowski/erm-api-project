@@ -45,6 +45,7 @@ app.use(
 ); // both cookies together provide CSRF protection
 
 app.use(routes); // connect all routes
+// app.use('/groups', require('./routes/groups'));
 
 
 
