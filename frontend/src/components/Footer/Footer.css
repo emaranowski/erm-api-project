@@ -31,7 +31,7 @@ light grey:
     font-size: 16px;
 }
 
-#get-started-button {
+.footer-get-started-btn button {
     color: #FFFFFF;
     background-color: #212121;
     border: 2px solid #FFFFFF;
@@ -42,7 +42,7 @@ light grey:
     font-weight: 600;
 }
 
-#get-started-button:hover {
+.footer-get-started-btn button:hover {
     color: #000000;
     background-color: #FFFFFF;
     border: 2px solid #000000;

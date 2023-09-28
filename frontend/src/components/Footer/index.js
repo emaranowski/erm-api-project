@@ -13,6 +13,11 @@ export default function Footer() {
 
   const sessionUser = useSelector(state => state.session.user);
 
+  const goToGroupsForm = (e) => {
+    e.preventDefault();
+    history.push(`/groups/new`);
+  };
+
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
@@ -27,9 +32,27 @@ export default function Footer() {
           <span id="create-group-text">
             Create your own MeetBuds group.
           </span>
-          <button id="get-started-button">
+          {/* <button id="get-started-button">
             Get Started
-          </button>
+          </button> */}
+          {!sessionUser ? (
+            <>
+              <span className='footer-get-started-btn'>
+                <OpenModalButton
+                  buttonText="Get Started"
+                  modalComponent={<LoginFormModal />}
+                />
+              </span>
+            </>
+          ) : (
+            <>
+              <span className='footer-get-started-btn'>
+                <button onClick={goToGroupsForm}>
+                  Get Started
+                </button>
+              </span>
+            </>
+          )}
         </div>
 
         <div id="footer-links-box">
@@ -39,8 +62,6 @@ export default function Footer() {
             </div>
             {!sessionUser ? (
               <>
-                {/* <div className='footer-link'>Sign Up</div>
-                <div className='footer-link'>Log In</div> */}
                 <div className='footer-signup-login-btn'>
                   <OpenModalButton
                     buttonText="Sign Up"
