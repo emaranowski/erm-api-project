@@ -70,6 +70,10 @@ light grey:
     cursor: pointer;
 }
 
+.footer-signup-login-btn button:hover {
+    color: #FFFFFF;
+}
+
 .footer-links-col-header {
     color: #F6F7F8;
     font-size: 15.5px;
@@ -98,6 +102,7 @@ light grey:
     color: #C5C4C4;
     font-size: 19.55px;
     font-weight: 100;
+    transition: color .7s;
 }
 
 #footer-dev-name:hover {
