@@ -96,9 +96,9 @@ nav {
 
 .dropdown-user-info {
     color: rgb(63, 63, 63);
-    padding-left: 6px;
     font-size: 14px;
     font-weight: 200;
+    margin-bottom: 5px;
 }
 
 .dropdown-button {
