@@ -58,7 +58,7 @@ function HomePage({ isLoaded }) {
           </div>
           <div className="how-it-works-subhead-box">
             <div className='how-it-works-col-text'>
-              Have fun doing your favorite activities
+              Have fun doing your favorite activities!
             </div>
           </div>
 
