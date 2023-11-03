@@ -28,7 +28,7 @@ Deployment: Render (using PostgreSQL).
 
 ## Landing Page
 
-![Alt text](./images/meetbuds-homepage.png)
+<img width="1310" alt="meetbuds" src="https://github.com/emaranowski/erm-api-project/assets/128769940/edf134cd-3d8a-4ab3-bb64-f8338fe1c61f">
 
 ## Launch Instructions
 
