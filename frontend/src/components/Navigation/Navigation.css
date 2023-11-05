@@ -98,7 +98,7 @@ nav {
     color: rgb(63, 63, 63);
     font-size: 14px;
     font-weight: 200;
-    margin-bottom: 5px;
+    margin-bottom: 9px;
 }
 
 .dropdown-button {
@@ -183,7 +183,7 @@ nav {
     right: 27px;
     height: 170px;
     width: 190px;
-    padding: 25px 15px 15px 25px;
+    padding: 25px 15px 18px 30px;
     border-radius: 10px;
     background-color: #FFFFFF;
     border: 1px solid #707070;

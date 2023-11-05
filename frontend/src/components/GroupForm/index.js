@@ -143,18 +143,36 @@ export default function GroupForm({ group, formType }) {
 
         <div className='create-group-form-section'>
           <div className='form-top-header'>
-            {formType === 'Create Group' ? 'Start a New Group' : 'Update your Group'}
+            {formType === 'Create Group' ? 'Start a new group' : 'Update your group'}
           </div>
         </div>
 
         <div className='create-group-form-section'>
           <div className='create-group-form-become-organizer'>BECOME AN ORGANIZER</div>
-          <div className='create-group-form-header'>We'll walk you through a few steps to build your local community</div>
+          <div className='create-group-form-header'>We'll walk you through a few steps to build your community</div>
         </div>
 
         <div className='create-group-form-section'>
-          <div className='create-group-form-header'>Set your group's location.</div>
-          <div className='create-group-form-text'>MeetBuds groups meet locally, in person, and online. We'll connect you with people in your area.</div>
+          <div className='create-group-form-header'>What will your group name be?</div>
+          <div className='create-group-form-text'>Choose a name that will give a clear idea of what the group is about. Get creative! You can edit this later if you want.
+          </div>
+          <div>
+            <input
+              className="input-spacer input-text"
+              size="57"
+              type="text"
+              name="name"
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+              placeholder='Group name'
+            />
+          </div>
+          {errors.name && (<div className="group-create-error-text">{errors.name}</div>)}
+        </div>
+
+        <div className='create-group-form-section'>
+          <div className='create-group-form-header'>Set your group location.</div>
+          <div className='create-group-form-text'>MeetBuds groups meet locally, in person, and online. Select the city and state you'll be primarily based out of.</div>
           <div>
             <span>
               <input
@@ -187,50 +205,8 @@ export default function GroupForm({ group, formType }) {
           {errors.city && !errors.state ? <div className="group-create-error-text">{errors.city}</div> : null}
           {errors.state && !errors.city ? <div className="group-create-error-text">{errors.state}</div> : null}
           {errors.city && errors.state ? <div className="group-create-error-text">{errors.city} | {errors.state}</div> : null}
-        </div>
 
-        <div className='create-group-form-section'>
-          <div className='create-group-form-header'>What will your group's name be?</div>
-          <div className='create-group-form-text'>Choose a name that will give people a clear idea of what the group is about.
-            Feel free to get creative! You can edit this later if you change your mind.</div>
-          <div>
-            <input
-              className="input-spacer input-text"
-              size="57"
-              type="text"
-              name="name"
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-              placeholder='What is your group name?'
-            />
-          </div>
-          {errors.name && (<div className="group-create-error-text">{errors.name}</div>)}
-        </div>
-
-        <div className='create-group-form-section'>
-          <div className='create-group-form-header'>Describe the purpose of your group.</div>
-          <div className='create-group-form-text'>People will see this when we promote your group, but you'll be able to add to it later, too.</div>
-          <div className='create-group-form-text'>1. What's the purpose of the group?</div>
-          <div className='create-group-form-text'>2. Who should join?</div>
-          <div className='create-group-form-text'>3. What will you do at your events?</div>
-          <div>
-            <textarea
-              className="input-spacer input-text"
-              rows="6" cols="39"
-              id='comments'
-              name='about'
-              onChange={e => setAbout(e.target.value)}
-              value={about}
-              placeholder='Please write at least 30 characters'
-            />
-          </div>
-          {errors.about && (<div className="group-create-error-text">{errors.about}</div>)}
-        </div>
-
-        <div className='create-group-form-section'>
-          <div className='create-group-form-header'>Final steps...</div>
-
-          <div className='create-group-form-text'>Is this an in-person or online group?</div>
+          <div className='create-group-form-text'>Will this group be in-person or online?</div>
           <div>
             <select
               className="input-spacer input-text"
@@ -244,21 +220,31 @@ export default function GroupForm({ group, formType }) {
           </div>
           {errors.type && (<div className="group-create-error-text">{errors.type}</div>)}
 
-          <div className='create-group-form-text'>Is this group private or public?</div>
-          <div>
-            <select
-              className="input-spacer input-text"
-              onChange={(e) => setPrivacy(e.target.value)}
-              value={privacy}
-            >
-              <option key='(select one)' value='(select one)'>(select one)</option>
-              <option key='true' value={true}>Private</option>
-              <option key='false' value={false}>Public</option>
-            </select>
-          </div>
-          {errors.privacy && (<div className="group-create-error-text">{errors.privacy}</div>)}
+        </div>
 
-          <div className='create-group-form-text'>Please add an image URL for your group below:</div>
+        <div className='create-group-form-section'>
+          <div className='create-group-form-header'>Describe the purpose of your group.</div>
+          <div className='create-group-form-text'>People will see this when we promote your group, but you'll be able to add to it later, too.</div>
+          <div className='create-group-form-text'>1. What's the purpose of the group?</div>
+          <div className='create-group-form-text'>2. Who should join?</div>
+          <div className='create-group-form-text'>3. What will you do at your events?</div>
+          <div>
+            <textarea
+              className="input-spacer input-text"
+              rows="8" cols="56"
+              id='comments'
+              name='about'
+              onChange={e => setAbout(e.target.value)}
+              value={about}
+              placeholder='Please include at least 30 characters'
+            />
+          </div>
+          {errors.about && (<div className="group-create-error-text">{errors.about}</div>)}
+        </div>
+
+        <div className='create-group-form-section'>
+          <div className='create-group-form-header'>A picture says a thousand words.</div>
+          <div className='create-group-form-text'>Add an image URL for your group:</div>
           <div>
             <input
               className="input-spacer input-text"
@@ -275,6 +261,23 @@ export default function GroupForm({ group, formType }) {
           {/* {url === '' ? <div className="group-create-error-text">Image URL must be valid (must end in .png, .jpg, or .jpeg)</div> : null} */}
           {/* {errors.url && (<div className="group-create-error-text">{errors.url}</div>)} */}
           {/* {errors.url && (<div className="group-create-error-text">Image URL must be valid (must end in .png, .jpg, or .jpeg)</div>)} */}
+        </div>
+
+        <div className='create-group-form-section'>
+          <div className='create-group-form-header'>Final step – group visibility.</div>
+          <div className='create-group-form-text'>Is this group private or public?</div>
+          <div>
+            <select
+              className="input-spacer input-text"
+              onChange={(e) => setPrivacy(e.target.value)}
+              value={privacy}
+            >
+              <option key='(select one)' value='(select one)'>(select one)</option>
+              <option key='true' value={true}>Private</option>
+              <option key='false' value={false}>Public</option>
+            </select>
+          </div>
+          {errors.privacy && (<div className="group-create-error-text">{errors.privacy}</div>)}
         </div>
 
         <button

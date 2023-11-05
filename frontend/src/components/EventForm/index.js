@@ -129,35 +129,37 @@ export default function EventForm({ event, formType }) {
     <>
       <form id='event-form' onSubmit={handleSubmit}>
 
-        <div className='create-group-form-section'>
+        <div className='create-event-form-section'>
           <div className='form-top-header'>
-            {formType === 'Create Event' ? `Create a new event for ${groupName}` : `Update your event for ${groupName}`}
+            {formType === 'Create Event' ? `Create an event for ${groupName}` : `Update your event for ${groupName}`}
           </div>
         </div>
 
-        <div className='create-group-form-section'>
+        <div className='create-event-form-section'>
+          <div className='create-event-form-become-host'>BECOME A HOST</div>
+          <div className='create-event-form-header'>We'll help you plan an event for your group</div>
+        </div>
 
-          <div className='create-group-form-text'>What is the name of your event?</div>
+        <div className='create-event-form-section'>
+          <div className='create-event-form-header'>What will your event name be?</div>
+          <div className='create-event-form-text'>Choose a name that will give a clear idea of what the event is about. Get creative! You can edit this later if you want.</div>
           <div>
-            <span>
-              <input
-                className="input-spacer input-text"
-                size="26"
-                type="text"
-                name="name"
-                onChange={(e) => setName(e.target.value)}
-                value={name}
-                placeholder="Event Name"
-              />
-            </span>
+            <input
+              className="input-spacer input-text"
+              size="57"
+              type="text"
+              name="name"
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+              placeholder="Event name"
+            />
           </div>
-          {errors.name ? <div className="group-create-error-text">{errors.name}</div> : null}
-
+          {errors.name ? <div className="event-create-error-text">{errors.name}</div> : null}
         </div>
 
-        <div className='create-group-form-section'>
-
-          <div className='create-group-form-text'>Is this an in-person or online event?</div>
+        <div className='create-event-form-section'>
+          <div className='create-event-form-header'>Set your event location.</div>
+          <div className='create-event-form-text'>Will this event be in-person or online?</div>
           <div>
             <select
               className="input-spacer input-text"
@@ -169,44 +171,64 @@ export default function EventForm({ event, formType }) {
               <option key='Online' value='Online'>Online</option>
             </select>
           </div>
-          {errors.type && (<div className="group-create-error-text">{errors.type}</div>)}
-
-          <div className='create-group-form-text'>What is the attendance capacity for your event?</div>
-          <div>
-            <span>
-              <input
-                className="input-spacer input-text"
-                size="26"
-                type="number"
-                name="capacity"
-                onChange={(e) => setCapacity(e.target.value)}
-                value={capacity}
-                placeholder='0'
-              />
-            </span>
-          </div>
-          {errors.capacity && (<div className="group-create-error-text">{errors.capacity}</div>)}
-
-          <div className='create-group-form-text'>What is the price for your event?</div>
-          <div>
-            <span>
-              <input
-                className="input-spacer input-text"
-                size="26"
-                type="number"
-                name="price"
-                onChange={(e) => setPrice(e.target.value)}
-                value={price}
-                placeholder={`0`}
-              />
-            </span>
-          </div>
-          {errors.price && (<div className="group-create-error-text">{errors.price}</div>)}
-
+          {errors.type && (<div className="event-create-error-text">{errors.type}</div>)}
         </div>
 
-        <div className='create-group-form-section'>
-          <div className='create-group-form-text'>When does your event start?</div>
+        <div className='create-event-form-section'>
+          <div className='create-event-form-header'>Describe the purpose of your event.</div>
+          <div className='create-event-form-text'>Let people know what it's all about.</div>
+          <div>
+            <textarea
+              className="input-spacer input-text"
+              rows="8" cols="56"
+              id='comments'
+              name='description'
+              onChange={e => setDescription(e.target.value)}
+              value={description}
+              placeholder='Please include at least 30 characters'
+            />
+          </div>
+          {errors.description && (<div className="event-create-error-text">{errors.description}</div>)}
+        </div>
+
+        {formType === 'Create Event' ?
+          <div className='create-event-form-section'>
+            <div className='create-event-form-header'>A picture says a thousand words.</div>
+            <div className='create-event-form-text'>Add an image URL for your event:</div>
+            <div>
+              <input
+                className="input-spacer input-text"
+                size="57"
+                type="url"
+                name="url"
+                onChange={(e) => setURL(e.target.value)}
+                value={url}
+                placeholder='Image URL'
+                required
+              />
+            </div>
+          </div>
+          :
+          <div className='create-event-form-section'>
+            <div className='create-event-form-header'>A picture says a thousand words.</div>
+            <div className='create-event-form-text'>Add an image URL for your event:</div>
+            <div>
+              <input
+                className="input-spacer input-text"
+                size="57"
+                type="url"
+                name="url"
+                onChange={(e) => setURL(e.target.value)}
+                value={url}
+                placeholder='Image URL'
+              />
+            </div>
+          </div>
+        }
+
+        <div className='create-event-form-section'>
+          <div className='create-event-form-header'>Timing is everything.</div>
+          <div className='create-event-form-text'>Select an event start:</div>
           <div>
             <span>
               {/* <input
@@ -236,9 +258,9 @@ export default function EventForm({ event, formType }) {
               />
             </span>
           </div>
-          {errors.startDate && (<div className="group-create-error-text">{errors.startDate}</div>)}
+          {errors.startDate && (<div className="event-create-error-text">{errors.startDate}</div>)}
 
-          <div className='create-group-form-text'>When does your event end?</div>
+          <div className='create-event-form-text'>Select an event end:</div>
           <div>
             <span>
               {/* <input
@@ -268,62 +290,46 @@ export default function EventForm({ event, formType }) {
               />
             </span>
           </div>
-          {errors.endDate && (<div className="group-create-error-text">{errors.endDate}</div>)}
+          {errors.endDate && (<div className="event-create-error-text">{errors.endDate}</div>)}
         </div>
 
-
-        {formType === 'Create Event' ?
-          <div className='create-group-form-section'>
-            <div className='create-group-form-text'>Please add an image URL for your event below:</div>
-            <div>
-              <input
-                className="input-spacer input-text"
-                size="57"
-                type="url"
-                name="url"
-                onChange={(e) => setURL(e.target.value)}
-                value={url}
-                placeholder='Image URL'
-                required
-              />
-            </div>
-          </div>
-          :
-          <div className='create-group-form-section'>
-            <div className='create-group-form-text'>Please add an image URL for your event below:</div>
-            <div>
-              <input
-                className="input-spacer input-text"
-                size="57"
-                type="url"
-                name="url"
-                onChange={(e) => setURL(e.target.value)}
-                value={url}
-                placeholder='Image URL'
-              />
-            </div>
-          </div>
-        }
-
-        <div className='create-group-form-section'>
-          <div className='create-group-form-text'>Please describe your event:</div>
+        <div className='create-event-form-section'>
+          <div className='create-event-form-header'>Final steps – event capacity and price.</div>
+          <div className='create-event-form-text'>What is the attendance capacity for your event?</div>
           <div>
-            <textarea
-              className="input-spacer input-text"
-              rows="8" cols="56"
-              id='comments'
-              name='description'
-              onChange={e => setDescription(e.target.value)}
-              value={description}
-              placeholder='Please include at least 30 characters'
-            />
+            <span>
+              <input
+                className="input-spacer input-text"
+                size="26"
+                type="number"
+                name="capacity"
+                onChange={(e) => setCapacity(e.target.value)}
+                value={capacity}
+                placeholder='0'
+              />
+            </span>
           </div>
-          {errors.description && (<div className="group-create-error-text">{errors.description}</div>)}
-        </div>
+          {errors.capacity && (<div className="event-create-error-text">{errors.capacity}</div>)}
 
+          <div className='create-event-form-text'>What is the price for your event?</div>
+          <div>
+            <span>
+              <input
+                className="input-spacer input-text"
+                size="26"
+                type="number"
+                name="price"
+                onChange={(e) => setPrice(e.target.value)}
+                value={price}
+                placeholder={`0`}
+              />
+            </span>
+          </div>
+          {errors.price && (<div className="event-create-error-text">{errors.price}</div>)}
+        </div>
 
         <button
-          className={disabled ? "create-group-form-button-disabled" : "create-group-form-button"}
+          className={disabled ? "create-event-form-button-disabled" : "create-event-form-button"}
           disabled={disabled}
         >
           {formType === 'Create Event' ? 'Create Event' : 'Update Event'}
