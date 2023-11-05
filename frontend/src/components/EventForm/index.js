@@ -195,6 +195,41 @@ export default function EventForm({ event, formType }) {
           {errors.description && (<div className="event-create-error-text">{errors.description}</div>)}
         </div>
 
+        {formType === 'Create Event' ?
+          <div className='create-event-form-section'>
+            <div className='create-event-form-header'>A picture says a thousand words.</div>
+            <div className='create-event-form-text'>Add an image URL for your event:</div>
+            <div>
+              <input
+                className="input-spacer input-text"
+                size="57"
+                type="url"
+                name="url"
+                onChange={(e) => setURL(e.target.value)}
+                value={url}
+                placeholder='Image URL'
+                required
+              />
+            </div>
+          </div>
+          :
+          <div className='create-event-form-section'>
+            <div className='create-event-form-header'>A picture says a thousand words.</div>
+            <div className='create-event-form-text'>Add an image URL for your event:</div>
+            <div>
+              <input
+                className="input-spacer input-text"
+                size="57"
+                type="url"
+                name="url"
+                onChange={(e) => setURL(e.target.value)}
+                value={url}
+                placeholder='Image URL'
+              />
+            </div>
+          </div>
+        }
+
         <div className='create-event-form-section'>
           <div className='create-event-form-header'>Timing is everything.</div>
           <div className='create-event-form-text'>Select an event start:</div>
@@ -262,44 +297,8 @@ export default function EventForm({ event, formType }) {
           {errors.endDate && (<div className="event-create-error-text">{errors.endDate}</div>)}
         </div>
 
-        {formType === 'Create Event' ?
-          <div className='create-event-form-section'>
-            <div className='create-event-form-header'>A picture says a thousand words.</div>
-            <div className='create-event-form-text'>Add an image URL for your event:</div>
-            <div>
-              <input
-                className="input-spacer input-text"
-                size="57"
-                type="url"
-                name="url"
-                onChange={(e) => setURL(e.target.value)}
-                value={url}
-                placeholder='Image URL'
-                required
-              />
-            </div>
-          </div>
-          :
-          <div className='create-event-form-section'>
-            <div className='create-event-form-header'>A picture says a thousand words.</div>
-            <div className='create-event-form-text'>Add an image URL for your event:</div>
-            <div>
-              <input
-                className="input-spacer input-text"
-                size="57"
-                type="url"
-                name="url"
-                onChange={(e) => setURL(e.target.value)}
-                value={url}
-                placeholder='Image URL'
-              />
-            </div>
-          </div>
-        }
-
         <div className='create-event-form-section'>
-
-          <div className='create-event-form-header'>Final steps...</div>
+          <div className='create-event-form-header'>Final steps...capacity and pricing:</div>
           <div className='create-event-form-text'>What is the attendance capacity for your event?</div>
           <div>
             <span>
@@ -331,9 +330,7 @@ export default function EventForm({ event, formType }) {
             </span>
           </div>
           {errors.price && (<div className="event-create-error-text">{errors.price}</div>)}
-
         </div>
-
 
         <button
           className={disabled ? "create-event-form-button-disabled" : "create-event-form-button"}
