@@ -181,43 +181,6 @@ export default function EventForm({ event, formType }) {
         </div>
 
         <div className='create-event-form-section'>
-
-          <div className='create-event-form-header'>Final steps...</div>
-          <div className='create-event-form-text'>What is the attendance capacity for your event?</div>
-          <div>
-            <span>
-              <input
-                className="input-spacer input-text"
-                size="26"
-                type="number"
-                name="capacity"
-                onChange={(e) => setCapacity(e.target.value)}
-                value={capacity}
-                placeholder='0'
-              />
-            </span>
-          </div>
-          {errors.capacity && (<div className="event-create-error-text">{errors.capacity}</div>)}
-
-          <div className='create-event-form-text'>What is the price for your event?</div>
-          <div>
-            <span>
-              <input
-                className="input-spacer input-text"
-                size="26"
-                type="number"
-                name="price"
-                onChange={(e) => setPrice(e.target.value)}
-                value={price}
-                placeholder={`0`}
-              />
-            </span>
-          </div>
-          {errors.price && (<div className="event-create-error-text">{errors.price}</div>)}
-
-        </div>
-
-        <div className='create-event-form-section'>
           <div className='create-event-form-text'>When does your event start?</div>
           <div>
             <span>
@@ -331,6 +294,43 @@ export default function EventForm({ event, formType }) {
             />
           </div>
           {errors.description && (<div className="event-create-error-text">{errors.description}</div>)}
+        </div>
+
+        <div className='create-event-form-section'>
+
+          <div className='create-event-form-header'>Final steps...</div>
+          <div className='create-event-form-text'>What is the attendance capacity for your event?</div>
+          <div>
+            <span>
+              <input
+                className="input-spacer input-text"
+                size="26"
+                type="number"
+                name="capacity"
+                onChange={(e) => setCapacity(e.target.value)}
+                value={capacity}
+                placeholder='0'
+              />
+            </span>
+          </div>
+          {errors.capacity && (<div className="event-create-error-text">{errors.capacity}</div>)}
+
+          <div className='create-event-form-text'>What is the price for your event?</div>
+          <div>
+            <span>
+              <input
+                className="input-spacer input-text"
+                size="26"
+                type="number"
+                name="price"
+                onChange={(e) => setPrice(e.target.value)}
+                value={price}
+                placeholder={`0`}
+              />
+            </span>
+          </div>
+          {errors.price && (<div className="event-create-error-text">{errors.price}</div>)}
+
         </div>
 
 
