@@ -143,7 +143,7 @@ export default function GroupForm({ group, formType }) {
 
         <div className='create-group-form-section'>
           <div className='form-top-header'>
-            {formType === 'Create Group' ? 'Start a New Group' : 'Update your Group'}
+            {formType === 'Create Group' ? 'Start a new group' : 'Update your group'}
           </div>
         </div>
 
