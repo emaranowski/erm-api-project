@@ -149,7 +149,25 @@ export default function GroupForm({ group, formType }) {
 
         <div className='create-group-form-section'>
           <div className='create-group-form-become-organizer'>BECOME AN ORGANIZER</div>
-          <div className='create-group-form-header'>We'll walk you through a few steps to build your local community</div>
+          <div className='create-group-form-header'>We'll walk you through a few steps to build your community</div>
+        </div>
+
+        <div className='create-group-form-section'>
+          <div className='create-group-form-header'>What will your group's name be?</div>
+          <div className='create-group-form-text'>Choose a name that will give a clear idea of what the group is about. Get creative! You can edit this later if you want.
+          </div>
+          <div>
+            <input
+              className="input-spacer input-text"
+              size="57"
+              type="text"
+              name="name"
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+              placeholder='What is your group name?'
+            />
+          </div>
+          {errors.name && (<div className="group-create-error-text">{errors.name}</div>)}
         </div>
 
         <div className='create-group-form-section'>
@@ -202,24 +220,6 @@ export default function GroupForm({ group, formType }) {
           </div>
           {errors.type && (<div className="group-create-error-text">{errors.type}</div>)}
 
-        </div>
-
-        <div className='create-group-form-section'>
-          <div className='create-group-form-header'>What will your group's name be?</div>
-          <div className='create-group-form-text'>Choose a name that will give people a clear idea of what the group is about.
-            Feel free to get creative! You can edit this later if you change your mind.</div>
-          <div>
-            <input
-              className="input-spacer input-text"
-              size="57"
-              type="text"
-              name="name"
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-              placeholder='What is your group name?'
-            />
-          </div>
-          {errors.name && (<div className="group-create-error-text">{errors.name}</div>)}
         </div>
 
         <div className='create-group-form-section'>
