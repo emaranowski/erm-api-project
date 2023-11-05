@@ -142,7 +142,8 @@ export default function EventForm({ event, formType }) {
 
         <div className='create-event-form-section'>
 
-          <div className='create-event-form-text'>What is the name of your event?</div>
+          <div className='create-event-form-header'>What will your event's name be?</div>
+          <div className='create-event-form-text'>Choose a name that will give a clear idea of what the event is about. Get creative! You can edit this later if you want.</div>
           <div>
             <span>
               <input
