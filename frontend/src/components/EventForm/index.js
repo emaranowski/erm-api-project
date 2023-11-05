@@ -269,7 +269,8 @@ export default function EventForm({ event, formType }) {
 
         {formType === 'Create Event' ?
           <div className='create-event-form-section'>
-            <div className='create-event-form-text'>Please add an image URL for your event below:</div>
+            <div className='create-event-form-header'>A picture says a thousand words.</div>
+            <div className='create-event-form-text'>Add an image URL for your event:</div>
             <div>
               <input
                 className="input-spacer input-text"
@@ -285,7 +286,8 @@ export default function EventForm({ event, formType }) {
           </div>
           :
           <div className='create-event-form-section'>
-            <div className='create-event-form-text'>Please add an image URL for your event below:</div>
+            <div className='create-event-form-header'>A picture says a thousand words.</div>
+            <div className='create-event-form-text'>Add an image URL for your event:</div>
             <div>
               <input
                 className="input-spacer input-text"
