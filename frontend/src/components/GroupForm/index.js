@@ -154,7 +154,7 @@ export default function GroupForm({ group, formType }) {
 
         <div className='create-group-form-section'>
           <div className='create-group-form-header'>Set your group's location.</div>
-          <div className='create-group-form-text'>MeetBuds groups meet locally, in person, and online. We'll connect you with people in your area.</div>
+          <div className='create-group-form-text'>MeetBuds groups meet locally, in person, and online. Select the city and state you'll be primarily based out of.</div>
           <div>
             <span>
               <input
@@ -187,6 +187,21 @@ export default function GroupForm({ group, formType }) {
           {errors.city && !errors.state ? <div className="group-create-error-text">{errors.city}</div> : null}
           {errors.state && !errors.city ? <div className="group-create-error-text">{errors.state}</div> : null}
           {errors.city && errors.state ? <div className="group-create-error-text">{errors.city} | {errors.state}</div> : null}
+
+          <div className='create-group-form-text'>Will this group be in-person or online?</div>
+          <div>
+            <select
+              className="input-spacer input-text"
+              onChange={(e) => setType(e.target.value)}
+              value={type}
+            >
+              <option key='(select one)' value='(select one)'>(select one)</option>
+              <option key='In person' value='In person'>In Person</option>
+              <option key='Online' value='Online'>Online</option>
+            </select>
+          </div>
+          {errors.type && (<div className="group-create-error-text">{errors.type}</div>)}
+
         </div>
 
         <div className='create-group-form-section'>
@@ -229,20 +244,6 @@ export default function GroupForm({ group, formType }) {
 
         <div className='create-group-form-section'>
           <div className='create-group-form-header'>Final steps...</div>
-
-          <div className='create-group-form-text'>Is this an in-person or online group?</div>
-          <div>
-            <select
-              className="input-spacer input-text"
-              onChange={(e) => setType(e.target.value)}
-              value={type}
-            >
-              <option key='(select one)' value='(select one)'>(select one)</option>
-              <option key='In person' value='In person'>In Person</option>
-              <option key='Online' value='Online'>Online</option>
-            </select>
-          </div>
-          {errors.type && (<div className="group-create-error-text">{errors.type}</div>)}
 
           <div className='create-group-form-text'>Is this group private or public?</div>
           <div>
