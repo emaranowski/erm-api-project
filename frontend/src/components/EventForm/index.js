@@ -153,7 +153,7 @@ export default function EventForm({ event, formType }) {
                 name="name"
                 onChange={(e) => setName(e.target.value)}
                 value={name}
-                placeholder="Event Name"
+                placeholder="Event name"
               />
             </span>
           </div>

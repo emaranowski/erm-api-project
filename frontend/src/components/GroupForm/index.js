@@ -164,7 +164,7 @@ export default function GroupForm({ group, formType }) {
               name="name"
               onChange={(e) => setName(e.target.value)}
               value={name}
-              placeholder='What is your group name?'
+              placeholder='Group name'
             />
           </div>
           {errors.name && (<div className="group-create-error-text">{errors.name}</div>)}
@@ -236,7 +236,7 @@ export default function GroupForm({ group, formType }) {
               name='about'
               onChange={e => setAbout(e.target.value)}
               value={about}
-              placeholder='Please write at least 30 characters'
+              placeholder='Please include at least 30 characters'
             />
           </div>
           {errors.about && (<div className="group-create-error-text">{errors.about}</div>)}
