@@ -162,7 +162,6 @@ export default function EventForm({ event, formType }) {
         </div>
 
         <div className='create-event-form-section'>
-
           <div className='create-event-form-header'>Set your event's location.</div>
           <div className='create-event-form-text'>Will this event be in-person or online?</div>
           <div>
@@ -177,7 +176,23 @@ export default function EventForm({ event, formType }) {
             </select>
           </div>
           {errors.type && (<div className="event-create-error-text">{errors.type}</div>)}
+        </div>
 
+        <div className='create-event-form-section'>
+          <div className='create-event-form-header'>Describe the purpose of your event.</div>
+          <div className='create-event-form-text'>Let people know what it's all about.</div>
+          <div>
+            <textarea
+              className="input-spacer input-text"
+              rows="8" cols="56"
+              id='comments'
+              name='description'
+              onChange={e => setDescription(e.target.value)}
+              value={description}
+              placeholder='Please include at least 30 characters'
+            />
+          </div>
+          {errors.description && (<div className="event-create-error-text">{errors.description}</div>)}
         </div>
 
         <div className='create-event-form-section'>
@@ -246,26 +261,6 @@ export default function EventForm({ event, formType }) {
           </div>
           {errors.endDate && (<div className="event-create-error-text">{errors.endDate}</div>)}
         </div>
-
-        <div className='create-event-form-section'>
-
-          <div className='create-event-form-header'>Describe the purpose of your event.</div>
-          <div className='create-event-form-text'>Let people know what it's all about.</div>
-          <div>
-            <textarea
-              className="input-spacer input-text"
-              rows="8" cols="56"
-              id='comments'
-              name='description'
-              onChange={e => setDescription(e.target.value)}
-              value={description}
-              placeholder='Please include at least 30 characters'
-            />
-          </div>
-          {errors.description && (<div className="event-create-error-text">{errors.description}</div>)}
-
-        </div>
-
 
         {formType === 'Create Event' ?
           <div className='create-event-form-section'>
