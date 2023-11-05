@@ -164,7 +164,7 @@ export default function EventForm({ event, formType }) {
         <div className='create-event-form-section'>
 
           <div className='create-event-form-header'>Set your event's location.</div>
-          <div className='create-event-form-text'>Is this event in-person or online?</div>
+          <div className='create-event-form-text'>Will this event be in-person or online?</div>
           <div>
             <select
               className="input-spacer input-text"
