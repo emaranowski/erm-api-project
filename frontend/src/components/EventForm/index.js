@@ -163,7 +163,8 @@ export default function EventForm({ event, formType }) {
 
         <div className='create-event-form-section'>
 
-          <div className='create-event-form-text'>Is this an in-person or online event?</div>
+          <div className='create-event-form-header'>Set your event's location.</div>
+          <div className='create-event-form-text'>Is this event in-person or online?</div>
           <div>
             <select
               className="input-spacer input-text"
@@ -177,6 +178,11 @@ export default function EventForm({ event, formType }) {
           </div>
           {errors.type && (<div className="event-create-error-text">{errors.type}</div>)}
 
+        </div>
+
+        <div className='create-event-form-section'>
+
+          <div className='create-event-form-header'>Final steps...</div>
           <div className='create-event-form-text'>What is the attendance capacity for your event?</div>
           <div>
             <span>
