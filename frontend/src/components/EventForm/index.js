@@ -298,7 +298,7 @@ export default function EventForm({ event, formType }) {
         </div>
 
         <div className='create-event-form-section'>
-          <div className='create-event-form-header'>Final steps...capacity and pricing:</div>
+          <div className='create-event-form-header'>Final steps...</div>
           <div className='create-event-form-text'>What is the attendance capacity for your event?</div>
           <div>
             <span>
