@@ -181,7 +181,8 @@ export default function EventForm({ event, formType }) {
         </div>
 
         <div className='create-event-form-section'>
-          <div className='create-event-form-text'>When does your event start?</div>
+          <div className='create-event-form-header'>Timing is everything.</div>
+          <div className='create-event-form-text'>Select an event start:</div>
           <div>
             <span>
               {/* <input
@@ -213,7 +214,7 @@ export default function EventForm({ event, formType }) {
           </div>
           {errors.startDate && (<div className="event-create-error-text">{errors.startDate}</div>)}
 
-          <div className='create-event-form-text'>When does your event end?</div>
+          <div className='create-event-form-text'>Select an event end:</div>
           <div>
             <span>
               {/* <input
