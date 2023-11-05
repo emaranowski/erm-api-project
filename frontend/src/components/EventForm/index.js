@@ -141,24 +141,20 @@ export default function EventForm({ event, formType }) {
         </div>
 
         <div className='create-event-form-section'>
-
           <div className='create-event-form-header'>What will your event name be?</div>
           <div className='create-event-form-text'>Choose a name that will give a clear idea of what the event is about. Get creative! You can edit this later if you want.</div>
           <div>
-            <span>
-              <input
-                className="input-spacer input-text"
-                size="26"
-                type="text"
-                name="name"
-                onChange={(e) => setName(e.target.value)}
-                value={name}
-                placeholder="Event name"
-              />
-            </span>
+            <input
+              className="input-spacer input-text"
+              size="57"
+              type="text"
+              name="name"
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+              placeholder="Event name"
+            />
           </div>
           {errors.name ? <div className="event-create-error-text">{errors.name}</div> : null}
-
         </div>
 
         <div className='create-event-form-section'>
