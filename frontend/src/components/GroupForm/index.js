@@ -264,7 +264,7 @@ export default function GroupForm({ group, formType }) {
         </div>
 
         <div className='create-group-form-section'>
-          <div className='create-group-form-header'>Final step – group visibility settings.</div>
+          <div className='create-group-form-header'>Final step – group visibility.</div>
           <div className='create-group-form-text'>Is this group private or public?</div>
           <div>
             <select
