@@ -153,7 +153,7 @@ export default function GroupForm({ group, formType }) {
         </div>
 
         <div className='create-group-form-section'>
-          <div className='create-group-form-header'>What will your group's name be?</div>
+          <div className='create-group-form-header'>What will your group name be?</div>
           <div className='create-group-form-text'>Choose a name that will give a clear idea of what the group is about. Get creative! You can edit this later if you want.
           </div>
           <div>
@@ -171,7 +171,7 @@ export default function GroupForm({ group, formType }) {
         </div>
 
         <div className='create-group-form-section'>
-          <div className='create-group-form-header'>Set your group's location.</div>
+          <div className='create-group-form-header'>Set your group location.</div>
           <div className='create-group-form-text'>MeetBuds groups meet locally, in person, and online. Select the city and state you'll be primarily based out of.</div>
           <div>
             <span>
@@ -264,7 +264,7 @@ export default function GroupForm({ group, formType }) {
         </div>
 
         <div className='create-group-form-section'>
-          <div className='create-group-form-header'>Final step – set your group's visibility.</div>
+          <div className='create-group-form-header'>Final step – group visibility settings.</div>
           <div className='create-group-form-text'>Is this group private or public?</div>
           <div>
             <select

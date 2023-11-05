@@ -142,7 +142,7 @@ export default function EventForm({ event, formType }) {
 
         <div className='create-event-form-section'>
 
-          <div className='create-event-form-header'>What will your event's name be?</div>
+          <div className='create-event-form-header'>What will your event name be?</div>
           <div className='create-event-form-text'>Choose a name that will give a clear idea of what the event is about. Get creative! You can edit this later if you want.</div>
           <div>
             <span>
@@ -162,7 +162,7 @@ export default function EventForm({ event, formType }) {
         </div>
 
         <div className='create-event-form-section'>
-          <div className='create-event-form-header'>Set your event's location.</div>
+          <div className='create-event-form-header'>Set your event location.</div>
           <div className='create-event-form-text'>Will this event be in-person or online?</div>
           <div>
             <select
@@ -298,7 +298,7 @@ export default function EventForm({ event, formType }) {
         </div>
 
         <div className='create-event-form-section'>
-          <div className='create-event-form-header'>Final steps – set your event's capacity and price.</div>
+          <div className='create-event-form-header'>Final steps – event capacity and price.</div>
           <div className='create-event-form-text'>What is the attendance capacity for your event?</div>
           <div>
             <span>
