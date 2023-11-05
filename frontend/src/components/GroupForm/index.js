@@ -243,23 +243,8 @@ export default function GroupForm({ group, formType }) {
         </div>
 
         <div className='create-group-form-section'>
-          <div className='create-group-form-header'>Final steps...</div>
-
-          <div className='create-group-form-text'>Is this group private or public?</div>
-          <div>
-            <select
-              className="input-spacer input-text"
-              onChange={(e) => setPrivacy(e.target.value)}
-              value={privacy}
-            >
-              <option key='(select one)' value='(select one)'>(select one)</option>
-              <option key='true' value={true}>Private</option>
-              <option key='false' value={false}>Public</option>
-            </select>
-          </div>
-          {errors.privacy && (<div className="group-create-error-text">{errors.privacy}</div>)}
-
-          <div className='create-group-form-text'>Please add an image URL for your group below:</div>
+          <div className='create-group-form-header'>A picture says a thousand words.</div>
+          <div className='create-group-form-text'>Add an image URL for your group:</div>
           <div>
             <input
               className="input-spacer input-text"
@@ -276,6 +261,23 @@ export default function GroupForm({ group, formType }) {
           {/* {url === '' ? <div className="group-create-error-text">Image URL must be valid (must end in .png, .jpg, or .jpeg)</div> : null} */}
           {/* {errors.url && (<div className="group-create-error-text">{errors.url}</div>)} */}
           {/* {errors.url && (<div className="group-create-error-text">Image URL must be valid (must end in .png, .jpg, or .jpeg)</div>)} */}
+        </div>
+
+        <div className='create-group-form-section'>
+          <div className='create-group-form-header'>Final step...privacy settings:</div>
+          <div className='create-group-form-text'>Is this group private or public?</div>
+          <div>
+            <select
+              className="input-spacer input-text"
+              onChange={(e) => setPrivacy(e.target.value)}
+              value={privacy}
+            >
+              <option key='(select one)' value='(select one)'>(select one)</option>
+              <option key='true' value={true}>Private</option>
+              <option key='false' value={false}>Public</option>
+            </select>
+          </div>
+          {errors.privacy && (<div className="group-create-error-text">{errors.privacy}</div>)}
         </div>
 
         <button
