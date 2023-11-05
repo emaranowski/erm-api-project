@@ -231,7 +231,7 @@ export default function GroupForm({ group, formType }) {
           <div>
             <textarea
               className="input-spacer input-text"
-              rows="6" cols="39"
+              rows="8" cols="56"
               id='comments'
               name='about'
               onChange={e => setAbout(e.target.value)}
