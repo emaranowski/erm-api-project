@@ -129,15 +129,15 @@ export default function EventForm({ event, formType }) {
     <>
       <form id='event-form' onSubmit={handleSubmit}>
 
-        <div className='create-group-form-section'>
+        <div className='create-event-form-section'>
           <div className='form-top-header'>
             {formType === 'Create Event' ? `Create an event for ${groupName}` : `Update your event for ${groupName}`}
           </div>
         </div>
 
-        <div className='create-group-form-section'>
+        <div className='create-event-form-section'>
 
-          <div className='create-group-form-text'>What is the name of your event?</div>
+          <div className='create-event-form-text'>What is the name of your event?</div>
           <div>
             <span>
               <input
@@ -151,13 +151,13 @@ export default function EventForm({ event, formType }) {
               />
             </span>
           </div>
-          {errors.name ? <div className="group-create-error-text">{errors.name}</div> : null}
+          {errors.name ? <div className="event-create-error-text">{errors.name}</div> : null}
 
         </div>
 
-        <div className='create-group-form-section'>
+        <div className='create-event-form-section'>
 
-          <div className='create-group-form-text'>Is this an in-person or online event?</div>
+          <div className='create-event-form-text'>Is this an in-person or online event?</div>
           <div>
             <select
               className="input-spacer input-text"
@@ -169,9 +169,9 @@ export default function EventForm({ event, formType }) {
               <option key='Online' value='Online'>Online</option>
             </select>
           </div>
-          {errors.type && (<div className="group-create-error-text">{errors.type}</div>)}
+          {errors.type && (<div className="event-create-error-text">{errors.type}</div>)}
 
-          <div className='create-group-form-text'>What is the attendance capacity for your event?</div>
+          <div className='create-event-form-text'>What is the attendance capacity for your event?</div>
           <div>
             <span>
               <input
@@ -185,9 +185,9 @@ export default function EventForm({ event, formType }) {
               />
             </span>
           </div>
-          {errors.capacity && (<div className="group-create-error-text">{errors.capacity}</div>)}
+          {errors.capacity && (<div className="event-create-error-text">{errors.capacity}</div>)}
 
-          <div className='create-group-form-text'>What is the price for your event?</div>
+          <div className='create-event-form-text'>What is the price for your event?</div>
           <div>
             <span>
               <input
@@ -201,12 +201,12 @@ export default function EventForm({ event, formType }) {
               />
             </span>
           </div>
-          {errors.price && (<div className="group-create-error-text">{errors.price}</div>)}
+          {errors.price && (<div className="event-create-error-text">{errors.price}</div>)}
 
         </div>
 
-        <div className='create-group-form-section'>
-          <div className='create-group-form-text'>When does your event start?</div>
+        <div className='create-event-form-section'>
+          <div className='create-event-form-text'>When does your event start?</div>
           <div>
             <span>
               {/* <input
@@ -236,9 +236,9 @@ export default function EventForm({ event, formType }) {
               />
             </span>
           </div>
-          {errors.startDate && (<div className="group-create-error-text">{errors.startDate}</div>)}
+          {errors.startDate && (<div className="event-create-error-text">{errors.startDate}</div>)}
 
-          <div className='create-group-form-text'>When does your event end?</div>
+          <div className='create-event-form-text'>When does your event end?</div>
           <div>
             <span>
               {/* <input
@@ -268,13 +268,13 @@ export default function EventForm({ event, formType }) {
               />
             </span>
           </div>
-          {errors.endDate && (<div className="group-create-error-text">{errors.endDate}</div>)}
+          {errors.endDate && (<div className="event-create-error-text">{errors.endDate}</div>)}
         </div>
 
 
         {formType === 'Create Event' ?
-          <div className='create-group-form-section'>
-            <div className='create-group-form-text'>Please add an image URL for your event below:</div>
+          <div className='create-event-form-section'>
+            <div className='create-event-form-text'>Please add an image URL for your event below:</div>
             <div>
               <input
                 className="input-spacer input-text"
@@ -289,8 +289,8 @@ export default function EventForm({ event, formType }) {
             </div>
           </div>
           :
-          <div className='create-group-form-section'>
-            <div className='create-group-form-text'>Please add an image URL for your event below:</div>
+          <div className='create-event-form-section'>
+            <div className='create-event-form-text'>Please add an image URL for your event below:</div>
             <div>
               <input
                 className="input-spacer input-text"
@@ -305,8 +305,8 @@ export default function EventForm({ event, formType }) {
           </div>
         }
 
-        <div className='create-group-form-section'>
-          <div className='create-group-form-text'>Please describe your event:</div>
+        <div className='create-event-form-section'>
+          <div className='create-event-form-text'>Please describe your event:</div>
           <div>
             <textarea
               className="input-spacer input-text"
@@ -318,12 +318,12 @@ export default function EventForm({ event, formType }) {
               placeholder='Please include at least 30 characters'
             />
           </div>
-          {errors.description && (<div className="group-create-error-text">{errors.description}</div>)}
+          {errors.description && (<div className="event-create-error-text">{errors.description}</div>)}
         </div>
 
 
         <button
-          className={disabled ? "create-group-form-button-disabled" : "create-group-form-button"}
+          className={disabled ? "create-event-form-button-disabled" : "create-event-form-button"}
           disabled={disabled}
         >
           {formType === 'Create Event' ? 'Create Event' : 'Update Event'}
