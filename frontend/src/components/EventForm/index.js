@@ -131,7 +131,7 @@ export default function EventForm({ event, formType }) {
 
         <div className='create-group-form-section'>
           <div className='form-top-header'>
-            {formType === 'Create Event' ? `Create a new event for ${groupName}` : `Update your event for ${groupName}`}
+            {formType === 'Create Event' ? `Create an event for ${groupName}` : `Update your event for ${groupName}`}
           </div>
         </div>
 
