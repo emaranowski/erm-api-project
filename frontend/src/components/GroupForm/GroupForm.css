@@ -38,7 +38,7 @@
 }
 
 .create-group-form-button {
-    margin: 16px 0px;
+    margin: 24px 0px 16px 0px;
 
     width: 145px;
 
@@ -58,7 +58,7 @@
 }
 
 .create-group-form-button-disabled {
-    margin: 16px 0px;
+    margin: 24px 0px 16px 0px;
 
     width: 145px;
 

@@ -338,4 +338,4 @@ export default function EventForm({ event, formType }) {
       </form>
     </>
   )
-}
+};

@@ -290,4 +290,4 @@ export default function GroupForm({ group, formType }) {
       </form>
     </>
   )
-}
+};
