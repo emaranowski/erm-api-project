@@ -76,12 +76,12 @@ function ProfileButton({ user }) {
             <div className="dropdown-user-info">{user.email}</div>
             <div>
               <button onClick={viewGroups} className="dropdown-button">
-                View groups
+                All groups
               </button>
             </div>
             <div>
               <button onClick={viewEvents} className="dropdown-button">
-                View events
+                All events
               </button>
             </div>
             <div>
