@@ -17,12 +17,6 @@
     margin-bottom: 5px;
 }
 
-.event-info-header {
-    color: black;
-    font-size: 22px;
-    margin-bottom: 5px;
-}
-
 .event-hosted-by {
     font-size: 14px;
     font-weight: 200;
@@ -166,11 +160,15 @@
     margin-top: 10px;
 }
 
-.event-info-header {}
+.event-info-header {
+    color: black;
+    font-size: 22px;
+    margin: 5px 0;
+}
 
 .event-info-text {
     font-size: 14px;
     font-weight: 200;
     color: black;
-    margin-bottom: 250px;
+    /* margin-bottom: 250px; */
 }
