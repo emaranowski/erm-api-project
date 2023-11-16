@@ -16,9 +16,11 @@ import DisplayCardEventMini from '../DisplayCardEventMini';
 import './GroupDetails.css';
 
 export default function GroupDetails() {
+  const dispatch = useDispatch();
   const sessionUser = useSelector(state => state.session.user);
   const { groupId } = useParams();
   const groupIdAsNum = parseInt(groupId);
+  const group = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
 
   const groupsStateArr = Object.values(
     useSelector((state) => (state.groups ? state.groups : {}))
@@ -41,8 +43,7 @@ export default function GroupDetails() {
   // const previewImageURL = previewImagesArr[0].url;
 
 
-  // get preview image URL
-  const group = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
+  ////////////// GET PREVIEW IMAGE URL //////////////
   const groupImages = useSelector(state => state.groups.singleGroup.GroupImages ? state.groups.singleGroup.GroupImages : []); // {}
 
   // const previewImageURL = useSelector(state => state.groups.allGroups[groupId].previewImage);
@@ -54,12 +55,14 @@ export default function GroupDetails() {
     })
     // previewImageURL = previewImages[0].url; // orig
     previewImageURL = previewImages[previewImages.length - 1].url; // use last previewImage
-  };
+  }
 
 
 
 
-  // // Current user must be "host" or "co-host" of Group that Event belongs to
+  // To create or update an event for a group:
+  // Current user must be "host" or "co-host" of the group that the event belongs to
+
   // const memberships = await Membership.findAll();
   // const userId = user.dataValues.id;
   // const groupId = event.Group.id;
@@ -71,10 +74,6 @@ export default function GroupDetails() {
   //             member.status === 'co-host');
   // });
 
-
-
-
-  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getSingleGroupThunk(groupId));
   }, [dispatch, groupId]);
@@ -88,17 +87,10 @@ export default function GroupDetails() {
   }, [dispatch]);
 
 
-
-  ////////////// ORGANIZER NAME //////////////
+  ////////////// GET ORGANIZER NAME //////////////
   const singleGroup = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
   const organizerId = singleGroup.organizerId;
   const organizer = singleGroup.Organizer;
-  // const organizerFirstName = singleGroup.Organizer.firstName;
-  // const organizerLastName = singleGroup.Organizer.lastName;
-  // if (Object.values(organizer).length) {
-  //   const organizerFirstName = singleGroup.Organizer.firstName;
-  //   const organizerLastName = singleGroup.Organizer.lastName;
-  // }
 
   let organizerFirstName;
   let organizerLastName;
@@ -107,55 +99,35 @@ export default function GroupDetails() {
     organizerLastName = singleGroup.Organizer.lastName;
   }
 
-  // const allGroups = useSelector(state => state.groups.allGroups ? state.groups.allGroups : {}); // {}
-  // useEffect(() => {
-  //   dispatch(getAllUsersThunk());
-  // }, [dispatch]);
+  ////////////// 'JOIN' BUTTON DISPLAY LOGIC //////////////
+  // if not logged in: HIDE 'JOIN' btn
+  // if logged in + did create group: HIDE 'JOIN' btn
+  // if logged in + did not create group: DISPLAY 'JOIN' btn
 
-
-
-
-  ////////////// 'JOIN' BUTTON LOGIC //////////////
-  // if not logged in, 'JOIN' BUTTON should hide
-  // if logged in and created group, 'JOIN' BUTTON should hide
-  // if logged in and did not create group, 'JOIN' BUTTON should display
-
-  // const sessionUser = useSelector(state => state.session.user);
-  // logged out: sessionUser === null
-  // logged in: sessionUser === {id: 1, firstName: 'FirstNameOne', lastName: 'LastNameOne', email: 'demo1@demo.com', username: 'DemoUser1'}
+  // logged in sessionUser:
+  // {id: 1, firstName: 'FirstNameOne', lastName: 'LastNameOne', email: 'demo1@demo.com', username: 'DemoUser1'}
 
   let hideJoinButton = true;
   if (sessionUser === null) { // logged out
-    hideJoinButton = true;
+    hideJoinButton = true; // hide join btn
   } else if (sessionUser !== null && sessionUser !== undefined) { // logged in
-    const sessionUserId = sessionUser.id; // must create in block, after confirming !null && !undefined
-    if (sessionUserId !== organizerId) hideJoinButton = false; // logged in + did not create group: so display 'join' btn
+    if (sessionUser.id !== organizerId) { // did not create group
+      hideJoinButton = false; // display join btn
+    }
   }
 
+  ////////////// ADMIN BUTTONS DISPLAY LOGIC //////////////
+  /////////// 'Create Event', 'Update', 'Delete' ///////////
+  // if logged in + did create group: DISPLAY ADMIN BUTTONS
 
-  ////////////// 'Create Event', 'Update', 'Delete' ADMIN BUTTONS LOGIC //////////////
-  // if logged in and created group, ADMIN BUTTONS should display
   let hideAdminButtons = true;
   if (sessionUser === null) { // logged out
-    hideAdminButtons = true;
+    hideAdminButtons = true; // hide admin btns
   } else if (sessionUser !== null && sessionUser !== undefined) { // logged in
-    const sessionUserId = sessionUser.id; // must create in block, after confirming !null && !undefined
-    if (sessionUserId === organizerId) hideAdminButtons = false; // logged in + created group: so display admin btns
+    if (sessionUser.id === organizerId) { // did create group
+      hideAdminButtons = false; // display join btn
+    }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   // works when logged in -- do not edit
   // // ////////////// 'JOIN' BUTTON LOGIC //////////////
