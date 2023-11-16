@@ -10,7 +10,6 @@ import OpenModalButtonJoinGroup from '../../components/OpenModalButtonJoinGroup'
 import JoinGroupModal from '../../components/JoinGroupModal';
 import GroupDeleteModalButton from '../GroupDeleteModalButton';
 import GroupDeleteModal from '../GroupDeleteModal';
-
 import DisplayCardEvent from '../DisplayCardEvent';
 import DisplayCardEventMini from '../DisplayCardEventMini';
 
@@ -23,11 +22,11 @@ export default function GroupDetails() {
 
   const groupsStateArr = Object.values(
     useSelector((state) => (state.groups ? state.groups : {}))
-  ); // ret arr
+  ); // ret arr of objs
 
   const groupsStateKeys = Object.keys(
     useSelector((state) => (state.groups ? state.groups : {}))
-  ); // ret arr // 0: allGroups, 1: singleGroup
+  ); // ret arr -- i0: allGroups, i1: singleGroup
 
   // const singleGroup = groupsStateArr[1]; // obj
   // // const singleGroupArr = Object.values(singleGroup)
@@ -42,64 +41,22 @@ export default function GroupDetails() {
   // const previewImageURL = previewImagesArr[0].url;
 
 
-  // WORKING -- V1
-  // const group = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
-  // const groupImages = useSelector(state => state.groups.singleGroup.GroupImages ? state.groups.singleGroup.GroupImages : []); // {}
-
-  // let previewImageURL;
-  // if (groupImages.length) {
-  //   previewImageURL = groupImages[0].url;
-  // }
-
-
-  // WORKING -- V2 -- used until 2023-08-02
+  // get preview image URL
   const group = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
   const groupImages = useSelector(state => state.groups.singleGroup.GroupImages ? state.groups.singleGroup.GroupImages : []); // {}
 
+  // const previewImageURL = useSelector(state => state.groups.allGroups[groupId].previewImage);
   let previewImageURL;
   let previewImages;
   if (groupImages.length) {
     previewImages = groupImages.filter(image => {
-      return image.preview === true;
+      return image.preview === true; // get all previewImages
     })
     // previewImageURL = previewImages[0].url; // orig
-    previewImageURL = previewImages[previewImages.length - 1].url;
-  }
+    previewImageURL = previewImages[previewImages.length - 1].url; // use last previewImage
+  };
 
 
-  // // new on 2023-08-02
-  // const group = useSelector(state => state.groups.allGroups[groupId]);
-  // const previewImageURL = useSelector(state => state.groups.allGroups[groupId].previewImage);
-
-
-
-  // if (typeof allEvents['1'] === 'object') { }
-  ///////////////////////////
-
-
-
-  // let previewImageURL;
-  // if (groupImages[0] !== undefined) {
-  //   previewImageURL = groupImages[0].url
-  // }
-
-  // WORKING V2
-  // const group = useSelector(state => state.groups.singleGroup ? state.groups.singleGroup : {}); // {}
-  // const groupImages = group.GroupImages; // [{}]
-
-  // let previewImage;
-  // if (groupImages !== undefined) {
-  //   const groupPreviewImages = groupImages.filter(image => { // [{}]
-  //     return image.preview === true;
-  //   })
-  //   previewImage = groupPreviewImages[0];
-  // }
-
-
-  // const previewImage = groupImages[0];
-  // const groupPreviewImages = groupImages.filter(image => { // [{}]
-  //   return image.preview === true;
-  // })
 
 
   // // Current user must be "host" or "co-host" of Group that Event belongs to
