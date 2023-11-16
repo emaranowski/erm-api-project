@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllGroupsThunk, getSingleGroupThunk } from '../../store/groups';
 import { getAllEventsThunk } from '../../store/events';
@@ -23,6 +23,8 @@ export default function GroupDetails() {
   const organizer = singleGroup.Organizer;
   const allEvents = useSelector(state => state.events.allEvents);
 
+  ///////////////// ALT LOGIC NOTES FOR PREVIEW IMAGE URL: TBD /////////////////
+
   // const groupsStateArr = Object.values(
   //   useSelector((state) => (state.groups ? state.groups : {}))
   // ); // ret arr of objs
@@ -43,7 +45,7 @@ export default function GroupDetails() {
   // });
   // const previewImageURL = previewImagesArr[0].url;
 
-  ////////////// GET PREVIEW IMAGE URL //////////////
+  ////////////// PREVIEW IMAGE URL //////////////
   // const previewImageURL = useSelector(state => state.groups.allGroups[groupId].previewImage);
   let previewImageURL;
   let previewImages;
@@ -55,7 +57,7 @@ export default function GroupDetails() {
     previewImageURL = previewImages[previewImages.length - 1].url; // use last previewImage
   }
 
-  ////////////// GET ORGANIZER NAME //////////////
+  ////////////// ORGANIZER NAME //////////////
   let organizerFirstName;
   let organizerLastName;
 
@@ -94,7 +96,7 @@ export default function GroupDetails() {
     }
   }
 
-  ///////////////// CO-HOST PERMISSIONS /////////////////
+  ///////////////// CO-HOST PERMISSIONS: TBD /////////////////
   // To create/update event for group: current user must be group "host"
   // If we want group "co-host" to be able to create/update events,
   // will need to separate 'Create Event' from admin btns,
@@ -129,7 +131,8 @@ export default function GroupDetails() {
 
     eventsByGroupTotalNum = allEventsByGroup.length; // assign
 
-    // Order all group events (DESC)
+    // Put all group events in DESC order
+    // (so that if 2+ events in upcoming or past, they will display in order)
     const startDateNumsUnordered = [];
     const allEventsByGroupDESC = [];
     if (allEventsByGroup[0] !== undefined && allEventsByGroup[0] !== null) {
@@ -139,8 +142,8 @@ export default function GroupDetails() {
         startDateNumsUnordered.push(startDateNum);
       });
 
-      let startDateNumsASC = startDateNumsUnordered.toSorted();
-      let startDateNumsDESC = startDateNumsASC.toReversed();
+      const startDateNumsASC = startDateNumsUnordered.toSorted();
+      const startDateNumsDESC = startDateNumsASC.toReversed();
 
       for (let i = 0; i < startDateNumsDESC.length; i++) {
         const startDateNumDESC = startDateNumsDESC[i];
