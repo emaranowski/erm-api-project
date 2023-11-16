@@ -338,20 +338,20 @@ export default function GroupDetails() {
                 : ''
               }
             </div>
-            <div className='group-detail-info'>
+            <div>
               <div className='group-detail-name'>
                 {group.name}
               </div>
               <div className='group-detail-location'>
                 {group.city}, {group.state}
               </div>
-              <div className='group-detail-events-privacy'>
+              <div className='group-detail-events-and-privacy'>
                 {eventsByGroupTotalNum === 1 ?
                   `${eventsByGroupTotalNum} event`
                   : `${eventsByGroupTotalNum} events`
                 } · {group.privacy ?
-                  <span>Private</span>
-                  : <span>Public</span>
+                  <span>Private group</span>
+                  : <span>Public group</span>
                 }
               </div>
               <div className='group-detail-organized-by'>
@@ -414,7 +414,9 @@ export default function GroupDetails() {
 
             {eventsByGroupUpcomingNum > 0 ?
               <>
-                <div className='group-info-header'>Upcoming Events ({`${eventsByGroupUpcomingNum}`})</div>
+                <div className='group-info-header'>
+                  Upcoming Events ({`${eventsByGroupUpcomingNum}`})
+                </div>
                 <div>
                   {eventsByGroupUpcoming.map((event) => (
                     <div key={event.id}>
@@ -423,11 +425,14 @@ export default function GroupDetails() {
                   ))}
                 </div>
               </>
-              : null}
+              : null
+            }
 
             {eventsByGroupPastNum > 0 ?
               <>
-                <div className='group-info-header'>Past Events ({`${eventsByGroupPastNum}`})</div>
+                <div className='group-info-header'>
+                  Past Events ({`${eventsByGroupPastNum}`})
+                </div>
                 <div>
                   {eventsByGroupPast.map((event) => (
                     <div key={event.id}>
@@ -436,33 +441,8 @@ export default function GroupDetails() {
                   ))}
                 </div>
               </>
-              : null}
-
-            {/* <Link to={`/events/:eventId`}>
-          <div className='event-card'>
-            <div className='event-card-top'>
-              <div className='event-img'>
-                [ image ]
-              </div>
-              <div className='event-info'>
-                <div className='event-date-time'>
-                  {event.date} · {event.time}
-                </div>
-                <div className='event-name'>
-                  {event.name}
-                </div>
-                <div className='event-location'>
-                  {event.city}, {event.state}
-                </div>
-              </div>
-            </div>
-            <div className='event-card-bottom'>
-              <div className='event-text'>
-                {event.about}
-              </div>
-            </div>
-          </div>
-        </Link> */}
+              : null
+            }
 
           </div>
 
