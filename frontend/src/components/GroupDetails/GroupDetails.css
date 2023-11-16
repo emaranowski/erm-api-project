@@ -34,7 +34,7 @@
     border-radius: 10px;
 }
 
-.group-info-header {
+.group-detail-name {
     color: black;
     font-size: 22px;
     margin-bottom: 5px;
@@ -61,7 +61,7 @@
     margin-bottom: 5px;
 }
 
-.group-detail-events-privacy {
+.group-detail-events-and-privacy {
     font-size: 14px;
     font-weight: 200;
     color: rgb(123, 123, 123);
@@ -98,6 +98,10 @@
     color: #FFFFFF;
     background-color: #707070;
     cursor: pointer;
+}
+
+.group-info-section {
+    padding-bottom: 10px;
 }
 
 .group-info-header {
