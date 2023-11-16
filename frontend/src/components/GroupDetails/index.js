@@ -333,14 +333,10 @@ export default function GroupDetails() {
 
           <div className='group-detail-card'>
             <div>
-              {/* <div className='group-detail-img'>[ image ]</div> */}
-
-              {previewImageURL ? <img className='group-detail-img' src={previewImageURL}></img> : ''}
-
-              {/* <img className='group-detail-img' src={previewImageURL}></img> */}
-              {/* <div className='group-detail-img'> */}
-              {/* {previewImageURL} */}
-              {/* </div> */}
+              {previewImageURL ?
+                <img className='group-detail-img' src={previewImageURL}></img>
+                : ''
+              }
             </div>
             <div className='group-detail-info'>
               <div className='group-info-header'>
@@ -350,7 +346,13 @@ export default function GroupDetails() {
                 {group.city}, {group.state}
               </div>
               <div className='group-detail-events-privacy'>
-                {eventsByGroupTotalNum === 1 ? `${eventsByGroupTotalNum} event` : `${eventsByGroupTotalNum} events`} · {group.privacy ? <span>Private</span> : <span>Public</span>}
+                {eventsByGroupTotalNum === 1 ?
+                  `${eventsByGroupTotalNum} event`
+                  : `${eventsByGroupTotalNum} events`
+                } · {group.privacy ?
+                  <span>Private</span>
+                  : <span>Public</span>
+                }
               </div>
               <div className='group-detail-organized-by'>
                 Organized by: {organizerFirstName} {organizerLastName}
@@ -444,12 +446,16 @@ export default function GroupDetails() {
 
           <div className='group-info-box'>
 
+            <div className='group-info-header'>
+              Organizer
+            </div>
+            <div className='group-organizer-name'>
+              {organizerFirstName} {organizerLastName}
+            </div>
 
-
-            <div className='group-info-header'>Organizer</div>
-            <div className='group-organizer-name'>{organizerFirstName} {organizerLastName}</div>
-
-            <div className='group-info-header'>What we're about</div>
+            <div className='group-info-header'>
+              What we're about
+            </div>
             <div className='group-info-text'>
               {group.about}
             </div>
