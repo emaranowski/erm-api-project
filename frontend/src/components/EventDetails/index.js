@@ -1,91 +1,39 @@
 import { Link, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { getAllEventsThunk, getSingleEventThunk } from '../../store/events';
 import { getAllGroupsThunk, getSingleGroupThunk } from '../../store/groups';
-
-// import OpenModalButtonJoinEvent from '../../components/OpenModalButtonJoinEvent';
-// import JoinEventModal from '../../components/JoinEventModal';
 import EventDeleteModalButton from '../EventDeleteModalButton';
 import EventDeleteModal from '../EventDeleteModal';
-
 import './EventDetails.css';
 
 export default function EventDetails() {
   const dispatch = useDispatch();
   const sessionUser = useSelector(state => state.session.user);
   const { eventId } = useParams();
-
-  // const eventsStateArr = Object.values(
-  //   useSelector((state) => (state.events ? state.events : {}))
-  // ); // ret arr
-
-  // const eventsStateKeys = Object.keys(
-  //   useSelector((state) => (state.events ? state.events : {}))
-  // ); // ret arr // 0: allEvents, 1: singleEvent
-
-
-  // WORKING -- V2 -- used until 2023-08-02
   const event = useSelector(state => state.events.singleEvent ? state.events.singleEvent : {}); // {}
   const eventImages = useSelector(state => state.events.singleEvent.EventImages ? state.events.singleEvent.EventImages : []); // {}
+  const singleGroup = useSelector(state => state.groups.singleGroup);
+  const allGroups = useSelector(state => state.groups.allGroups);
 
-
+  ////////////// PREVIEW IMAGE URL //////////////
   let previewImageURL;
   let previewImages;
   if (eventImages.length) {
     previewImages = eventImages.filter(image => {
       return image.preview === true;
-    })
+    });
     // previewImageURL = previewImages[0].url; // orig
     previewImageURL = previewImages[previewImages.length - 1].url;
   }
 
-
   ////////////// GROUP ID //////////////
-
   let groupId;
   if (event.Group !== undefined) {
     groupId = event.groupId;
-  };
+  }
 
-  // const group = useSelector(state => state)
-
-  // useEffect(() => {
-  //   dispatch(getSingleEventThunk(eventId));
-  // }, [dispatch, eventId]);
-  // useEffect(() => {
-  //   dispatch(getAllEventsThunk());
-  // }, [dispatch]);
-  // useEffect(() => {
-  //   dispatch(getSingleGroupThunk(groupId));
-  // }, [dispatch, groupId]);
-  // useEffect(() => {
-  //   dispatch(getAllGroupsThunk());
-  // }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(getSingleEventThunk(eventId));
-    dispatch(getAllEventsThunk());
-    dispatch(getSingleGroupThunk(groupId));
-    dispatch(getAllGroupsThunk());
-  }, [dispatch, eventId, groupId]);
-
-  // useEffect(() => {
-  //   const getAllData = async () => {
-  //     await Promise.all([
-  //       dispatch(getSingleEventThunk(eventId)),
-  //       dispatch(getAllEventsThunk()),
-  //       dispatch(getSingleGroupThunk(groupId)),
-  //       dispatch(getAllGroupsThunk()),
-  //     ])
-  //   }
-  //   getAllData();
-  // }, [dispatch, eventId, groupId])
-
-
-  ////////////// HOST NAME (GROUP ORGANIZER NAME) //////////////
-  const singleGroup = useSelector(state => state.groups.singleGroup);
+  ////////////// EVENT HOST NAME (GROUP ORGANIZER NAME) //////////////
   let organizerId;
   let organizerFirstName;
   let organizerLastName;
@@ -95,15 +43,7 @@ export default function EventDetails() {
     organizerLastName = singleGroup.Organizer.lastName;
   }
 
-  // ////////////// GROUP IMAGE //////////////
-  // const allGroups = useSelector(state => state.groups.allGroups ? state.groups.allGroups : {});
-  // let groupPreviewImageURL;
-  // if (allGroups[groupId] !== undefined) {
-  //   groupPreviewImageURL = allGroups[groupId].previewImage;
-  // }
-
   ////////////// GROUP IMAGE //////////////
-  const allGroups = useSelector(state => state.groups.allGroups);
   let groupPreviewImageURL;
   if (Object.values(allGroups).length) {
     if (allGroups[groupId] !== undefined) {
@@ -120,16 +60,19 @@ export default function EventDetails() {
   ////////////// GROUP VISIBILITY //////////////
   let groupVisbility;
   if (event.Group !== undefined) {
-    if (event.Group.privacy === true) groupVisbility = 'Private';
-    if (event.Group.privacy === false) groupVisbility = 'Public';
+    if (event.Group.privacy === true) groupVisbility = 'Private group';
+    if (event.Group.privacy === false) groupVisbility = 'Public group';
   }
 
   ////////////// START DATE + TIME //////////////
-  let startDateArr = [];
-  let startTimeArr = [];
+  // index 0-9 = date // '2', '0', '2', '5', '-', '0', '9', '-', '1', '2'
+  // index 10 = 'T'
+  // index 11-15 = time // '1', '6', ':', '0', '0'
+  const startDateArr = [];
+  const startTimeArr = [];
 
   if (event.id !== undefined) {
-    const startDateTime = event.startDate; // startDateTime is string
+    const startDateTime = event.startDate;
     const startDateTimeArr = startDateTime.split('');
 
     for (let i = 0; i < 10; i++) {
@@ -141,15 +84,15 @@ export default function EventDetails() {
     }
   }
 
-  let startDateStr = startDateArr.join('');
-  let startTimeStr = startTimeArr.join('');
+  const startDateStr = startDateArr.join('');
+  const startTimeStr = startTimeArr.join('');
 
   ////////////// END DATE + TIME //////////////
-  let endDateArr = [];
-  let endTimeArr = [];
+  const endDateArr = [];
+  const endTimeArr = [];
 
   if (event.id !== undefined) {
-    const endDateTime = event.endDate; // endDateTime is string
+    const endDateTime = event.endDate;
     const endDateTimeArr = endDateTime.split('');
 
     for (let i = 0; i < 10; i++) {
@@ -161,8 +104,8 @@ export default function EventDetails() {
     }
   }
 
-  let endDateStr = endDateArr.join('');
-  let endTimeStr = endTimeArr.join('');
+  const endDateStr = endDateArr.join('');
+  const endTimeStr = endTimeArr.join('');
 
   ////////////// PRICE //////////////
 
@@ -172,7 +115,7 @@ export default function EventDetails() {
   }
   if (price === 0) price = 'FREE';
 
-  ////////////// ONLINE / IN PERSON //////////////
+  ////////////// ONLINE OR IN-PERSON //////////////
 
   let onlineOrInPerson;
   if (event.type !== undefined) {
@@ -181,43 +124,52 @@ export default function EventDetails() {
 
   ////////////// DESCRIPTION //////////////
 
-  let desc;
+  let description;
   if (event.description !== undefined) {
-    desc = event.description;
+    description = event.description;
   }
 
-
-
-  ////////////// 'JOIN' BUTTON LOGIC //////////////
-  // if not logged in, 'JOIN' BUTTON should hide
-  // if logged in and created event, 'JOIN' BUTTON should hide
-  // if logged in and did not create event, 'JOIN' BUTTON should display
+  ////////////// 'JOIN' BUTTON LOGIC: TBD IF USING //////////////
+  // logged out: HIDE
+  // logged in + created event: HIDE
+  // logged in + did not create event: DISPLAY
 
   // let hideJoinButton = true;
+
   // if (sessionUser === null) { // logged out
-  //   hideJoinButton = true;
+  //   hideJoinButton = true; // hide
   // } else if (sessionUser !== null && sessionUser !== undefined) { // logged in
-  //   const sessionUserId = sessionUser.id; // must create in block, after confirming !null && !undefined
-  //   if (sessionUserId !== organizerId) hideJoinButton = false; // logged in + did not create event: so display 'join' btn
+  //   if (sessionUser.id !== organizerId) { // did not create event
+  //     hideJoinButton = false; // display
+  //   }
   // }
 
-  ////////////// 'Create Event', 'Update', 'Delete' ADMIN BUTTONS LOGIC //////////////
-  // if logged in and created event, ADMIN BUTTONS should display
+  ////////////// ADMIN BUTTONS LOGIC: 'Update', 'Delete' //////////////
+  // logged out: HIDE
+  // logged in + created event: DISPLAY
+  // logged in + did not create event: HIDE
+
   let hideAdminButtons = true;
+
   if (sessionUser === null) { // logged out
-    hideAdminButtons = true;
+    hideAdminButtons = true; // hide
   } else if (sessionUser !== null && sessionUser !== undefined) { // logged in
-    const sessionUserId = sessionUser.id; // must create in block, after confirming !null && !undefined
-    if (sessionUserId === organizerId) hideAdminButtons = false; // logged in + created event: so display admin btns
+    if (sessionUser.id === organizerId) { // created event
+      hideAdminButtons = false; // display
+    }
   }
+
+  useEffect(() => {
+    dispatch(getSingleEventThunk(eventId));
+    dispatch(getAllEventsThunk());
+    if (groupId !== undefined) dispatch(getSingleGroupThunk(groupId));
+    dispatch(getAllGroupsThunk());
+  }, [dispatch, eventId, groupId]);
 
   return (
     <>
       <div className='event-detail-main-box'>
-
         <div className='event-detail-centering-child'>
-
-          {/* HEADER */}
 
           <div className='event-detail-header'>
             <div className='event-breadcrumb-link'>
@@ -233,11 +185,12 @@ export default function EventDetails() {
 
           <div className='event-detail-box'>
 
-            {/* UPPER GRAPHIC ROW */}
-
             <div className='event-detail-upper-graphic-row'>
               <div className='event-img-col'>
-                {previewImageURL ? <img className='event-detail-img' src={previewImageURL}></img> : ''}
+                {previewImageURL ?
+                  <img className='event-detail-img' src={previewImageURL}></img>
+                  : ''
+                }
               </div>
 
               <div className='event-group-date-price-location-col'>
@@ -245,7 +198,10 @@ export default function EventDetails() {
                 <Link to={`/groups/${groupId}`}>
                   <div className='event-group-mini-card-row'>
                     <div className='event-group-mini-image-col'>
-                      {groupPreviewImageURL ? <img className='event-detail-group-img' src={groupPreviewImageURL}></img> : ''}
+                      {groupPreviewImageURL ?
+                        <img className='event-detail-group-img' src={groupPreviewImageURL}></img>
+                        : null
+                      }
                     </div>
                     <div className='event-group-mini-name-visibility-col'>
                       <div className='event-group-mini-name-row'>
@@ -281,7 +237,8 @@ export default function EventDetails() {
                       💲
                     </div>
                     <div className='price-text-col'>
-                      {typeof price === 'number' ? '$' : null}{price === '0' ? 'FREE' : price}
+                      {typeof price === 'number' ? '$' : null}
+                      {price === '0' ? 'FREE' : price}
                     </div>
                   </div>
 
@@ -301,7 +258,6 @@ export default function EventDetails() {
                 <div className='event-admin-buttons-row'>
                   {hideAdminButtons ? null :
                     <div id="event-admin-buttons-div">
-                      {/* <Link to={`/events/${eventId}/update`}> */}
                       <Link to={`/groups/${groupId}/events/${eventId}/update`}>
                         <button className='event-admin-button'>
                           Update
@@ -318,24 +274,19 @@ export default function EventDetails() {
               </div>
             </div>
 
-            {/* LOWER TEXT ROW */}
-
             <div className='event-detail-lower-text-row'>
               <div className='event-info-header'>
                 Description
               </div>
-
               <div className='event-info-text'>
-                {desc}
+                {description}
               </div>
             </div>
 
           </div>
 
         </div>
-
       </div>
-
     </>
   )
-}
+};
