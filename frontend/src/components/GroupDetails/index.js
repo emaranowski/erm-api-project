@@ -339,7 +339,7 @@ export default function GroupDetails() {
               }
             </div>
             <div className='group-detail-info'>
-              <div className='group-info-header'>
+              <div className='group-detail-name'>
                 {group.name}
               </div>
               <div className='group-detail-location'>
@@ -366,8 +366,6 @@ export default function GroupDetails() {
                 </div>
               }
 
-              {/* (POST /api/groups/:groupId/events) */}
-
               {hideAdminButtons ? null :
                 <div id="admin-buttons-div">
                   <Link to={`/groups/${groupId}/events/new`}>
@@ -380,9 +378,6 @@ export default function GroupDetails() {
                       Update
                     </button>
                   </Link>
-                  {/* <button className='admin-button'>
-                Delete
-              </button> */}
                   <GroupDeleteModalButton
                     buttonText="Delete"
                     modalComponent={<GroupDeleteModal groupId={groupId} />}
@@ -390,74 +385,27 @@ export default function GroupDetails() {
                 </div>
               }
 
-
-              {/* {sessionUser ? (
-            <>
-              <div id="join-group-button-div">
-                <OpenModalButtonJoinGroup
-                  buttonText="Join this group"
-                  modalComponent={<JoinGroupModal />} />
-              </div>
-            </>
-          ) : (
-            <>
-              <div>test</div>
-            </>
-          )} */}
-
-
-              {/* {!sessionUser ? (
-            <>
-              <div className='how-it-works-header-link-inactive small-link-bold-inactive'>
-                Start a new group
-              </div>
-            </>
-          ) : (
-            <>
-              <Link to="/groups/new">
-                <div className='how-it-works-header-link small-link-bold'>
-                  Start a new group
-                </div>
-              </Link>
-            </>
-          )} */}
-
-              {/*
-          {!sessionUser ? (
-            <>
-              <Link to="/groups/new">
-                <div className='how-it-works-header-link small-link-bold'>
-                  Start a new group
-                </div>
-              </Link>
-            </>
-          ) : (
-            <>
-              <div className='how-it-works-header-link-inactive small-link-bold-inactive'>
-                Start a new group
-              </div>
-            </>
-          )} */}
-
-
-
             </div >
           </div >
 
           <div className='group-info-box'>
 
-            <div className='group-info-header'>
-              Organizer
-            </div>
-            <div className='group-organizer-name'>
-              {organizerFirstName} {organizerLastName}
+            <div className='group-info-section'>
+              <div className='group-info-header'>
+                Organizer
+              </div>
+              <div className='group-organizer-name'>
+                {organizerFirstName} {organizerLastName}
+              </div>
             </div>
 
-            <div className='group-info-header'>
-              What we're about
-            </div>
-            <div className='group-info-text'>
-              {group.about}
+            <div className='group-info-section'>
+              <div className='group-info-header'>
+                What we're about
+              </div>
+              <div className='group-info-text'>
+                {group.about}
+              </div>
             </div>
 
             <div className='total-events-header'>

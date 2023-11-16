@@ -34,7 +34,7 @@
     border-radius: 10px;
 }
 
-.group-info-header {
+.group-detail-name {
     color: black;
     font-size: 22px;
     margin-bottom: 5px;
@@ -98,6 +98,10 @@
     color: #FFFFFF;
     background-color: #707070;
     cursor: pointer;
+}
+
+.group-info-section {
+    padding-bottom: 10px;
 }
 
 .group-info-header {
