@@ -1,18 +1,14 @@
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { getAllGroupsThunk, getSingleGroupThunk } from '../../store/groups';
 import { getAllEventsThunk } from '../../store/events';
-// import { getAllUsersThunk } from '../../store/session';
-
 import OpenModalButtonJoinGroup from '../../components/OpenModalButtonJoinGroup';
 import JoinGroupModal from '../../components/JoinGroupModal';
 import GroupDeleteModalButton from '../GroupDeleteModalButton';
 import GroupDeleteModal from '../GroupDeleteModal';
 import DisplayCardEvent from '../DisplayCardEvent';
 import DisplayCardEventMini from '../DisplayCardEventMini';
-
 import './GroupDetails.css';
 
 export default function GroupDetails() {
@@ -27,13 +23,13 @@ export default function GroupDetails() {
   const organizer = singleGroup.Organizer;
   const allEvents = useSelector(state => state.events.allEvents);
 
-  const groupsStateArr = Object.values(
-    useSelector((state) => (state.groups ? state.groups : {}))
-  ); // ret arr of objs
+  // const groupsStateArr = Object.values(
+  //   useSelector((state) => (state.groups ? state.groups : {}))
+  // ); // ret arr of objs
 
-  const groupsStateKeys = Object.keys(
-    useSelector((state) => (state.groups ? state.groups : {}))
-  ); // ret arr -- i0: allGroups, i1: singleGroup
+  // const groupsStateKeys = Object.keys(
+  //   useSelector((state) => (state.groups ? state.groups : {}))
+  // ); // ret arr -- i0: allGroups, i1: singleGroup
 
   // const singleGroup = groupsStateArr[1]; // obj
   // // const singleGroupArr = Object.values(singleGroup)
@@ -59,22 +55,6 @@ export default function GroupDetails() {
     previewImageURL = previewImages[previewImages.length - 1].url; // use last previewImage
   }
 
-  ////////////// PERMISSIONS //////////////
-
-  // To create or update an event for a group:
-  // Current user must be "host" or "co-host" of the group that the event belongs to
-
-  // const memberships = await Membership.findAll();
-  // const userId = user.dataValues.id;
-  // const groupId = event.Group.id;
-
-  // const hostOrCoHost = memberships.filter(member => {
-  //     return member.userId === userId &&
-  //         member.groupId === groupId &&
-  //         (member.status === 'host' ||
-  //             member.status === 'co-host');
-  // });
-
   ////////////// GET ORGANIZER NAME //////////////
   let organizerFirstName;
   let organizerLastName;
@@ -85,9 +65,9 @@ export default function GroupDetails() {
   }
 
   ////////////// 'JOIN' BUTTON DISPLAY LOGIC //////////////
-  // if logged out: HIDE 'JOIN' BTN
-  // if logged in + created group: HIDE 'JOIN' BTN
-  // if logged in + did not create group: DISPLAY 'JOIN' BTN
+  // if logged out: HIDE
+  // if logged in + created group: HIDE
+  // if logged in + did not create group: DISPLAY
 
   let hideJoinButton = true;
 
@@ -100,9 +80,9 @@ export default function GroupDetails() {
   }
 
   ////////////// ADMIN BUTTONS DISPLAY LOGIC: 'Create Event', 'Update', 'Delete' //////////////
-  // if logged out: HIDE ADMIN BTNS
-  // if logged in + created group: DISPLAY ADMIN BTNS
-  // if logged in + did not create group: HIDE 'JOIN' BTN
+  // if logged out: HIDE
+  // if logged in + created group: DISPLAY
+  // if logged in + did not create group: HIDE
 
   let hideAdminButtons = true;
 
@@ -114,25 +94,30 @@ export default function GroupDetails() {
     }
   }
 
-  // works when logged in -- do not edit
-  // // ////////////// 'JOIN' BUTTON LOGIC //////////////
-  // // if user is logged in and created group, 'JOIN' BUTTON should hide
-  // const currUser = useSelector(state => state.session ? state.session : {}); // {}
-  // const currUserId = useSelector(state => state.session.user.id ? state.session.user.id : {}); // {}
+  ///////////////// CO-HOST PERMISSIONS /////////////////
+  // To create/update event for group: current user must be group "host"
+  // If we want group "co-host" to be able to create/update events,
+  // will need to separate 'Create Event' from admin btns,
+  // and display 'Create Event' btn depending on if hostOrCoHost
 
-  // let hideJoinButton = true;
-  // if (currUserId !== organizerId) hideJoinButton = false;
+  // const memberships = await Membership.findAll();
+  // const userId = user.dataValues.id;
+  // const groupId = event.Group.id;
 
-  // // // if not logged in, 'JOIN' BUTTON should hide
-  // // if (!sessionUser) hideJoinButton = true;
+  // const hostOrCoHost = memberships.filter(member => {
+  //     return member.userId === userId &&
+  //         member.groupId === groupId &&
+  //         (member.status === 'host' ||
+  //             member.status === 'co-host');
+  // });
 
-  ///////////////// EVENTS FOR GROUP: UPCOMING, PAST, & NUMS /////////////////
+  ///////////////// GROUP EVENTS: UPCOMING, PAST, & NUMS /////////////////
 
-  let eventsByGroupTotalNum;
   const eventsByGroupUpcoming = [];
-  let eventsByGroupUpcomingNum;
   const eventsByGroupPast = [];
+  let eventsByGroupUpcomingNum;
   let eventsByGroupPastNum;
+  let eventsByGroupTotalNum;
 
   if (Object.values(allEvents).length) {
 
@@ -170,27 +155,27 @@ export default function GroupDetails() {
       }
     };
 
-    // Assign num of upcoming events
+    // Populate upcoming events + assign num
     for (let i = 0; i < allEventsByGroupDESC.length; i++) {
       const event = allEventsByGroupDESC[i];
       const currTimestamp = Date.now();
       const eventStartDate = Date.parse(event.startDate);
 
       if (eventStartDate > currTimestamp) { // in future
-        eventsByGroupUpcoming.push(event);
+        eventsByGroupUpcoming.push(event); // populate
       }
 
       eventsByGroupUpcomingNum = eventsByGroupUpcoming.length; // assign
     };
 
-    // Assign num of past events
+    // Populate past events + assign num
     for (let i = 0; i < allEventsByGroupDESC.length; i++) {
       const event = allEventsByGroupDESC[i];
       const currTimestamp = Date.now();
       const eventStartDate = Date.parse(event.startDate);
 
       if (eventStartDate < currTimestamp) { // in past
-        eventsByGroupPast.push(event);
+        eventsByGroupPast.push(event); // populate
       }
 
       eventsByGroupPastNum = eventsByGroupPast.length; // assign
