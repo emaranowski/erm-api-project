@@ -147,6 +147,11 @@
     padding: 8px 11px;
     font-size: 14px;
     font-weight: 600;
+    cursor: pointer;
+}
+
+.event-admin-button:hover {
+    background-color: #707070;
 }
 
 .event-admin-buttons-row {
