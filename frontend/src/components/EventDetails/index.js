@@ -115,7 +115,7 @@ export default function EventDetails() {
   }
   if (price === 0) price = 'FREE';
 
-  ////////////// ONLINE / IN PERSON //////////////
+  ////////////// ONLINE OR IN-PERSON //////////////
 
   let onlineOrInPerson;
   if (event.type !== undefined) {
@@ -129,7 +129,7 @@ export default function EventDetails() {
     description = event.description;
   }
 
-  ////////////// 'JOIN' BUTTON LOGIC //////////////
+  ////////////// 'JOIN' BUTTON LOGIC: TBD IF USING //////////////
   // logged out: HIDE
   // logged in + created event: HIDE
   // logged in + did not create event: DISPLAY
@@ -159,37 +159,12 @@ export default function EventDetails() {
     }
   }
 
-  // useEffect(() => {
-  //   dispatch(getSingleEventThunk(eventId));
-  // }, [dispatch, eventId]);
-  // useEffect(() => {
-  //   dispatch(getAllEventsThunk());
-  // }, [dispatch]);
-  // useEffect(() => {
-  //   dispatch(getSingleGroupThunk(groupId));
-  // }, [dispatch, groupId]);
-  // useEffect(() => {
-  //   dispatch(getAllGroupsThunk());
-  // }, [dispatch]);
-
   useEffect(() => {
     dispatch(getSingleEventThunk(eventId));
     dispatch(getAllEventsThunk());
-    dispatch(getSingleGroupThunk(groupId));
+    if (groupId !== undefined) dispatch(getSingleGroupThunk(groupId));
     dispatch(getAllGroupsThunk());
   }, [dispatch, eventId, groupId]);
-
-  // useEffect(() => {
-  //   const getAllData = async () => {
-  //     await Promise.all([
-  //       dispatch(getSingleEventThunk(eventId)),
-  //       dispatch(getAllEventsThunk()),
-  //       dispatch(getSingleGroupThunk(groupId)),
-  //       dispatch(getAllGroupsThunk()),
-  //     ])
-  //   }
-  //   getAllData();
-  // }, [dispatch, eventId, groupId])
 
   return (
     <>
