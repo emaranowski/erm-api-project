@@ -7,36 +7,39 @@ import DisplayCardGroup from '../DisplayCardGroup';
 import DisplayCardEvent from '../DisplayCardEvent';
 import './DisplayAll.css';
 
+// display all groups or events, depending on displayType prop
 export default function DisplayAll({ displayType }) {
   const dispatch = useDispatch();
-
   const allGroups = useSelector((state) => (state.groups.allGroups));
+  const allGroupsArr = Object.values(allGroups);
+  const allEvents = useSelector(state => state.events.allEvents);
+  const allEventsArr = Object.values(allEvents);
 
-  // const allGroups = groupsStateArr[0]; // {}
-
-  const allGroupsArr = Object.values(allGroups)
-
-  const allEvents = useSelector(state => state.events.allEvents)
-  const allEventsArr = Object.values(allEvents)
-
-  const startDateNumsUnordered = [];
+  // must display upcoming events at top, past at bottom
+  // so create arr of events, desc-ordered by start date
   const allEventsArrDESC = [];
-  if (allEventsArr[0] !== undefined && allEventsArr[0] !== null) {
 
+  if (allEventsArr[0] !== undefined && allEventsArr[0] !== null) {
+    // collect all start dates in arr (unordered)
+    const startDateNumsUnordered = [];
     allEventsArr.forEach(eventObj => {
       const startDateNum = Date.parse(eventObj.startDate);
       startDateNumsUnordered.push(startDateNum);
     });
 
-    let startDateNumsASC = startDateNumsUnordered.toSorted();
-    let startDateNumsDESC = startDateNumsASC.toReversed();
+    // arrange start dates in desc order
+    const startDateNumsASC = startDateNumsUnordered.toSorted();
+    const startDateNumsDESC = startDateNumsASC.toReversed();
 
+    // loop over start dates
     for (let i = 0; i < startDateNumsDESC.length; i++) {
-      const startDateNumDESC = startDateNumsDESC[i];
-
+      const currStartDateDESC = startDateNumsDESC[i];
+      // loop over events
       for (let j = 0; j < allEventsArr.length; j++) {
-        const startDateNum = Date.parse(allEventsArr[j].startDate);
-        if (startDateNum === startDateNumDESC) {
+        const eventStartDate = Date.parse(allEventsArr[j].startDate);
+        // if event start date matches current start date,
+        if (eventStartDate === currStartDateDESC) {
+          // add event to allEventsArrDESC
           allEventsArrDESC.push(allEventsArr[j]);
         }
       }
@@ -109,7 +112,7 @@ export default function DisplayAll({ displayType }) {
           }
 
         </div>
-      </div >
+      </div>
     </>
   )
-}
+};
