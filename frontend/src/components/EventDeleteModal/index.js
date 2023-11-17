@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import * as sessionActions from "../../store/session"; // sessionActions is obj
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from 'react-redux';
 import { useModal } from "../../context/Modal";
@@ -7,12 +6,12 @@ import { deleteEventThunk } from "../../store/events";
 import { useHistory } from "react-router-dom";
 import "./EventDeleteModal.css";
 
-function EventDeleteModal({ eventId }) {
+export default function EventDeleteModal({ eventId }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const { closeModal } = useModal();
-
   const singleGroup = useSelector(state => state.groups.singleGroup);
+
   let groupId;
   if (singleGroup.id !== undefined && singleGroup.id !== null) {
     groupId = singleGroup.id;
@@ -36,29 +35,26 @@ function EventDeleteModal({ eventId }) {
           setErrors(data.errors);
         }
       });
-
   };
 
   return (
     <>
       <div className="event-delete-modal">
-        <div className="confirm-delete-header">Confirm Delete</div>
-        <div className="confirm-delete-text">Are you sure you want to remove this event?</div>
+        <div className="confirm-delete-header">Delete Event</div>
+        <div className="confirm-delete-text">Do you want to delete this event?</div>
         <button
-          className="admin-button-delete-red"
+          className="admin-button-delete-event"
           onClick={deleteEvent}
         >
-          Yes (Delete Event)
+          Delete
         </button>
         <button
-          className="admin-button-delete"
+          className="admin-button-keep-event"
           onClick={closeModal}
         >
-          No (Keep Event)
+          Keep
         </button>
       </div>
     </>
-  );
-}
-
-export default EventDeleteModal;
+  )
+};
