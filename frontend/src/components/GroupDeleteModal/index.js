@@ -95,19 +95,19 @@ function GroupDeleteModal({ groupId }) {
   return (
     <>
       <div className="group-delete-modal">
-        <div className="confirm-delete-header">Confirm Delete</div>
-        <div className="confirm-delete-text">Are you sure you want to remove this group?</div>
+        <div className="confirm-delete-header">Delete Group</div>
+        <div className="confirm-delete-text">Do you want to delete this group?</div>
         <button
           className="admin-button-delete-red"
           onClick={deleteGroup}
         >
-          Yes (Delete Group)
+          Delete
         </button>
         <button
           className="admin-button-delete"
           onClick={closeModal}
         >
-          No (Keep Group)
+          Keep
         </button>
       </div>
     </>
