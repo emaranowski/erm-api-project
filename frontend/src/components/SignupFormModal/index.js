@@ -4,7 +4,7 @@ import { useModal } from "../../context/Modal";
 import * as sessionActions from "../../store/session";
 import "./SignupForm.css";
 
-function SignupFormModal() {
+export default function SignupFormModal() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -143,7 +143,5 @@ function SignupFormModal() {
         </form>
       </div>
     </>
-  );
-}
-
-export default SignupFormModal;
+  )
+};
