@@ -6,7 +6,7 @@ import OpenModalButton from '../OpenModalButton';
 import SignupFormModal from '../SignupFormModal';
 import './HomePage.css';
 
-function HomePage({ isLoaded }) {
+export default function HomePage({ isLoaded }) {
 
   const sessionUser = useSelector(state => state.session.user);
 
@@ -536,7 +536,5 @@ function HomePage({ isLoaded }) {
 
       </div>
     </>
-  );
-}
-
-export default HomePage;
+  )
+};

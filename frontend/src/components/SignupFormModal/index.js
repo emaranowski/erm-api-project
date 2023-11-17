@@ -4,7 +4,7 @@ import { useModal } from "../../context/Modal";
 import * as sessionActions from "../../store/session";
 import "./SignupForm.css";
 
-function SignupFormModal() {
+export default function SignupFormModal() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -19,14 +19,6 @@ function SignupFormModal() {
 
   useEffect(() => {
 
-    if (email.length &&
-      username.length >= 4 &&
-      firstName.length &&
-      lastName.length &&
-      password.length <= 6 &&
-      confirmPassword.length <= 6
-    ) setDisabled(false);
-
     if (!email.length) setDisabled(true);
     if (!username.length) setDisabled(true);
     if (username.length < 4) setDisabled(true);
@@ -36,6 +28,14 @@ function SignupFormModal() {
     if (password.length < 6) setDisabled(true);
     if (!confirmPassword.length) setDisabled(true);
     if (confirmPassword.length < 6) setDisabled(true);
+
+    if (email.length &&
+      username.length >= 4 &&
+      firstName.length &&
+      lastName.length &&
+      password.length >= 6 &&
+      confirmPassword.length >= 6
+    ) setDisabled(false);
 
   }, [email, username, firstName, lastName, password, confirmPassword]);
 
@@ -61,7 +61,7 @@ function SignupFormModal() {
         });
     }
     return setErrors({
-      confirmPassword: "Confirm Password field must be the same as the Password field"
+      confirmPassword: "Passwords must match"
     });
   };
 
@@ -143,7 +143,5 @@ function SignupFormModal() {
         </form>
       </div>
     </>
-  );
-}
-
-export default SignupFormModal;
+  )
+};
