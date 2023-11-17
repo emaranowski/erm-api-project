@@ -4,7 +4,6 @@ import { NavLink, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import * as sessionActions from '../../store/session';
 // import OpenModalButtonLoginDemo from '../OpenModalButtonLoginDemo';
-// import LoginFormModalDemo from '../LoginFormModalDemo';
 import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
@@ -50,16 +49,6 @@ export default function Navigation({ isLoaded }) {
             </>
           ) : (<></>)
           }
-
-          {/* {!sessionUser ? (
-            <>
-              <OpenModalButtonLoginDemo
-                buttonText="Log in as Demo User"
-                modalComponent={<LoginFormModalDemo />}
-              />
-            </>
-          ) : (<></>)
-          } */}
 
           {sessionUser ? (
             <>
