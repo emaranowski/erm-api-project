@@ -40,19 +40,19 @@ export default function EventDeleteModal({ eventId }) {
   return (
     <>
       <div className="event-delete-modal">
-        <div className="confirm-delete-header">Confirm Delete</div>
+        <div className="confirm-delete-header">Delete Event</div>
         <div className="confirm-delete-text">Do you want to delete this event?</div>
         <button
           className="admin-button-delete-event"
           onClick={deleteEvent}
         >
-          Delete event
+          Delete
         </button>
         <button
           className="admin-button-keep-event"
           onClick={closeModal}
         >
-          Keep event
+          Keep
         </button>
       </div>
     </>
