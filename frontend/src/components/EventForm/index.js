@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { createEventThunk, updateEventThunk, getSingleEventThunk } from "../../store/events";
+import { createEventThunk, updateEventThunk } from "../../store/events";
 import { getSingleGroupThunk } from "../../store/groups";
 import './EventForm.css';
 
@@ -10,8 +10,8 @@ export default function EventForm({ event, formType }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const { groupId, eventId } = useParams();
-
   const singleGroup = useSelector(state => state.groups.singleGroup);
+
   let groupName;
   if (singleGroup.id !== undefined && singleGroup.id !== null) {
     groupName = singleGroup.name;
@@ -83,9 +83,7 @@ export default function EventForm({ event, formType }) {
       eventId,
     }
 
-    // refactored to match below
     if (formType === 'Create Event') {
-
       try {
         const res = await dispatch(createEventThunk(event)); // VS Code gives note about not needing 'await', but it IS needed here
         if (res.id) {
@@ -100,9 +98,7 @@ export default function EventForm({ event, formType }) {
           setErrors(data.errors); // setErrors
         }
       };
-
     } else if (formType === 'Update Event') {
-
       try {
         const res = await dispatch(updateEventThunk(event)); // VS Code gives note about not needing 'await', but it IS needed here
         if (res.id) {
@@ -117,8 +113,7 @@ export default function EventForm({ event, formType }) {
           setErrors(data.errors); // setErrors
         }
       };
-    }
-
+    };
   };
 
   useEffect(() => {
@@ -131,18 +126,29 @@ export default function EventForm({ event, formType }) {
 
         <div className='create-event-form-section'>
           <div className='form-top-header'>
-            {formType === 'Create Event' ? `Create an event for ${groupName}` : `Update your event for ${groupName}`}
+            {formType === 'Create Event' ?
+              `Create an event for ${groupName}`
+              : `Update your event for ${groupName}`
+            }
           </div>
         </div>
 
         <div className='create-event-form-section'>
-          <div className='create-event-form-become-host'>BECOME A HOST</div>
-          <div className='create-event-form-header'>We'll help you plan the next big thing</div>
+          <div className='create-event-form-become-host'>
+            BECOME A HOST
+          </div>
+          <div className='create-event-form-header'>
+            We'll help you plan the next big thing
+          </div>
         </div>
 
         <div className='create-event-form-section'>
-          <div className='create-event-form-header'>What will your event name be?</div>
-          <div className='create-event-form-text'>Choose a name that will give a clear idea of what the event is about. Get creative! You can edit this later if you want.</div>
+          <div className='create-event-form-header'>
+            What will your event name be?
+          </div>
+          <div className='create-event-form-text'>
+            Choose a name that will give a clear idea of what the event is about. Get creative! You can edit this later if you want.
+          </div>
           <div>
             <input
               className="input-spacer input-text"
@@ -154,7 +160,7 @@ export default function EventForm({ event, formType }) {
               placeholder="Event name"
             />
           </div>
-          {errors.name ? <div className="event-create-error-text">{errors.name}</div> : null}
+          {errors.name && (<div className="event-create-error-text">{errors.name}</div>)}
         </div>
 
         <div className='create-event-form-section'>
@@ -231,15 +237,6 @@ export default function EventForm({ event, formType }) {
           <div className='create-event-form-text'>Select an event start:</div>
           <div>
             <span>
-              {/* <input
-                className="input-spacer input-text"
-                size="26"
-                type="text"
-                name="startDate"
-                onChange={(e) => setStartDate(e.target.value)}
-                value={startDate}
-                placeholder="MM/DD/YYY HH:mm AM"
-              /> */}
               <input
                 className="input-spacer input-text"
                 type="date"
@@ -263,15 +260,6 @@ export default function EventForm({ event, formType }) {
           <div className='create-event-form-text'>Select an event end:</div>
           <div>
             <span>
-              {/* <input
-                className="input-spacer input-text"
-                size="26"
-                type="text"
-                name="endDate"
-                onChange={(e) => setEndDate(e.target.value)}
-                value={endDate}
-                placeholder="MM/DD/YYY HH:mm PM"
-              /> */}
               <input
                 className="input-spacer input-text"
                 type="date"
