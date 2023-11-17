@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { useSelector } from 'react-redux';
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { createGroupThunk } from "../../store/groups";
