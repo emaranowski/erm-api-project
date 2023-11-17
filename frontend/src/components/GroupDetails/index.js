@@ -66,7 +66,7 @@ export default function GroupDetails() {
     organizerLastName = singleGroup.Organizer.lastName;
   }
 
-  ////////////// 'JOIN' BUTTON DISPLAY LOGIC //////////////
+  ////////////// 'JOIN' BUTTON LOGIC //////////////
   // if logged out: HIDE
   // if logged in + created group: HIDE
   // if logged in + did not create group: DISPLAY
@@ -81,7 +81,7 @@ export default function GroupDetails() {
     }
   }
 
-  ////////////// ADMIN BUTTONS DISPLAY LOGIC: 'Create Event', 'Update', 'Delete' //////////////
+  ////////////// ADMIN BUTTONS LOGIC: 'Create Event', 'Update', 'Delete' //////////////
   // if logged out: HIDE
   // if logged in + created group: DISPLAY
   // if logged in + did not create group: HIDE

@@ -32,9 +32,6 @@ export default function Footer() {
           <span id="create-group-text">
             Create your own MeetBuds group.
           </span>
-          {/* <button id="get-started-button">
-            Get Started
-          </button> */}
           {!sessionUser ? (
             <>
               <span className='footer-get-started-btn'>
@@ -106,7 +103,6 @@ export default function Footer() {
             <div className="footer-links-col-header">
               MeetBuds
             </div>
-
             <div className='footer-link-box'>
               <Link to="/">
                 <span className='footer-link-text'>
@@ -114,9 +110,6 @@ export default function Footer() {
                 </span>
               </Link>
             </div>
-
-            {/* <div className='footer-link'>About</div> */}
-            {/* <div className='footer-link'>Blog</div> */}
           </div>
           <div id="footer-links-col-4">
             <div className="footer-links-col-header">
@@ -154,5 +147,5 @@ export default function Footer() {
         </div>
       </div>
     </>
-  );
+  )
 };
