@@ -1,9 +1,7 @@
 import { Link } from 'react-router-dom';
 // import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-
 // import { getAllGroupsThunk } from '../../store/groups';
-
 import './DisplayCardGroup.css';
 
 export default function DisplayCardGroup({ group }) {
@@ -55,13 +53,17 @@ export default function DisplayCardGroup({ group }) {
 
   return (
     <>
-
       <Link to={`/groups/${group.id}`}>
         <div className='group-card'>
 
-          {group.previewImage ? <div><img className='group-card-img' src={group.previewImage}></img></div> : ''}
+          {group.previewImage ?
+            <div>
+              <img className='group-card-img' src={group.previewImage}></img>
+            </div>
+            : null
+          }
 
-          <div className='group-info'>
+          <div>
             <div className='group-name'>
               {group.name}
             </div>
@@ -70,18 +72,24 @@ export default function DisplayCardGroup({ group }) {
               {group.city}, {group.state}
             </div>
 
-            <div className='group-text'>
+            <div className='group-about'>
               {group.about}
             </div>
 
-            <div className='group-num-of-events'>
-              {numEvents === 1 ? `${numEvents} event` : `${numEvents} events`} · {group.privacy ? <span>Private</span> : <span>Public</span>}
+            <div className='group-events-and-privacy'>
+              {numEvents === 1 ?
+                `${numEvents} event` :
+                `${numEvents} events`
+              } · {
+                group.privacy ?
+                  <span>Private group</span> :
+                  <span>Public group</span>
+              }
             </div>
           </div>
 
         </div>
       </Link>
-
     </>
   )
 };
