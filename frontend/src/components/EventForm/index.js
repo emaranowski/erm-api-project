@@ -137,7 +137,7 @@ export default function EventForm({ event, formType }) {
 
         <div className='create-event-form-section'>
           <div className='create-event-form-become-host'>BECOME A HOST</div>
-          <div className='create-event-form-header'>We'll help you plan an event for your group</div>
+          <div className='create-event-form-header'>We'll help you plan the next big thing</div>
         </div>
 
         <div className='create-event-form-section'>
