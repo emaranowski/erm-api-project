@@ -1,14 +1,5 @@
-.confirm-delete-header {
-    font-size: 20px;
-}
-
-.confirm-delete-text {
-    font-size: 16px;
-    margin: 20px 0px;
-}
-
 .group-delete-modal {
-    padding: 100px 100px 100px 100px;
+    padding: 65px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -19,13 +10,22 @@
     font-weight: 400;
 }
 
+.confirm-delete-header {
+    font-size: 20px;
+}
+
+.confirm-delete-text {
+    font-size: 16px;
+    margin: 20px 0px;
+}
+
 .admin-button-delete-red {
     color: #FFFFFF;
     background-color: #b21111;
     border: none;
     border-radius: 5px;
     margin-top: 13px;
-    padding: 8px 11px;
+    padding: 12px;
     font-size: 14px;
     font-weight: 600;
     width: 200px;
@@ -42,8 +42,8 @@
     background-color: #212121;
     border: none;
     border-radius: 5px;
-    margin-top: 30px;
-    padding: 8px 11px;
+    margin-top: 25px;
+    padding: 12px;
     font-size: 14px;
     font-weight: 600;
     width: 200px;
