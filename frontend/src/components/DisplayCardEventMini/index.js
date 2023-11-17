@@ -2,8 +2,6 @@ import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleEventThunk } from '../../store/events';
-
-
 import './DisplayCardEventMini.css';
 
 export default function DisplayCardEventMini({ event }) {
@@ -16,7 +14,7 @@ export default function DisplayCardEventMini({ event }) {
     eventDescription = singleEvent.description;
   }
 
-  const startDateTime = event.startDate; // startDateTime is string
+  const startDateTime = event.startDate; // string
   const startDateTimeArr = startDateTime.split('');
   const startDateArr = startDateTimeArr.slice(0, 10);
   const startTimeArr = startDateTimeArr.slice(11, 16);
@@ -25,7 +23,7 @@ export default function DisplayCardEventMini({ event }) {
 
   useEffect(() => {
     dispatch(getSingleEventThunk(eventId));
-  }, [])
+  }, []);
 
   return (
     <>
@@ -41,8 +39,6 @@ export default function DisplayCardEventMini({ event }) {
 
             <div className='event-card-mini-info'>
               <div className='event-date-time'>
-                {/* [ YYY-MM-DD ] · [ time ] <br></br>
-              {event.startDate} */}
                 {startDateStr} · {startTimeStr}
               </div>
 
