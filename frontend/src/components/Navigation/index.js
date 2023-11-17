@@ -12,14 +12,11 @@ import './Navigation.css';
 export default function Navigation({ isLoaded }) {
   const dispatch = useDispatch();
   const history = useHistory();
-
   const sessionUser = useSelector(state => state.session.user);
 
   const logout = (e) => {
     e.preventDefault();
-
     dispatch(sessionActions.logout());
-
     history.push(`/`);
   };
 
@@ -33,11 +30,6 @@ export default function Navigation({ isLoaded }) {
         </NavLink>
 
         <span id="nav-btns">
-
-          {/* <button id="nav-language-button" className='nav-button'>
-            English
-          </button> */}
-
           {sessionUser ? (
             <>
               <NavLink exact to="/groups/new" style={{ textDecoration: 'none' }}>
@@ -77,5 +69,5 @@ export default function Navigation({ isLoaded }) {
         </span>
       </nav>
     </>
-  );
+  )
 };
