@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
 import { useModal } from "../../context/Modal";
-import * as sessionActions from "../../store/session"; // sessionActions is obj
+import * as sessionActions from "../../store/session"; // obj
 import "./LoginForm.css";
 
 export default function LoginFormModal() {
   const dispatch = useDispatch();
-  const history = useHistory();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,24 +13,13 @@ export default function LoginFormModal() {
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
-  // disable button
+  // disable button if either is not met:
+  // Username or email must be at least 4 characters
+  // Password must be at least 6 characters
   useEffect(() => {
-    if (credential.length >= 4 && password.length <= 6) setDisabled(false);
+    if (credential.length >= 4 && password.length >= 6) setDisabled(false);
     if (credential.length < 4 || password.length < 6) setDisabled(true);
   }, [credential, password]);
-
-  // validations
-  // useEffect(() => {
-  //   const errsObj = {};
-
-  //   if (credential.length < 4) errsObj.credential = "Username or email must be at least 4 characters"
-  //   if (password.length < 6) errsObj.password = "Password must be at least 6 characters"
-
-  //   if (Object.keys(errsObj).length) setDisabled(true);
-  //   if (!Object.keys(errsObj).length) setDisabled(false);
-
-  //   setErrors(errsObj);
-  // }, [credential, password])
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -42,7 +29,7 @@ export default function LoginFormModal() {
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) {
-          setErrors(data.errors);
+          setErrors(data.errors); // The provided credentials were invalid.
         }
       });
   };
@@ -66,10 +53,11 @@ export default function LoginFormModal() {
     <>
       <div id="modal-log-in-form-box">
 
-        <h1 id="modal-log-in-form-header">Log In</h1>
+        <h1 id="modal-log-in-form-header">
+          Log In
+        </h1>
 
         <form onSubmit={handleSubmit}>
-
           {errors.credential && (
             <div className="log-in-error-text">
               {errors.credential}
@@ -104,12 +92,14 @@ export default function LoginFormModal() {
             Log In
           </button>
         </form>
+
         <div>
           <button id='demo-user-btn' onClick={handleDemoUser}>
             Log in as demo user
           </button>
         </div>
+
       </div>
     </>
-  );
+  )
 };
