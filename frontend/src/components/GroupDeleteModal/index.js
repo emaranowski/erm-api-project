@@ -35,13 +35,13 @@ export default function GroupDeleteModal({ groupId }) {
         <div className="confirm-delete-header">Delete Group</div>
         <div className="confirm-delete-text">Do you want to delete this group?</div>
         <button
-          className="admin-button-delete-red"
+          className="admin-button-delete-group"
           onClick={deleteGroup}
         >
           Delete
         </button>
         <button
-          className="admin-button-delete"
+          className="admin-button-keep-group"
           onClick={closeModal}
         >
           Keep
