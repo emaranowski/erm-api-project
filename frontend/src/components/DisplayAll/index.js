@@ -17,10 +17,10 @@ export default function DisplayAll({ displayType }) {
 
   // must display upcoming events at top, past at bottom
   // so create arr of events, desc-ordered by start date
-  const allEventsArrDESC = [];
+  const allEventsDESC = [];
 
   if (allEventsArr[0] !== undefined && allEventsArr[0] !== null) {
-    // collect all start dates in arr (unordered)
+    // collect all start dates
     const startDateNumsUnordered = [];
     allEventsArr.forEach(eventObj => {
       const startDateNum = Date.parse(eventObj.startDate);
@@ -28,19 +28,19 @@ export default function DisplayAll({ displayType }) {
     });
 
     // arrange start dates in desc order
-    const startDateNumsASC = startDateNumsUnordered.toSorted();
-    const startDateNumsDESC = startDateNumsASC.toReversed();
+    const startDatesASC = startDateNumsUnordered.toSorted();
+    const startDatesDESC = startDatesASC.toReversed();
 
-    // loop over start dates
-    for (let i = 0; i < startDateNumsDESC.length; i++) {
-      const currStartDateDESC = startDateNumsDESC[i];
-      // loop over events
+    // loop start dates
+    for (let i = 0; i < startDatesDESC.length; i++) {
+      const currStartDate = startDatesDESC[i];
+      // loop events
       for (let j = 0; j < allEventsArr.length; j++) {
         const eventStartDate = Date.parse(allEventsArr[j].startDate);
-        // if event start date matches current start date,
-        if (eventStartDate === currStartDateDESC) {
-          // add event to allEventsArrDESC
-          allEventsArrDESC.push(allEventsArr[j]);
+        // if event start date is current start date,
+        if (eventStartDate === currStartDate) {
+          // add event to allEventsDESC
+          allEventsDESC.push(allEventsArr[j]);
         }
       }
     }
@@ -102,7 +102,7 @@ export default function DisplayAll({ displayType }) {
             : null
           }
           {displayType === 'Events' ?
-            allEventsArrDESC.map((event) => (
+            allEventsDESC.map((event) => (
               <div key={event.id}>
 
                 <DisplayCardEvent event={event} />
