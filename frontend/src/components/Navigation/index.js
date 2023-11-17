@@ -3,8 +3,6 @@ import { useDispatch } from 'react-redux';
 import { NavLink, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import * as sessionActions from '../../store/session';
-// import OpenModalButtonLoginDemo from '../OpenModalButtonLoginDemo';
-// import LoginFormModalDemo from '../LoginFormModalDemo';
 import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
@@ -14,14 +12,11 @@ import './Navigation.css';
 export default function Navigation({ isLoaded }) {
   const dispatch = useDispatch();
   const history = useHistory();
-
   const sessionUser = useSelector(state => state.session.user);
 
   const logout = (e) => {
     e.preventDefault();
-
     dispatch(sessionActions.logout());
-
     history.push(`/`);
   };
 
@@ -35,11 +30,6 @@ export default function Navigation({ isLoaded }) {
         </NavLink>
 
         <span id="nav-btns">
-
-          {/* <button id="nav-language-button" className='nav-button'>
-            English
-          </button> */}
-
           {sessionUser ? (
             <>
               <NavLink exact to="/groups/new" style={{ textDecoration: 'none' }}>
@@ -50,16 +40,6 @@ export default function Navigation({ isLoaded }) {
             </>
           ) : (<></>)
           }
-
-          {/* {!sessionUser ? (
-            <>
-              <OpenModalButtonLoginDemo
-                buttonText="Log in as Demo User"
-                modalComponent={<LoginFormModalDemo />}
-              />
-            </>
-          ) : (<></>)
-          } */}
 
           {sessionUser ? (
             <>
@@ -89,5 +69,5 @@ export default function Navigation({ isLoaded }) {
         </span>
       </nav>
     </>
-  );
+  )
 };
