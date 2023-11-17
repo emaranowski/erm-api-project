@@ -57,57 +57,55 @@ export default function DisplayAll({ displayType }) {
         <div className='centering-box'>
 
           {displayType === 'Groups' ?
-            <div className="events-groups-header-box">
-              <div className="events-groups-header">
-                <Link to='/events'>
-                  <span className='events-groups-header-spacer non-active-event-group-header'>
-                    Events
-                  </span>
-                </Link>
-                <span className='active-event-group-header'>
-                  Groups
-                </span>
-              </div>
-              <div className='events-groups-subhead'>
-                Groups in MeetBuds
-              </div>
-            </div>
-            : null
-          }
-          {displayType === 'Groups' ?
-            allGroupsArr.map((group) => (
-              <div key={group.id}>
-                <DisplayCardGroup group={group} />
-              </div>
-            ))
-            : null
-          }
-
-          {displayType === 'Events' ?
-            <div className="events-groups-header-box">
-              <div className="events-groups-header">
-                <span className='events-groups-header-spacer active-event-group-header'>
-                  Events
-                </span>
-                <Link to='/groups'>
-                  <span className='non-active-event-group-header'>
+            <>
+              <div className="events-groups-header-box">
+                <div className="events-groups-header">
+                  <Link to='/events'>
+                    <span className='events-groups-header-spacer non-active-event-group-header'>
+                      Events
+                    </span>
+                  </Link>
+                  <span className='active-event-group-header'>
                     Groups
                   </span>
-                </Link>
+                </div>
+                <div className='events-groups-subhead'>
+                  Groups in MeetBuds
+                </div>
               </div>
-              <div className='events-groups-subhead'>
-                Events in MeetBuds
-              </div>
-            </div>
+              {allGroupsArr.map((group) => (
+                <div key={group.id}>
+                  <DisplayCardGroup group={group} />
+                </div>
+              ))}
+            </>
             : null
           }
-          {displayType === 'Events' ?
-            allEventsDESC.map((event) => (
-              <div key={event.id}>
 
-                <DisplayCardEvent event={event} />
+          {displayType === 'Events' ?
+            <>
+              <div className="events-groups-header-box">
+                <div className="events-groups-header">
+                  <span className='events-groups-header-spacer active-event-group-header'>
+                    Events
+                  </span>
+                  <Link to='/groups'>
+                    <span className='non-active-event-group-header'>
+                      Groups
+                    </span>
+                  </Link>
+                </div>
+                <div className='events-groups-subhead'>
+                  Events in MeetBuds
+                </div>
               </div>
-            ))
+              {allEventsDESC.map((event) => (
+                <div key={event.id}>
+
+                  <DisplayCardEvent event={event} />
+                </div>
+              ))}
+            </>
             : null
           }
 
