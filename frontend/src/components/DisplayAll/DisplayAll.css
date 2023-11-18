@@ -27,7 +27,7 @@
 }
 
 .non-active-event-group-header {
-  color: rgb(63, 63, 63);
+  color: #087c8c;
   font-size: 22px;
 }
 
@@ -37,7 +37,7 @@
 }
 
 .active-event-group-header {
-  color: #087c8c;
+  color: rgb(63, 63, 63);
   text-decoration: underline;
   font-size: 22px;
 }
