@@ -120,6 +120,17 @@ light grey:
     gap: 14px;
 }
 
+#footer-dev-name-and-links i {
+    color: #C5C4C4;
+    font-size: 24.5px;
+    transition: color .7s;
+}
+
+#footer-dev-name-and-links i:hover {
+    color: #FFFFFF;
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.3);
+}
+
 #footer-dev-name {
     color: #C5C4C4;
     font-size: 19.55px;
@@ -131,19 +142,15 @@ light grey:
     color: #FFFFFF;
 }
 
-#footer-dev-name-and-links i {
-    color: #C5C4C4;
-    font-size: 24.5px;
-    transition: color .7s;
+#footer-dev-icons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 #github-icon {
     border-radius: 50px;
-}
-
-#footer-dev-name-and-links i:hover {
-    color: #FFFFFF;
-    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.3);
 }
 
 #copyright-and-tech-box {
@@ -154,14 +161,6 @@ light grey:
     padding: 30px 0px 40px 0px;
     font-size: 13px;
 }
-
-#footer-dev-icons {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
 
 #footer-tech {
     display: flex;
