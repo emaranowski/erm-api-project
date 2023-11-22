@@ -120,7 +120,7 @@ export default function Footer() {
                 <span id='footer-dev-name'>Erica Maranowski</span>
               </a>
               <span id='footer-dev-icons'>
-                <a href="https://www.linkedin.com/in/erica-maranowski/" target="_blank" rel="noopener noreferrer">
+                <a href="https://linkedin.com/in/erica-maranowski/" target="_blank" rel="noopener noreferrer">
                   <i class="fa-brands fa-linkedin"></i>
                 </a>
                 <a href="https://github.com/emaranowski" target="_blank" rel="noopener noreferrer">
