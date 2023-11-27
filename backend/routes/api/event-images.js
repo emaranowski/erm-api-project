@@ -1,60 +1,49 @@
 // resources for route paths beginning in: /api/event-images
 const express = require('express');
 const { Op } = require('sequelize');
-const { Group, Membership, User, Venue, Event, Attendance, EventImage } = require('../../db/models');
+const { Membership, Event, EventImage } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
-const { check } = require('express-validator'); // validates req.body
-const { handleValidationErrors } = require('../../utils/validation'); // validates req.body
 const router = express.Router();
 
 
 // Delete an Image for an Event (DELETE /api/event-images/:imageId)
 router.delete('/:imageId', requireAuth, async (req, res) => {
 
-    // get imageId
-    const imageId = req.params.imageId;
-    const image = await EventImage.findByPk(imageId); // get image to delete
+  const imageId = req.params.imageId; // get imageId from URI parameters
+  const image = await EventImage.findByPk(imageId); // get image to delete
 
-    // if no image w/ specified id
-    if (!image) {
-        res.status(404);
-        return res.json({ message: `Event Image couldn't be found` });
-    };
+  if (!image) { // if no image w/ that id, return 404 + 'not found' message
+    res.status(404);
+    return res.json({ message: `Event Image couldn't be found` });
+  };
 
-    // get eventId
-    const eventId = image.eventId;
-    const event = await Event.findByPk(eventId);
+  const { user } = req; // get current user from request
+  const userId = user.dataValues.id; // get userId from user
 
-    // get groupId
-    const groupId = event.groupId;
-    const group = await Group.findByPk(groupId);
+  const eventId = image.eventId; // get eventId from image
+  const event = await Event.findByPk(eventId); // get event
+  const groupId = event.groupId; // get groupId from event
 
-    // get userId
-    const { user } = req;
-    const userId = user.dataValues.id;
+  const membership = await Membership.findOne({ // get group membership
+    where: { // must match userId & groupId, and have status of host/organizer or co-host
+      userId: userId,
+      groupId: groupId,
+      status: {
+        [Op.in]: ['host', 'co-host']
+      }
+    }
+  });
 
-    // get membership
-    const membership = await Membership.findOne({
-        where: {
-            userId: userId,
-            groupId: groupId,
-            status: {
-                [Op.in]: ['host', 'co-host']
-            }
-        }
-    });
+  // if current user is not host/organizer or co-host of group that owns event:
+  if (!membership) { // return 403 + 'forbidden' message
+    res.status(403);
+    return res.json({ message: `Forbidden: User must be a group organizer or co-host to delete a Event Image.` });
+  };
 
-    // Current user must be "host" or "co-host" of Group that Event belongs to
-    if (!membership) {
-        res.status(403);
-        return res.json({
-            message: `Forbidden: User must be a group organizer or co-host to delete a Event Image.`
-        });
-    };
-
-    await image.destroy();
-    res.status(200);
-    return res.json({ message: `Successfully deleted` });
+  // if all conditions are met:
+  await image.destroy(); // delete image
+  res.status(200); // return 200 + 'success' message
+  return res.json({ message: `Successfully deleted` });
 });
 
 
