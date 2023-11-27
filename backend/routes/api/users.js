@@ -1,78 +1,82 @@
-// this file holds resources for route paths beginning in: /api/users
-
+// resources for route paths beginning in: /api/users
 const express = require('express');
 const bcrypt = require('bcryptjs');
-
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { User } = require('../../db/models');
-
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-
 const router = express.Router();
 
-// midware to validate email, password, username keys that we expect to have in req.body
-// 2023-07-07: added firstName + lastName
+// signup validator (if any check fails, return error as response)
+// middleware to validate email, password, username keys that we expect to have in req.body
 const validateSignup = [
-  check('firstName') // check if req.body.firstName exists
+  check('firstName') // check that req.body.firstName is not empty
     .exists({ checkFalsy: true })
     .withMessage('First Name is required'),
-  check('lastName') // check if req.body.lastName exists
+  check('lastName') // check that req.body.lastName is not empty
     .exists({ checkFalsy: true })
     .withMessage('Last Name is required'),
-  check('email') // check if req.body.email is an email
+  check('email') // check that req.body.email is not empty, and is an email
     .exists({ checkFalsy: true })
     .isEmail()
     .withMessage('Invalid email'),
-  // check('email') // currently err seems to be coming from model val; should come from here? prob fine actually
-  //   .exists({ checkFalsy: true })
+  // todo: currently err seems to come from model val; see about having it come from here?
+  // check('email') // check that email is unique
   //   .isUnique()
-  //   .withMessage('User with that email already exists'),
-  // check('username') // currently err seems to be coming from model val; should come from here? prob fine actually
-  //   .exists({ checkFalsy: true })
-  //   .isUnique()
-  //   .withMessage('User with that username already exists'),
-  check('username') // check if req.body.username has min len 4
+  //   .withMessage('This email is already in use.'),
+  check('username') // check that req.body.username is not empty, and length >= 4
     .exists({ checkFalsy: true })
     .isLength({ min: 4 })
     .withMessage('Please provide a username with at least 4 characters.'),
-  check('username') // check if req.body.username is not an email
+  check('username') // check that req.body.username is NOT an email
     .not()
     .isEmail()
     .withMessage('Username cannot be an email.'),
-  check('password') // check if req.body.password is not empty & has min len 6
+  // todo: currently err seems to come from model val; see about having it come from here?
+  // check('username') // check that email is unique
+  //   .isUnique()
+  //   .withMessage('This username is already in use.'),
+  check('password') // check that req.body.password is not empty, and length >= 6
     .exists({ checkFalsy: true })
     .isLength({ min: 6 })
     .withMessage('Password must be 6 characters or more.'),
   handleValidationErrors
-]; // if at least one val fails, ret err as res
+];
 
 // Sign up (POST /api/users)
-router.post(
-  '/',
-  validateSignup, // connect
-  async (req, res) => {
-    const { firstName, lastName, email, password, username } = req.body;
-    const hashedPassword = bcrypt.hashSync(password);
-    const user = await User.create({ firstName, lastName, email, username, hashedPassword });
+router.post('/', validateSignup, async (req, res) => {
+  const { firstName, lastName, email, password, username } = req.body;
+  const hashedPassword = bcrypt.hashSync(password);
+  const user = await User.create({ firstName, lastName, email, username, hashedPassword });
 
-    const safeUser = { // non-sensitive info
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      username: user.username,
-    };
+  const safeUser = { // non-sensitive info
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    username: user.username,
+  };
 
-    // use setTokenCookie to log in user by creating
-    // JWT cookie w/ user's non-sensitive info as payload
-    await setTokenCookie(res, safeUser);
+  // use setTokenCookie to log in user by creating
+  // JWT cookie w/ user's non-sensitive info as payload
+  await setTokenCookie(res, safeUser);
 
-    return res.json({
-      user: safeUser
-    });
-  }
+  return res.json({
+    user: safeUser
+  });
+}
 );
+
+
+module.exports = router;
+
+
+//////////////////////////////////////////////
+//////////////////////////////////////////////
+///////// fetch requests for testing /////////
+//////////////////////////////////////////////
+//////////////////////////////////////////////
+
 
 /*
 test signup validation w/ firstName & lastName
@@ -295,7 +299,3 @@ fetch('/api/users', {
 *** should see: 'Bad Request' ... errors: {username: 'Username cannot be an email.'}
 
 */
-
-
-
-module.exports = router;
