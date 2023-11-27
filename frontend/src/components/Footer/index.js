@@ -137,8 +137,9 @@ export default function Footer() {
             <span className='footer-copyright-and-tech'>Technologies Used:</span>
             <span className='footer-copyright-and-tech'>React</span>
             <span className='footer-copyright-and-tech'>Redux</span>
+            <span className='footer-copyright-and-tech'>Express</span>
             <span className='footer-copyright-and-tech'>Sequelize</span>
-            <span className='footer-copyright-and-tech'>SQL</span>
+            <span className='footer-copyright-and-tech'>MySQL</span>
             <span className='footer-copyright-and-tech'>PostgreSQL</span>
             <span className='footer-copyright-and-tech'>JS</span>
             <span className='footer-copyright-and-tech'>HTML</span>
