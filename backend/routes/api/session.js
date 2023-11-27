@@ -1,69 +1,112 @@
-// this file holds resources for route paths beginning in: /api/session
-
+// resources for route paths beginning in: /api/session
 const express = require('express');
 const { Op } = require('sequelize');
-
 const bcrypt = require('bcryptjs');
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
-
 const { User } = require('../../db/models');
-
 const { check } = require('express-validator'); // check func will be used w/ handleValidationErrors to validate body of req
 const { handleValidationErrors } = require('../../utils/validation');
-
 const router = express.Router();
 
-const validateLogin = [ // validateLogin midware composed of check & handleValidationErrors midwares
-  check('credential') // check if req.body.credential is missing
+
+// login validator (if one check fails, error is returned as response)
+// middleware composed of check & handleValidationErrors midwares
+const validateLogin = [
+  check('credential') // check that req.body.credential is not missing
     .exists({ checkFalsy: true })
     .notEmpty()
     .withMessage('Credential is required (email or username)'),
-  check('password') // check if req.body.password is missing
+  check('password') // check that req.body.password is not missing
     .exists({ checkFalsy: true })
     .withMessage('Password is required'),
   handleValidationErrors
-]; // if one is empty, err is ret as res
+];
+
 
 // Log in (POST /api/session)
-router.post(
-  '/',
-  validateLogin, // connect
-  async (req, res, next) => {
-    const { credential, password } = req.body;
+router.post('/', validateLogin, async (req, res, next) => {
+  // get credential and password
+  // (credential can be either email or username)
+  const { credential, password } = req.body;
 
-    const user = await User.unscoped().findOne({ // turn off default scope to read all user attr, incl hashedPassword
-      where: {
-        [Op.or]: { // can be either credential
-          username: credential,
-          email: credential
-        }
+  // get user with matching email or username
+  // turn off default scope to read/get all user attributes, including hashedPassword
+  const user = await User.unscoped().findOne({
+    where: {
+      [Op.or]: {
+        username: credential,
+        email: credential
       }
-    });
-
-    // if user not found, or pw doesn't match hashedPassword
-    if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
-      const err = new Error('Login failed');
-      err.status = 401;
-      err.title = 'Login failed';
-      err.errors = { credential: 'The provided credentials were invalid.' };
-      return next(err);
     }
+  });
 
-    const safeUser = { // only non-sensitive data
+  // if user not found, or pw from req.body doesn't match user.hashedPassword
+  if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
+    const err = new Error('Login failed');
+    err.status = 401;
+    err.title = 'Login failed';
+    err.errors = { credential: 'The provided credentials were invalid.' };
+    return next(err); // return 401 login failed error
+  };
+
+  // if user is found, and pw from req.body matches user.hashedPassword (pw is correct)
+  // create safeUser, including only non-sensitive user data (i.e. excluding pw)
+  const safeUser = {
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    username: user.username,
+  };
+
+  // set token cookie
+  await setTokenCookie(res, safeUser);
+
+  // return safeUser
+  return res.json({ user: safeUser });
+});
+
+
+// Log out (DELETE /api/session)
+router.delete('/', (_req, res) => {
+  res.clearCookie('token'); // remove 'token' cookie from res
+  return res.json({ message: 'success' });
+});
+
+
+// Restore session user (GET /api/session)
+router.get('/', (req, res) => {
+  // get session user from request
+  const { user } = req;
+
+  if (user) { // if session user exists
+    // create safeUser, including only non-sensitive user data (i.e. excluding pw)
+    const safeUser = {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
       username: user.username,
     };
+    // return session user as JSON object with key-value pair of `user: safeUser`
+    return res.json({ user: safeUser });
 
-    await setTokenCookie(res, safeUser); // if user found + pw is correct
+  } else { // if no session user
+    // return JSON object with key-value pair of `user: null`
+    return res.json({ user: null });
+  };
+});
 
-    return res.json({
-      user: safeUser
-    });
-  }
-);
+
+module.exports = router;
+
+
+///////////////////////////////////////////////////
+///////////////////////////////////////////////////
+///////// fetch requests for testing login ////////
+///////////////////////////////////////////////////
+///////////////////////////////////////////////////
+
 
 /*
 Test login route w/ firstName & lastName -- go to:
@@ -160,15 +203,12 @@ at express-validator/src/middlewares/check.js:16:13
 */
 
 
+///////////////////////////////////////////////////
+///////////////////////////////////////////////////
+///////// fetch requests for testing logout ///////
+///////////////////////////////////////////////////
+///////////////////////////////////////////////////
 
-// Log out (DELETE /api/session)
-router.delete(
-  '/',
-  (_req, res) => {
-    res.clearCookie('token'); // remove 'token' cookie from res
-    return res.json({ message: 'success' });
-  }
-);
 
 /*
 Test logout route by navigating to
@@ -197,29 +237,12 @@ And should no longer have 'token' cookie.
 */
 
 
-// Restore session user
-// GET /api/session
+///////////////////////////////////////////////////
+///////////////////////////////////////////////////
+// fetch requests to test restoring session user //
+///////////////////////////////////////////////////
+///////////////////////////////////////////////////
 
-// ret session user as JSON under the key of user
-// if there is not a session, ret a JSON with an empty object
-router.get(
-  '/',
-  (req, res) => {
-    const { user } = req;
-    if (user) {
-      const safeUser = {
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        username: user.username,
-      };
-      return res.json({
-        user: safeUser
-      });
-    } else return res.json({ user: null });
-  }
-);
 
 /*
 
@@ -285,6 +308,3 @@ whenever logged in, should ret in format:
   }
 }
 */
-
-
-module.exports = router;
