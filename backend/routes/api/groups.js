@@ -873,7 +873,6 @@ router.put('/:groupId/membership', requireAuth, async (req, res) => {
 
 
 // Edit a Group (PUT /api/groups/:groupId)
-// ***** Require proper authorization: Group must belong to current user
 router.put('/:groupId', requireAuth, validateGroup, async (req, res) => {
     const { user } = req;
     if (!user) { // shouldn't run, since requireAuth should catch issues (but here as backup)
@@ -881,23 +880,28 @@ router.put('/:groupId', requireAuth, validateGroup, async (req, res) => {
         return res.json({ message: `Authentication Required. No user is currently logged in.` });
     };
 
+    // get currUserId, groupId, and updated group info from req
     const currUserId = user.dataValues.id;
-    const groupId = req.params.groupId; // params, not query
+    const groupId = req.params.groupId;
     const { name, about, type, privacy, city, state } = req.body;
 
+    // get group
     const groupToUpdate = await Group.findByPk(groupId);
-    if (!groupToUpdate) {
-        res.status(404);
+    if (!groupToUpdate) { // if no group
+        res.status(404); // return 404 + 'not found' message
         return res.json({ message: `Group couldn't be found` });
     };
 
-    // If logged in, but trying to edit group organized by another user....
-    if (!(currUserId === groupToUpdate.organizerId)) {
-        res.status(403); // Forbidden -- or is this 401 Unauthorized/Unauthenticated ?????
-        return res.json({ message: `Forbidden: Group must belong to the current user. User must be the group's organizer to update it.` });
+    // if trying to edit group organized by another user
+    // currUser must be organizer of group to edit it
+    if (!(currUserId === groupToUpdate.organizerId)) { // if currUser is not groupOrganizer
+        res.status(403); // return 403 + 'forbidden' message
+        return res.json({
+            message: `Forbidden: Group must belong to the current user. User must be the group's organizer to update it.`
+        });
     };
 
-    // DO UPDATES HERE
+    // update group properties + save to DB
     groupToUpdate.name = name;
     groupToUpdate.about = about;
     groupToUpdate.type = type;
@@ -906,46 +910,39 @@ router.put('/:groupId', requireAuth, validateGroup, async (req, res) => {
     groupToUpdate.state = state;
     await groupToUpdate.save();
 
-    const updatedGroup = await Group.findByPk(groupId); // query again, for new 'updatedAt'
+    // query DB for just-updated group, to get new 'updatedAt'
+    const updatedGroup = await Group.findByPk(groupId);
 
+    // return 200 + updatedGroup
     res.status(200);
     return res.json(updatedGroup);
 });
 
 
-
-///////////////////////////////////
-///////////////////////////////////
-///////////////////////////////////
-///////////////////////////////////
-///////////////////////////////////
-
-
-
-// Create a Group (POST /api/groups) -- V2 -- WITH EDITS MADE ON 2023-08-01
+// Create a Group (POST /api/groups)
 router.post('/', requireAuth, validateGroup, async (req, res) => {
-    const { user } = req; // pull user from req
-    // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
-    // but if 'requireAuth' didn't work, this would be a failsafe/backup
-    if (!user) {
+    const { user } = req;
+    if (!user) { // shouldn't run, since requireAuth should catch issues (but here as backup)
         res.status(401);
         return res.json({ message: `Authentication Required. No user is currently logged in.` });
     };
 
+    // get userId & new group info from req
     const userId = user.dataValues.id;
     const { name, about, type, privacy, city, state } = req.body;
 
-
+    // get refGroup to determine refGroupIdPlusOne
     let refGroup = await Group.findOne({
         order: [['id', 'DESC']],
     });
     !refGroup ? refGroup = { dataValues: { id: 1 } } : refGroup;
     // const refGroupId = refGroup.dataValues.id;
-    const refGroupIdPlusOne = 1 + refGroup.dataValues.id;
+    const refGroupIdPlusOne = refGroup.dataValues.id + 1;
 
+    // create group
     await Group.bulkCreate([
         {
-            id: refGroupIdPlusOne, /////////// added
+            id: refGroupIdPlusOne,
             organizerId: userId,
             name,
             about,
@@ -956,63 +953,17 @@ router.post('/', requireAuth, validateGroup, async (req, res) => {
         },
     ], { validate: true });
 
-    // await Group.bulkCreate([
-    //     {
-    //         organizerId: userId,
-    //         name,
-    //         about,
-    //         type,
-    //         privacy,
-    //         city,
-    //         state
-    //     },
-    // ], { validate: true, individualHooks: true });
-
-    // await Group.create(
-    //     {
-    //         organizerId: userId,
-    //         name,
-    //         about,
-    //         type,
-    //         privacy,
-    //         city,
-    //         state
-    //     },
-    //     { validate: true, returning: true } // returning: true
-    // );
-
-    // const groupToBuild = Group.build({
-    //     organizerId: userId,
-    //     name,
-    //     about,
-    //     type,
-    //     privacy,
-    //     city,
-    //     state
-    // })
-    // await groupToBuild.save();
-
-    const createdGroup = await Group.findOne({ // must query for the group to get: id, createdAt, updatedAt
-        where: { // include all as failsafe against any w/ duplicate attributes (v low statistical prob, but why not)
-            id: refGroupIdPlusOne,
-        }
+    // query DB for just-created group to get its:
+    // id, createdAt, updatedAt
+    const createdGroup = await Group.findOne({
+        where: { id: refGroupIdPlusOne }
     });
 
-    // const createdGroup = await Group.findOne({ // must query for the group to get: id, createdAt, updatedAt
-    //     where: { // include all as failsafe against any w/ duplicate attributes (v low statistical prob, but why not)
-    //         organizerId: userId,
-    //         name: name,
-    //         about: about,
-    //         type: type,
-    //         privacy: privacy,
-    //         city: city,
-    //         state: state
-    //     }
-    // });
-
+    // get createdGroupObj & createdGroupId
     const createdGroupObj = createdGroup.dataValues;
+    const createdGroupId = createdGroup.dataValues.id;
 
-    const createdGroupId = createdGroup.dataValues.id; // added '.dataValues' on 2023-08-01
+    // for user who created group: create host membership in group
     await Membership.bulkCreate([
         {
             userId: userId,
@@ -1021,103 +972,39 @@ router.post('/', requireAuth, validateGroup, async (req, res) => {
         },
     ], { validate: true });
 
+    // return 201 + createdGroupId
     res.status(201);
-    return res.json(createdGroupObj); // changed from createdGroup on 2023-08-01
+    return res.json(createdGroupObj);
 });
 
 
-///////////////////////////////////
-///////////////////////////////////
-///////////////////////////////////
-
-
-// // Create a Group (POST /api/groups) -- V1
-// router.post('/', requireAuth, validateGroup, async (req, res) => {
-//     const { user } = req; // pull user from req
-//     // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
-//     // but if 'requireAuth' didn't work, this would be a failsafe/backup
-//     if (!user) {
-//         res.status(401);
-//         return res.json({ message: `Authentication Required. No user is currently logged in.` });
-//     };
-
-//     const userId = user.dataValues.id;
-//     const { name, about, type, privacy, city, state } = req.body;
-
-//     await Group.bulkCreate([
-//         {
-//             organizerId: userId,
-//             name,
-//             about,
-//             type,
-//             privacy,
-//             city,
-//             state
-//         },
-//     ], { validate: true });
-
-//     const createdGroup = await Group.findOne({ // must query for the group to get: id, createdAt, updatedAt
-//         where: { // include all as failsafe against any w/ duplicate attributes (v low statistical prob, but why not)
-//             organizerId: userId,
-//             name: name,
-//             about: about,
-//             type: type,
-//             privacy: privacy,
-//             city: city,
-//             state: state
-//         }
-//     });
-
-//     const createdGroupId = createdGroup.id;
-//     await Membership.bulkCreate([
-//         {
-//             userId: userId,
-//             groupId: createdGroupId,
-//             status: 'host'
-//         },
-//     ], { validate: true });
-
-//     res.status(201);
-//     return res.json(createdGroup);
-// });
-
-
-
-///////////////////////////////////
-///////////////////////////////////
-///////////////////////////////////
-///////////////////////////////////
-///////////////////////////////////
-
-
-
-// // Get all Groups joined or organized by the Current User (GET /api/groups/current) -- V3
-// Return all groups created by current user, or where current user has a membership.
+// Get all Groups joined or organized by the Current User (GET /api/groups/current)
+// (return all groups created by current user, OR where current user has a membership)
 router.get('/current', requireAuth, async (req, res) => {
-    const { user } = req; // pull user from req
-
-    // 'if (!user)' should not run, since 'requireAuth' will catch any reqs lacking authentication
-    // but if 'requireAuth' didn't work, this would be a failsafe/backup
-    if (!user) {
+    const { user } = req;
+    if (!user) { // shouldn't run, since requireAuth should catch issues (but here as backup)
         res.status(401);
         return res.json({ message: `Authentication Required. No user is currently logged in.` });
     };
 
+    // create allGroupsObj, to collect all groups associated with currUser
     let allGroupsObj = { Groups: [] };
 
+    // get currUserId
     const currUserId = user.dataValues.id;
 
+    // get all groups, including models for Membership & GroupImage
     const groupsOrig = await Group.findAll({
-        // where: { organizerId: currUserId }, // this was limiting to only groups meeting this condition
         include: [
             { model: Membership }, // removed: where: { userId: currUserId } (& do not need as "currUserId")
             { model: GroupImage }
         ]
     });
 
+    // collect JSON version of all groups
     let groups = [];
     groupsOrig.forEach(group => {
-        groups.push(group.toJSON()); // convert to JSON
+        groups.push(group.toJSON());
     });
 
     // 1. get all Memberships
@@ -1125,56 +1012,55 @@ router.get('/current', requireAuth, async (req, res) => {
     // 3. get groupId for each Membership where: { userId: currUserId }
     // 4. for each group, get count of Memberships with that groupId (numMembers)
 
+    // for each group
     groups.forEach(group => {
-
-        // 1. create + add numMembers
+        // add numMembers to group
         membershipsArr = group.Memberships;
         group.numMembers = membershipsArr.length;
         delete group.Memberships;
 
-        // 2. create + add previewImage
+        // add previewImage to group (URL, or 'not found' message)
         group.GroupImages.forEach(image => {
-            if (image.preview === true) {
+            if (image.preview === true) { // if previewImage is found
                 group.previewImage = image.url;
             };
         });
-        if (!group.previewImage) {
+        if (!group.previewImage) { // if previewImage is NOT found
             group.previewImage = 'No preview image found';
         };
         delete group.GroupImages;
 
+        // collect userIds of all group members
         let allUserIdsInGroupMemberships = [];
         membershipsArr.forEach(membership => {
             const id = membership.userId;
             allUserIdsInGroupMemberships.push(id);
         });
 
+        // if currUser is a member of group
         if (allUserIdsInGroupMemberships.includes(currUserId)) {
-            // 3. add group to allGroupsObj
-            allGroupsObj.Groups.push(group);
+            allGroupsObj.Groups.push(group); // add group to allGroupsObj
         };
     });
 
-    return res.json(allGroupsObj); // format: { Groups: [] }
+    // return allGroupsObj,
+    // fully populated with all groups created by currUser, OR where currUser is a member
+    return res.json(allGroupsObj); // allGroupsObj: { Groups: [] }
 });
 
 
-
-
-
-/// FEEDBACK
-// Creating & updating venues -
-// It seems like we get the correct responses,
+////// Should be resolved, but double-check to be sure:
+// Creating & updating venues - seems like we get the correct responses,
 // but the new venue does not show in either:
 // GET group details by id/ groups by current user endpoints, or in GET all venues by group id.
-// It does seem like we do indeed create data,
-// so the issue might be on our queries.
-// Start by looking at dev.db: see if venue data has proper id’s saved in appropriate cols.
-// -- Get details of a Group WAS NOT GETTING ALL VENUES AFTER CREATING ONE
+// It seems like we do create the venue, so issue might be in queries.
+// Start by looking at dev.db: see if venue data has proper ids saved in appropriate cols.
+// -- 'Get details of a Group' was not getting all venues after creating one.
 // -- NOW SEEMS FIXED
 
-// Get details of a Group from an id (GET /api/groups/:groupId) -- V1
+// Get details of a Group from an id (GET /api/groups/:groupId)
 router.get('/:groupId', async (req, res) => {
+    // get group
     const groupId = req.params.groupId;
     const groupOrig = await Group.findByPk(groupId, {
         include: [
@@ -1183,39 +1069,44 @@ router.get('/:groupId', async (req, res) => {
             // { model: Venue },
         ]
     });
-    if (!groupOrig) {
-        res.status(404); // 404 Error: Couldn't find a Group with the specified id
+
+    if (!groupOrig) { // if no group
+        res.status(404); // return 404 + 'not found' message
         return res.json({ message: `Group couldn't be found` });
     };
 
-    group = groupOrig.toJSON(); // convert to JSON
+    // todo: double-check adding const had no side effects
+    const group = groupOrig.toJSON(); // convert to JSON
 
-    // create totalMembers:
-    const memberships = await Membership.findAll(); // QUERY DB
+    // create num of totalMembers
+    const memberships = await Membership.findAll();
     const membersArr = memberships.filter(membership => {
         return membership.groupId === group.id;
     });
     const totalMembers = membersArr.length;
 
-    // create groupImagesArr:
+    // create groupImagesArr (to hold all images for group)
     const groupImagesArr = [];
-    const groupImagesArrOrig = await GroupImage.findAll({ where: { groupId: groupId } }); // QUERY DB
+    const groupImagesArrOrig = await GroupImage.findAll({
+        where: { groupId: groupId }
+    });
     // const groupImagesArrOrig = group.GroupImages; // want to remove groupId from orig
+    // for each group image
     groupImagesArrOrig.forEach(image => {
-        const imageObj = {
+        const imageObj = { // create imageObj
             id: image.id,
             url: image.url,
             preview: image.preview
         };
-
+        // add imageObj to groupImagesArr
         groupImagesArr.push(imageObj);
     });
 
-    // create organizerObj:
-    const users = await User.findAll(); // QUERY DB
+    // create organizerObj (to hold group organizer id, firstname, lastname)
+    const users = await User.findAll(); // get all users
     const usersArr = users.filter(user => {
         return user.id === group.organizerId;
-    });
+    }); // find user who is group organizer
     const user = usersArr[0];
     const organizerObj = {
         id: user.id,
@@ -1223,11 +1114,15 @@ router.get('/:groupId', async (req, res) => {
         lastName: user.lastName
     };
 
-    // create venuesArr:
-    const venuesArr = [];
-    const venuesArrOrig = await Venue.findAll({ where: { groupId: groupId } }); // QUERY DB
+    // create venuesArr (to hold all venues for group)
+    const venuesArr = []; // arr of objs
+    const venuesArrOrig = await Venue.findAll({
+        where: { groupId: groupId }
+    });
     // const venuesArrOrig = group.Venues;
+    // for each venue
     venuesArrOrig.forEach(venue => {
+        // create venueObj, then add properties
         const venueObj = {};
         venueObj.id = venue.id;
         venueObj.groupId = venue.groupId;
@@ -1236,10 +1131,11 @@ router.get('/:groupId', async (req, res) => {
         venueObj.state = venue.state;
         venueObj.lat = venue.lat;
         venueObj.lng = venue.lng;
-
+        // add venueObj to venuesArr
         venuesArr.push(venueObj);
     });
 
+    // create groupObj (to hold info for group, numMembers, GroupImages, Organizer, Venues)
     const groupObj = { // manually creating obj helps ensure ideal order
         id: group.id,
         organizerId: group.organizerId,
@@ -1251,24 +1147,24 @@ router.get('/:groupId', async (req, res) => {
         state: group.state,
         createdAt: group.createdAt,
         updatedAt: group.updatedAt,
-        numMembers: totalMembers, // add
-        GroupImages: groupImagesArr, // add
-        Organizer: organizerObj, // add
-        Venues: venuesArr // add
+        numMembers: totalMembers,
+        GroupImages: groupImagesArr,
+        Organizer: organizerObj,
+        Venues: venuesArr
     };
 
+    // return 200 + groupObj
     res.status(200);
     return res.json(groupObj);
 });
 
 
-
-
-
-// Get all Groups (GET /api/groups) -- V2
+// Get all Groups (GET /api/groups)
 router.get('/', async (req, res) => {
+    // create allGroupsObj to hold all groups
     let allGroupsObj = { Groups: [] };
 
+    // query DB for all groups, including models for Membership & GroupImage
     const groupsOrig = await Group.findAll({
         include: [
             { model: Membership },
@@ -1276,35 +1172,36 @@ router.get('/', async (req, res) => {
         ]
     });
 
-    // convert to JSON (not sure needed; keep to be safe)
+    // for each group, convert to JSON (not sure needed; keep to be safe)
     let groupsList = [];
     groupsOrig.forEach(group => {
         groupsList.push(group.toJSON());
     });
 
+    // for each group
     groupsList.forEach(group => {
-
-        // 1. create + add numMembers
+        // add numMembers to group
         const membershipsArr = group.Memberships;
         group.numMembers = membershipsArr.length;
         delete group.Memberships;
 
-        // 2. create + add previewImage
+        // add previewImage to group (URL, or 'not found' message)
         group.GroupImages.forEach(image => {
-            if (image.preview === true) {
+            if (image.preview === true) { // if previewImage is found
                 group.previewImage = image.url;
             };
         });
-        if (!group.previewImage) {
+        if (!group.previewImage) { // if previewImage NOT found
             group.previewImage = 'No preview image found';
         };
         delete group.GroupImages;
 
-        // 3. add group to allGroupsObj
+        // add group to allGroupsObj.Groups
         allGroupsObj.Groups.push(group);
     });
 
-    return res.json(allGroupsObj); // format: { Groups: [] }
+    // return allGroupsObj
+    return res.json(allGroupsObj); // allGroupsObj: { Groups: [] }
 });
 
 
